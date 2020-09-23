@@ -1,28 +1,28 @@
 # Business analysis:
   - endpoints to show:
-     - [ ] display all books
-     - [ ] get books by name
-     - [ ] get books by id
-     - [ ] crud for book
-     - [ ] crud for cart
-     - [ ] get books by author
-     - [ ] get all books on sale
-     - [ ] list all orders by user 
-     - [ ] list all categories
-     - [ ] get all books in this category
-     - [ ] list all shops
-     - [ ] list shops where this book is
+    - [ ] display all books
+    - [ ] get books by name
+    - [ ] get books by id
+    - [ ] crud for book
+    - [ ] crud for cart
+    - [ ] get books by author
+    - [ ] get all books on sale
+    - [ ] list all orders by user 
+    - [ ] list all categories
+    - [ ] get all books in this category
+    - [ ] list all shops
+    - [ ] list shops where this book is
   - entities:
-     - [ ] Book
-     - [ ] Author
-     - [ ] Cart
-     - [ ] Order
-     - [ ] Additional Service ( services like book packaging )
-     - [ ] Publisher
-     - [ ] User
-     - [ ] Admin
-     - [ ] Category of the book 
-     - [ ] Shop
+    - [ ] Book
+    - [ ] Author
+    - [ ] Cart
+    - [ ] Order
+    - [ ] Additional Service ( services like book packaging )
+    - [ ] Publisher
+    - [ ] User
+    - [ ] Admin
+    - [ ] Category of the book 
+    - [ ] Shop
   - repositories:
     - [ ] user repository
     - [ ] book repository
