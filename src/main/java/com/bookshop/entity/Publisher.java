@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +16,6 @@ import javax.persistence.Id;
 public class Publisher {
     @Id
     private Long id;
-    @NonNull
+    @NotBlank
     private String name;
 }

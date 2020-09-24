@@ -13,12 +13,12 @@
     - [ ] list all shops
     - [ ] list shops where this book is
   - entities:
-    - [ ] Book
-    - [ ] Author
+    - [x] Book
+    - [x] Author
     - [ ] Cart
     - [ ] Order
     - [ ] Additional Service ( services like book packaging )
-    - [ ] Publisher
+    - [x] Publisher
     - [ ] User
     - [ ] Admin
     - [ ] Category of the book 

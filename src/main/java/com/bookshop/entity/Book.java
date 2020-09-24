@@ -3,10 +3,12 @@ package com.bookshop.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -17,17 +19,13 @@ public class Book {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NonNull
+    @DecimalMin(value = "0.0")
     private BigDecimal price;
-    @NonNull
+    @NotBlank
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn()
+    LocalDate dateOfRelease;
+    @ManyToOne(fetch = FetchType.EAGER)
     private Publisher publisher;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @NonNull
-    //@JoinTable
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Author> authors;
 }

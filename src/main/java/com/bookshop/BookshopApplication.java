@@ -6,14 +6,16 @@ import com.bookshop.entity.Publisher;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import com.bookshop.repository.PublisherRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -31,7 +33,7 @@ public class BookshopApplication {
     }
 
     @EventListener
-    public void appReady(ApplicationReadyEvent event){
+    public void appReady(ApplicationReadyEvent event) {
         Publisher publisher1 = new Publisher(1L, "State Street");
         Publisher publisher2 = new Publisher(2L, "Gordon Bank");
         publisherRepository.save(publisher1);
@@ -42,10 +44,15 @@ public class BookshopApplication {
         authorRepository.save(author1);
         authorRepository.save(author2);
         authorRepository.save(author3);
-        Book book1 = new Book(1L, new BigDecimal("12.23"), "Tomek w krainie kangurów", publisher1, List.of(author1));
-        Book book2 = new Book(2L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", publisher2, List.of(author2, author3));
+        Book book1 = new Book(1L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), publisher1, List.of(author1));
+        Book book2 = new Book(2L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), publisher2, List.of(author2, author3));
         bookRepository.save(book1);
         bookRepository.save(book2);
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }
