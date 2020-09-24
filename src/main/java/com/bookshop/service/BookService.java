@@ -19,7 +19,15 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book save (Book book){
-        return bookRepository.save(book);
+    public void save (Book book){
+        bookRepository.save(book);
+    }
+
+    public void update (Book book){
+        bookRepository.save(book);
+    }
+
+    public void delete (Long id){
+        bookRepository.deleteById(id);
     }
 }

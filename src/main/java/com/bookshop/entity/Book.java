@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 public class Book {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long Id;
+    private Long id;
     @NotNull
-    private BigDecimal Price;
+    private BigDecimal price;
+    @NotNull
+    private String name;
 }
