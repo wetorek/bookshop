@@ -15,7 +15,7 @@ import java.util.Optional;
 public class PublisherService {
     private final PublisherRepository publisherRepository;
 
-    public List<Publisher> getAllPublichers() {
+    public List<Publisher> getAllPublishers() {
         return publisherRepository.findAll();
     }
 
