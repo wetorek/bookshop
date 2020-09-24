@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +21,11 @@ public class Book {
     private BigDecimal price;
     @NonNull
     private String name;
+
+    @ManyToOne()
+    private Publisher publisher;
+
+    @ManyToMany()
+    @NonNull
+    private List<Author> authors;
 }
