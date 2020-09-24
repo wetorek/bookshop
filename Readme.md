@@ -1,7 +1,7 @@
 # Business analysis:
   - endpoints to show:
     - [X] display all books
-    - [ ] get books by name
+    - [x] get books by name
     - [X] get books by id
     - [x] crud for book
     - [ ] crud for cart

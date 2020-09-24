@@ -6,20 +6,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import java.math.BigDecimal;
+import javax.persistence.Id;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Book {
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+public class Publisher {
+    @Id
     private Long id;
-    @NonNull
-    private BigDecimal price;
     @NonNull
     private String name;
 }
