@@ -22,10 +22,12 @@ public class Book {
     @NonNull
     private String name;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn()
     private Publisher publisher;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @NonNull
+    //@JoinTable
     private List<Author> authors;
 }
