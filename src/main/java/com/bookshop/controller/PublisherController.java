@@ -34,7 +34,7 @@ public class PublisherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/delete")
+    @PutMapping("/update")
     public ResponseEntity<Void> updatePublisher(@RequestBody Publisher publisher) {
         publisherService.updatePublisher(publisher);
         return new ResponseEntity<>(HttpStatus.OK);
