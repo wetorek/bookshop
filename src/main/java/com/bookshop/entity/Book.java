@@ -28,4 +28,6 @@ public class Book {
     private Publisher publisher;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Author> authors;
+    @OneToOne
+    private Category category;
 }

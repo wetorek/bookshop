@@ -2,9 +2,11 @@ package com.bookshop;
 
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
+import com.bookshop.entity.Category;
 import com.bookshop.entity.Publisher;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
+import com.bookshop.repository.CategoryRepository;
 import com.bookshop.repository.PublisherRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class BookshopApplication {
     BookRepository bookRepository;
     @Autowired
     AuthorRepository authorRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BookshopApplication.class, args);
@@ -44,10 +48,18 @@ public class BookshopApplication {
         authorRepository.save(author1);
         authorRepository.save(author2);
         authorRepository.save(author3);
-        Book book1 = new Book(1L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), publisher1, List.of(author1));
-        Book book2 = new Book(2L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), publisher2, List.of(author2, author3));
+        Category category1 = new Category(1L, "Przygodowe");
+        Category category2 = new Category(2L, "Akcji");
+        Category category3 = new Category(3L, "Kryminał");
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+        categoryRepository.save(category3);
+        Book book1 = new Book(1L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), publisher1, List.of(author1), category1);
+        Book book2 = new Book(2L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), publisher2, List.of(author2, author3), category2);
+        Book book3 = new Book(3L, new BigDecimal("23.22"), "Tomek u murzymnów", LocalDate.of(2014, 1, 3), publisher2, List.of(author3), category3);
         bookRepository.save(book1);
         bookRepository.save(book2);
+        bookRepository.save(book3);
     }
 
     @Bean
