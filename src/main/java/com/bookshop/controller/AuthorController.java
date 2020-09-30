@@ -1,5 +1,6 @@
 package com.bookshop.controller;
 
+import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.entity.Author;
 import com.bookshop.service.AuthorService;
 import lombok.AllArgsConstructor;
@@ -18,25 +19,25 @@ public class AuthorController {
     AuthorService authorService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    public ResponseEntity<List<AuthorDto>> getAllAuthors() {
         return ResponseEntity.ok().body(authorService.getAllAuthors());
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable Long id) {
-        Optional<Author> author = authorService.getAuthorById(id);
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
+        Optional<AuthorDto> author = authorService.getAuthorById(id);
         return author.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addAuthor(@RequestBody Author author) {
-        authorService.saveAuthor(author);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> addAuthor(@RequestBody AuthorDto authorDto) {
+        return authorService.saveAuthor(authorDto);
+        //return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/delete")
-    public ResponseEntity<Void> updateAuthor(@RequestBody Author author) {
-        authorService.updateAuthor(author);
+    public ResponseEntity<Void> updateAuthor(@RequestBody AuthorDto authorDto) {
+        //authorService.updateAuthor(author);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

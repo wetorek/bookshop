@@ -12,6 +12,8 @@
     - [ ] get all books in this category
     - [ ] list all shops
     - [ ] list shops where this book is
+    - [ ] adding reviews and comments
+    - [ ] adding votes
   - entities:
     - [x] Book
     - [x] Author

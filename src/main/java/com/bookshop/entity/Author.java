@@ -4,11 +4,12 @@ package com.bookshop.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +22,6 @@ public class Author {
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
+    @ManyToMany
+    List<Book> books;
 }

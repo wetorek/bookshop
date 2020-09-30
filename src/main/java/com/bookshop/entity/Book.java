@@ -24,10 +24,10 @@ public class Book {
     @NotBlank(message = "Name is required")
     private String name;
     LocalDate dateOfRelease;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Publisher publisher;
-    @ManyToMany(fetch = FetchType.EAGER)
+    //@ManyToOne
+   // private Publisher publisher;
+    @ManyToMany
     private List<Author> authors;
-    @OneToOne
-    private Category category;
+    //@OneToOne
+    //private Category category;
 }
