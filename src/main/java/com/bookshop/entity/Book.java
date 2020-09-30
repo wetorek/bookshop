@@ -21,7 +21,7 @@ public class Book {
     private Long id;
     @DecimalMin(value = "0.0")
     private BigDecimal price;
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
     LocalDate dateOfRelease;
     @ManyToOne(fetch = FetchType.EAGER)

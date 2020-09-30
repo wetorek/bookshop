@@ -17,8 +17,8 @@ import javax.validation.constraints.NotBlank;
 public class Author {
     @Id
     private Long id;
-    @NotBlank
+    @NotBlank(message = "First name is required")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "Second name is required")
     private String secondName;
 }
