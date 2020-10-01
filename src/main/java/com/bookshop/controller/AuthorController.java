@@ -32,18 +32,20 @@ public class AuthorController {
     @PostMapping("/add")
     public ResponseEntity<Void> addAuthor(@RequestBody AuthorDto authorDto) {
         return authorService.saveAuthor(authorDto);
-        //return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/delete")
     public ResponseEntity<Void> updateAuthor(@RequestBody AuthorDto authorDto) {
         //authorService.updateAuthor(author);
+
+        //TODO do this
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        authorService.deleteAuthor(id);
+        //authorService.deleteAuthor(id);
+        //TODO do this
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

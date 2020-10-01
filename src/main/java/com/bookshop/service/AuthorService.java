@@ -1,12 +1,12 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.entity.Author;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +32,7 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Optional<AuthorDto> getAuthorById(Long id) {
         return authorRepository.findById(id)
                 .map(authorMapper::mapAuthorEntityToDto);
@@ -39,8 +40,8 @@ public class AuthorService {
 
     @Transactional
     public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
-
-        authorRepository.save(author);
+        authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
     /*
