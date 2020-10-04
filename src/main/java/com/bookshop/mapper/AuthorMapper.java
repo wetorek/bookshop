@@ -2,18 +2,19 @@ package com.bookshop.mapper;
 
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.entity.Author;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 
-@Mapper(componentModel = "spring")
-public interface AuthorMapper {
+@AllArgsConstructor
+public class AuthorMapper {
+    private final ModelMapper modelMapper;
 
-    @Mapping(target = "id", source = "author.id")
-    @Mapping(target = "firstName", source = "author.firstName")
-    @Mapping(target = "secondName", source = "author.secondName")
-    AuthorDto mapAuthorEntityToDto(Author author);
-
-    Author mapAuthorDtoToEntity(AuthorDto authorDto);
-
-
+    public AuthorDto mapAuthorEntityToDto ( Author author){
+        AuthorDto authorDto = modelMapper.map(author, AuthorDto.class);
+        return authorDto;
+    }
+    public Author mapAuthorDtoToEntity( AuthorDto authorDto){
+        Author author = modelMapper.map(authorDto, Author.class);
+        return author;
+    }
 }
