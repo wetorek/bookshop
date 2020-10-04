@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Author {
+
     @Id
     private Long id;
     @NotBlank(message = "First name is required")

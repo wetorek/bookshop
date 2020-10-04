@@ -6,7 +6,6 @@ import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,24 +43,22 @@ public class AuthorService {
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    public ResponseEntity<Void> updateAuthor(AuthorDto authorDto) {
+        if (!authorRepository.existsById(authorDto.getId())) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> deleteAuthor(Long id) {
+        if (!authorRepository.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        authorRepository.deleteById(id); //TODO do sth with his books
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
-    /*
-
-    @Transactional
-    public void saveAuthor(AuthorDto authorDto) {
-
-        authorRepository.save(author);
-    }
-
-    public void updateAuthor(Author author) {
-        authorRepository.save(author);
-    }
-
-    public void deleteAuthor(Long id) {
-        authorRepository.deleteById(id);
-    }
-
-    public Optional<Author> getAuthorById(Long id) {
-        return authorRepository.findById(id);
-    }
-}*/

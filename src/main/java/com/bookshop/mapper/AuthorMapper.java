@@ -11,10 +11,11 @@ public class AuthorMapper {
     @Autowired
     private final ModelMapper modelMapper;
 
-    public AuthorDto mapAuthorEntityToDto ( Author author){
+    public AuthorDto mapAuthorEntityToDto(Author author) {
         return modelMapper.map(author, AuthorDto.class);
     }
-    public Author mapAuthorDtoToEntity( AuthorDto authorDto){
+
+    public Author mapAuthorDtoToEntity(AuthorDto authorDto) {
         return modelMapper.map(authorDto, Author.class);
     }
 }

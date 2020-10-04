@@ -1,9 +1,6 @@
 package com.bookshop;
 
 import com.bookshop.entity.Author;
-import com.bookshop.entity.Book;
-import com.bookshop.entity.Category;
-import com.bookshop.entity.Publisher;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
@@ -16,10 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootApplication
 public class BookshopApplication {
@@ -67,8 +60,9 @@ public class BookshopApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
     @Bean
-    public AuthorMapper authorMapper(){
-        return new AuthorMapper( new ModelMapper());
+    public AuthorMapper authorMapper() {
+        return new AuthorMapper(new ModelMapper());
     }
 }

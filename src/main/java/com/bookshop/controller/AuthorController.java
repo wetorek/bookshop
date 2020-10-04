@@ -1,10 +1,8 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.entity.Author;
 import com.bookshop.service.AuthorService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,16 +34,11 @@ public class AuthorController {
 
     @PutMapping("/delete")
     public ResponseEntity<Void> updateAuthor(@RequestBody AuthorDto authorDto) {
-        //authorService.updateAuthor(author);
-
-        //TODO do this
-        return new ResponseEntity<>(HttpStatus.OK);
+        return authorService.updateAuthor(authorDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        //authorService.deleteAuthor(id);
-        //TODO do this
-        return new ResponseEntity<>(HttpStatus.OK);
+        return authorService.deleteAuthor(id);
     }
 }
