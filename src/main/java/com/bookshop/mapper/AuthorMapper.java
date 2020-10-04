@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @AllArgsConstructor
 public class AuthorMapper {
-    @Autowired
     private final ModelMapper modelMapper;
 
     public AuthorDto mapAuthorEntityToDto(Author author) {

@@ -1,6 +1,8 @@
 package com.bookshop.service;
 
 import com.bookshop.entity.Book;
+import com.bookshop.mapper.BookMapper;
+import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,8 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final BookMapper bookMapper;
 
     public List<Book> getAllBooks() {
         return bookRepository.findAll();

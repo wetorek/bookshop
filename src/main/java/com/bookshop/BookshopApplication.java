@@ -2,6 +2,7 @@ package com.bookshop;
 
 import com.bookshop.entity.Author;
 import com.bookshop.mapper.AuthorMapper;
+import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import com.bookshop.repository.CategoryRepository;
@@ -64,5 +65,9 @@ public class BookshopApplication {
     @Bean
     public AuthorMapper authorMapper() {
         return new AuthorMapper(new ModelMapper());
+    }
+    @Bean
+    public BookMapper bookMapper() {
+        return new BookMapper(new ModelMapper());
     }
 }

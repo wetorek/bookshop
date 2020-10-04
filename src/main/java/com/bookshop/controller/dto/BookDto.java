@@ -16,5 +16,5 @@ public class BookDto {
     private BigDecimal price;
     private String name;
     private LocalDate dateOfRelease;
-    private List<AuthorDto> authorDtos;
+    private List<AuthorDto> authorDtoList;
 }

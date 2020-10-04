@@ -32,7 +32,7 @@ public class AuthorController {
         return authorService.saveAuthor(authorDto);
     }
 
-    @PutMapping("/delete")
+    @PutMapping("/update")
     public ResponseEntity<Void> updateAuthor(@RequestBody AuthorDto authorDto) {
         return authorService.updateAuthor(authorDto);
     }
