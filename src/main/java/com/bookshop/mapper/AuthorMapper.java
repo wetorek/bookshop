@@ -4,17 +4,17 @@ import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.entity.Author;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @AllArgsConstructor
 public class AuthorMapper {
+    @Autowired
     private final ModelMapper modelMapper;
 
     public AuthorDto mapAuthorEntityToDto ( Author author){
-        AuthorDto authorDto = modelMapper.map(author, AuthorDto.class);
-        return authorDto;
+        return modelMapper.map(author, AuthorDto.class);
     }
     public Author mapAuthorDtoToEntity( AuthorDto authorDto){
-        Author author = modelMapper.map(authorDto, Author.class);
-        return author;
+        return modelMapper.map(authorDto, Author.class);
     }
 }
