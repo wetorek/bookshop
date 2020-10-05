@@ -37,6 +37,7 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ResponseEntity<Void> save(BookDto bookDto) {
         if (!bookRepository.existsById(bookDto.getId()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -62,14 +63,26 @@ public class BookService {
                 .forEach(u -> authorRepository.save(authorMapper.mapAuthorDtoToEntity(u)));
     }
 
-    public void update(BookDto bookDto) {
+    @Transactional
+    public ResponseEntity<Void> update(BookDto bookDto) {
+        if (!bookRepository.existsById(bookDto.getId()))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Book bookFromRepo = bookRepository.findById(bookDto.getId()).get();
+
         bookRepository.save(bookDto);
+    }
+
+    private boolean compareAuthors (Book book, BookDto bookDto){
+        List<Long> ids = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
+        List<Long> ids2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
+        return ids.containsAll(ids2) && ids2.containsAll(ids);
     }
 
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<BookDto> getBookById(Long id) {
         return bookRepository.findById(id)
                 .map(bookMapper::mapBookEntityToDto)

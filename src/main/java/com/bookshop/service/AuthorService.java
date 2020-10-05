@@ -45,7 +45,7 @@ public class AuthorService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @Transactional
     public ResponseEntity<Void> updateAuthor(AuthorDto authorDto) {
         if (!authorRepository.existsById(authorDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,6 +54,7 @@ public class AuthorService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<Void> deleteAuthor(Long id) {
         if (!authorRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
