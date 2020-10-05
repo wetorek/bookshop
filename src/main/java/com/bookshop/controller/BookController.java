@@ -23,15 +23,12 @@ public class BookController {
 
     @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
-        return bookService.getAllBooks();
-        //return ResponseEntity.ok().body(bookService.getAllBooks());
+        return ResponseEntity.ok().body(bookService.getAllBooks());
     }
 
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
-        //Optional<Book> book = bookService.getBookById(id);
-        //return book.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/add")

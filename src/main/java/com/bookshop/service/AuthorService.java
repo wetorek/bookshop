@@ -40,6 +40,7 @@ public class AuthorService {
 
     @Transactional
     public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
+        // todo what if exists?
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }

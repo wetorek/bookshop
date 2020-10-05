@@ -14,7 +14,7 @@ public class BookMapper {
         return modelMapper.map(book, BookDto.class);
     }
 
-    public Book mapAuthorDtoToEntity(BookDto bookDto) {
+    public Book mapBookDtoToEntity(BookDto bookDto) {
         return modelMapper.map(bookDto, Book.class);
     }
 }
