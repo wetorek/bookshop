@@ -1,18 +1,12 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.BookDto;
-import com.bookshop.entity.Book;
-import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
@@ -40,7 +34,7 @@ public class BookController {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updateBook(@RequestBody BookDto bookDto) {
-            return bookService.update(bookDto);
+        return bookService.update(bookDto);
 //        bookService.update(book);
 //        return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -41,13 +41,13 @@ public class BookService {
     public ResponseEntity<Void> save(BookDto bookDto) {
         if (!bookRepository.existsById(bookDto.getId()))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        bookRepository.save(bookMapper.mapBookDtoToEntity(bookDto));
+        bookRepository.save(bookMapper.mapBookDtoToEntity(bookDto, authorRepository));
         createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
         bookDto.getAuthorDtoList().forEach(u -> {
             Optional<Author> authorFromRepo = authorRepository.findById(u.getId());
             if (authorFromRepo.isPresent()) {
                 List<Book> booksFromAuthor = authorFromRepo.get().getBooks();
-                booksFromAuthor.add(bookMapper.mapBookDtoToEntity(bookDto));
+                booksFromAuthor.add(bookMapper.mapBookDtoToEntity(bookDto, authorRepository));
                 authorFromRepo.get().setBooks(booksFromAuthor);
                 authorRepository.save(authorFromRepo.get());
 
@@ -68,18 +68,37 @@ public class BookService {
         if (!bookRepository.existsById(bookDto.getId()))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         Book bookFromRepo = bookRepository.findById(bookDto.getId()).get();
-
-        bookRepository.save(bookDto);
+        if (compareAuthors(bookFromRepo, bookDto)) {
+            Book newBook = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
+            newBook.setAuthors(bookFromRepo.getAuthors());
+            bookRepository.save(newBook);
+        } else {
+            Book newBook = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
+            newBook.setAuthors(bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()));
+            bookRepository.save(newBook);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean compareAuthors (Book book, BookDto bookDto){
+    private boolean compareAuthors(Book book, BookDto bookDto) {
         List<Long> ids = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
         List<Long> ids2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
         return ids.containsAll(ids2) && ids2.containsAll(ids);
     }
 
-    public void delete(Long id) {
-        bookRepository.deleteById(id);
+    public ResponseEntity<Void> delete(Long id) {
+        if (bookRepository.existsById(id)) {
+            Book book = bookRepository.findById(id).get();
+            bookRepository.deleteById(id);
+            book.getAuthors().forEach(author -> {
+                List<Book> books = author.getBooks();
+                books.remove(book);
+                author.setBooks(books);
+                authorRepository.save(author);
+            });
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Transactional(readOnly = true)

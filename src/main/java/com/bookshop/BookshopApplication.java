@@ -66,6 +66,7 @@ public class BookshopApplication {
     public AuthorMapper authorMapper() {
         return new AuthorMapper(new ModelMapper());
     }
+
     @Bean
     public BookMapper bookMapper() {
         return new BookMapper(new ModelMapper());
