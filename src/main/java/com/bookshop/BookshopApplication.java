@@ -1,12 +1,16 @@
 package com.bookshop;
 
+import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.entity.Author;
+import com.bookshop.entity.Book;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import com.bookshop.repository.CategoryRepository;
 import com.bookshop.repository.PublisherRepository;
+import com.bookshop.service.AuthorService;
+import com.bookshop.service.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -19,13 +23,9 @@ import org.springframework.context.event.EventListener;
 public class BookshopApplication {
 
     @Autowired
-    PublisherRepository publisherRepository;
+    AuthorService authorService;
     @Autowired
-    BookRepository bookRepository;
-    @Autowired
-    AuthorRepository authorRepository;
-    @Autowired
-    CategoryRepository categoryRepository;
+    BookService bookService;
 
     public static void main(String[] args) {
         SpringApplication.run(BookshopApplication.class, args);
@@ -33,16 +33,21 @@ public class BookshopApplication {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
+        AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
+        AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
+        authorService.saveAuthor(authorDto1);
+        authorService.saveAuthor(authorDto2);
         /*Publisher publisher1 = new Publisher(1L, "State Street");
         Publisher publisher2 = new Publisher(2L, "Gordon Bank");
         publisherRepository.save(publisher1);
         publisherRepository.save(publisher2);*/
-        Author author1 = new Author(1L, "Jan", "Pawel", null);
+        /*Author author1 = new Author(1L, "Jan", "Pawel", null);
         Author author2 = new Author(2L, "John", "Paul", null);
         Author author3 = new Author(3L, "Juanito", "Paulito", null);
         authorRepository.save(author1);
         authorRepository.save(author2);
-        authorRepository.save(author3);
+        authorRepository.save(author3);*/
+
         /*Category category1 = new Category(1L, "Przygodowe");
         Category category2 = new Category(2L, "Akcji");
         Category category3 = new Category(3L, "Kryminał");
