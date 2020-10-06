@@ -28,23 +28,15 @@ public class BookController {
     @PostMapping("/add")
     public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto) {
         return bookService.save(bookDto);
-        //bookService.save(book);
-        //return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<Void> updateBook(@RequestBody BookDto bookDto) {
         return bookService.update(bookDto);
-//        bookService.update(book);
-//        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         return bookService.delete(id);
-        //bookService.delete(id);
-        //return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    //TODO Delete an author from book?
 }
