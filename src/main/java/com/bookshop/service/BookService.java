@@ -39,7 +39,7 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> save(BookDto bookDto) {
-        if (!bookRepository.existsById(bookDto.getId())) {
+        if (bookRepository.existsById(bookDto.getId())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
@@ -51,8 +51,14 @@ public class BookService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(u -> {
-                    u.getBooks().add(book);
-                    authorRepository.save(u);
+                    System.out.println(u);
+                    /*if (u.getBooks() == null) {
+                        u.setBooks(List.of(book));
+                    } else {
+                        u.getBooks().add(book);
+                    }
+                    System.out.println(u);
+                    authorRepository.save(u);*/
                 });
         return new ResponseEntity<>(HttpStatus.OK);
     }

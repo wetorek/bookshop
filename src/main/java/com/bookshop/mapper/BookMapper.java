@@ -21,7 +21,7 @@ public class BookMapper {
 
     public Book mapBookDtoToEntity(BookDto bookDto, AuthorRepository authorRepository) {
         Book book = modelMapper.map(bookDto, Book.class);
-        book.setAuthors(book.getAuthors()
+        book.setAuthors(bookDto.getAuthorDtoList()
                 .stream()
                 .map(u -> authorRepository.findById(u.getId()))
                 .filter(Optional::isPresent)

@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Book {
-    LocalDate dateOfRelease;
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -27,9 +26,10 @@ public class Book {
     private BigDecimal price;
     @NotBlank(message = "Name is required")
     private String name;
+    LocalDate dateOfRelease;
     //@ManyToOne
     // private Publisher publisher;
-    @ManyToMany
+    @ManyToMany()
     private List<Author> authors;
     //@OneToOne
     //private Category category;
