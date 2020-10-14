@@ -1,5 +1,6 @@
 package com.bookshop.service;
 
+import antlr.collections.impl.LList;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.entity.Author;
@@ -28,6 +29,7 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
+    private final AuthorService authorService;
 
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
@@ -42,8 +44,17 @@ public class BookService {
         if (bookRepository.existsById(bookDto.getId())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
-        Book book = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
+        if (!authorService.existAll(bookDto.getAuthorDtoList()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
+        Book book = bookMapper.mapBookDtoToEntity(bookDto);
+        for ( Author author : authors){
+            book.addAuthor(author);
+        }
+        bookRepository.save(book);
+        //createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
+
+        /*Book book = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
         bookRepository.save(book); // tutaj książce ustawiam autorów
         bookDto.getAuthorDtoList()                            // tutaj do autorów trzeba przypisać książke
                 .stream()
@@ -52,14 +63,14 @@ public class BookService {
                 .map(Optional::get)
                 .forEach(u -> {
                     System.out.println(u);
-                    /*if (u.getBooks() == null) {
+                    *//*if (u.getBooks() == null) {
                         u.setBooks(List.of(book));
                     } else {
                         u.getBooks().add(book);
                     }
                     System.out.println(u);
-                    authorRepository.save(u);*/
-                });
+                    authorRepository.save(u);*//*
+                });*/
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

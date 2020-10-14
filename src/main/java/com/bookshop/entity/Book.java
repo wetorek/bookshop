@@ -33,4 +33,12 @@ public class Book {
     private List<Author> authors;
     //@OneToOne
     //private Category category;
+    public void addAuthor(Author author){
+        this.authors.add(author);
+        author.getBooks().add(this);
+    }
+    public void removeAuthor(Author author){
+        this.authors.remove(author);
+        author.getBooks().remove(this);
+    }
 }

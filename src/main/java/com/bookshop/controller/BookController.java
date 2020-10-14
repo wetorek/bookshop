@@ -3,7 +3,6 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

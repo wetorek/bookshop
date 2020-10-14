@@ -29,4 +29,8 @@ public class BookMapper {
                 .collect(Collectors.toList()));
         return book;
     }
+
+    public Book mapBookDtoToEntity(BookDto bookDto) {
+        return modelMapper.map(bookDto, Book.class);
+    }
 }

@@ -1,6 +1,7 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.AuthorDto;
+import com.bookshop.entity.Author;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class AuthorService {
 
     @Transactional
     public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
-        if (!authorRepository.existsById(authorDto.getId())){
+        if (!authorRepository.existsById(authorDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
@@ -62,6 +63,19 @@ public class AuthorService {
         }
         authorRepository.deleteById(id); //TODO do sth with his books
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Author> getAuthorsByList(List<AuthorDto> authorDto) {
+        return authorDto.stream()
+                .map(u -> authorRepository.getOne(u.getId()))
+                .collect(Collectors.toList());
+    }
+
+    public boolean existAll(List<AuthorDto> authorDtos) {
+        return authorDtos.stream()
+                .map(u -> authorRepository.existsById(u.getId()))
+                .anyMatch(u -> !u);
     }
 
 }
