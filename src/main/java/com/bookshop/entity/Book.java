@@ -29,7 +29,7 @@ public class Book {
     LocalDate dateOfRelease;
     //@ManyToOne
     // private Publisher publisher;
-    @ManyToMany()
+    @ManyToMany(mappedBy = "books")
     private List<Author> authors;
     //@OneToOne
     //private Category category;

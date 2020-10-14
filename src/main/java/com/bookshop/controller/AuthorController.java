@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/authors")
@@ -23,8 +22,7 @@ public class AuthorController {
 
     @GetMapping("/author/{id}")
     public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
-        Optional<AuthorDto> author = authorService.getAuthorById(id);
-        return author.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return authorService.getAuthorById(id);
     }
 
     @PostMapping("/add")
@@ -41,4 +39,8 @@ public class AuthorController {
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
         return authorService.deleteAuthor(id);
     }
+
+
+    //todo delete book from author
+    //todo add book to author
 }

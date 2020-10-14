@@ -3,7 +3,6 @@ package com.bookshop.service;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.repository.AuthorRepository;
-import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository; //
     private final AuthorMapper authorMapper;
 
     @Transactional(readOnly = true)
@@ -33,14 +31,17 @@ public class AuthorService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<AuthorDto> getAuthorById(Long id) {
-        return authorRepository.findById(id)
+    public ResponseEntity<AuthorDto> getAuthorById(Long id) {
+        Optional<AuthorDto> authorDto = authorRepository.findById(id)
                 .map(authorMapper::mapAuthorEntityToDto);
+        return authorDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @Transactional
     public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
-        // todo what if exists?
+        if (!authorRepository.existsById(authorDto.getId())){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }

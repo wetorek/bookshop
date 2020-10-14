@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -23,6 +21,17 @@ public class Author {
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable( name = "authors_books", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     List<Book> books;
+
+    public void addBook(Book book){
+        this.books.add(book);
+        book.getAuthors().add(this);
+    }
+
+    public void removeBook (Book book){
+        this.books.remove(book);
+        book.getAuthors().remove(this);
+    }
 }
