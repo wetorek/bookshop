@@ -3,6 +3,7 @@ package com.bookshop.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,12 +34,5 @@ public class Book {
     private List<Author> authors;
     //@OneToOne
     //private Category category;
-    public void addAuthor(Author author){
-        this.authors.add(author);
-        author.getBooks().add(this);
-    }
-    public void removeAuthor(Author author){
-        this.authors.remove(author);
-        author.getBooks().remove(this);
-    }
+
 }

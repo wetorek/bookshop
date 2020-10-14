@@ -6,6 +6,7 @@ import com.bookshop.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,8 @@ public class BookMapper {
     }
 
     public Book mapBookDtoToEntity(BookDto bookDto) {
-        return modelMapper.map(bookDto, Book.class);
+        Book book = modelMapper.map(bookDto, Book.class);
+        book.setAuthors(new LinkedList<>());
+        return book;
     }
 }

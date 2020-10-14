@@ -40,8 +40,8 @@ public class AuthorService {
 
     @Transactional
     public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
-        if (!authorRepository.existsById(authorDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (authorRepository.existsById(authorDto.getId())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
         return new ResponseEntity<>(HttpStatus.OK);
@@ -68,14 +68,15 @@ public class AuthorService {
     @Transactional(readOnly = true)
     public List<Author> getAuthorsByList(List<AuthorDto> authorDto) {
         return authorDto.stream()
-                .map(u -> authorRepository.getOne(u.getId()))
+                .map(u -> authorRepository.findById(u.getId()))
+                .filter(u -> u.isPresent())
+                .map(u -> u.get())
                 .collect(Collectors.toList());
     }
 
     public boolean existAll(List<AuthorDto> authorDtos) {
         return authorDtos.stream()
-                .map(u -> authorRepository.existsById(u.getId()))
-                .anyMatch(u -> !u);
+                .allMatch(u -> authorRepository.existsById(u.getId()));
     }
 
 }

@@ -26,7 +26,7 @@ import java.util.List;
 public class BookshopApplication {
 
     @Autowired
-    AuthorRepository authorRepository;
+    AuthorService authorService;
     @Autowired
     BookService bookService;
 
@@ -36,24 +36,17 @@ public class BookshopApplication {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-        /*AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
+        AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
-        authorService.saveAuthor(authorDto1);
-        authorService.saveAuthor(authorDto2);
-//        BookDto book1 = new BookDto(11L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), List.of(authorDto1));
-//        BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2));
-//        BookDto book3 = new BookDto(31L,new BigDecimal("23.22"), "Tomek u murzymnów", LocalDate.of(2014, 1, 3), List.of(authorDto2));
-       */
-        Author author = new Author(2L, "Puszek", "Okruszek", new LinkedList<>());
-        Book book1 = new Book(2L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), new LinkedList<>());
-        author.addBook(book1);
-        authorRepository.save(author);
+        System.out.println(authorService.saveAuthor(authorDto1));
+        System.out.println(authorService.saveAuthor(authorDto2));
+        BookDto book1 = new BookDto(11L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), List.of(authorDto1));
+        BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2));
+        BookDto book3 = new BookDto(31L,new BigDecimal("23.22"), "Tomek u murzymnów", LocalDate.of(2014, 1, 3), List.of(authorDto2));System.out.println(bookService.save(book1));
 
-// bookService.save(book1);
-        //bookService.save(book2);
-       // bookService.save(book3);
-
-
+        // System.out.println(bookService.save(book1));
+        /*System.out.println(bookService.save(book2));
+        System.out.println(bookService.save(book3));*/
         /*Publisher publisher1 = new Publisher(1L, "State Street");
         Publisher publisher2 = new Publisher(2L, "Gordon Bank");
         publisherRepository.save(publisher1);

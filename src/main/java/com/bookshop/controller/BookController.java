@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class BookController {
 
-    //@Autowired
     BookService bookService;
 
     @GetMapping("/all")

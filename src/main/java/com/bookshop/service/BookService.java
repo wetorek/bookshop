@@ -1,6 +1,5 @@
 package com.bookshop.service;
 
-import antlr.collections.impl.LList;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.entity.Author;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,12 +42,14 @@ public class BookService {
         if (bookRepository.existsById(bookDto.getId())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        if (!authorService.existAll(bookDto.getAuthorDtoList()))
+        if (!authorService.existAll(bookDto.getAuthorDtoList())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
-        for ( Author author : authors){
-            book.addAuthor(author);
+        for (Author author : authors) {
+            book.getAuthors().add(author);
+            author.getBooks().add(book);
         }
         bookRepository.save(book);
         //createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
