@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -18,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "books")
 public class Book {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -34,5 +31,4 @@ public class Book {
     private List<Author> authors;
     //@OneToOne
     //private Category category;
-
 }

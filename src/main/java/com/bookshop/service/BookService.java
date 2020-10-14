@@ -48,8 +48,8 @@ public class BookService {
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
         for (Author author : authors) {
-            book.getAuthors().add(author);
-            author.getBooks().add(book);
+//            author.getBooks().add(book);
+            //book.getAuthors().add(author);
         }
         bookRepository.save(book);
         //createAuthorIfDoesntExist(bookDto.getAuthorDtoList());

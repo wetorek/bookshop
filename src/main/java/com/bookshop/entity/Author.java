@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "authors")
 public class Author {
 
     @Id
@@ -21,7 +21,19 @@ public class Author {
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
-    @ManyToMany//(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable( name = "authors_books", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable( name = "authors_books",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     List<Book> books;
+
+    public void addBook(Book book){
+        this.books.add(book);
+        book.getAuthors().add(this);
+    }
+
+    public void removeBook (Book book){
+        this.books.remove(book);
+        book.getAuthors().remove(this);
+    }
 }
