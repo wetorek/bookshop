@@ -33,11 +33,11 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 
-//        createBooksAndSave();
+        createBooksAndSave();
 //        updateBooks();
 //        updateBooksAddAuthor();
 //        updateBooksRemoveAuthor();
-        deleteBooks();
+//        deleteBooks();
 
 
         // System.out.println(bookService.save(book1));

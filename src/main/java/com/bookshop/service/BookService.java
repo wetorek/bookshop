@@ -61,7 +61,11 @@ public class BookService {
         Book bookFromRepo = bookRepository.findById(bookDto.getId()).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
         Book newBook = bookMapper.mapBookDtoToEntity(bookDto);
         if (compareBooksIfHaveTheSameAuthors(bookFromRepo, bookDto)) {
-            newBook.setAuthors(bookFromRepo.getAuthors());
+            List<Author> listOfAuthors = bookFromRepo.getAuthors();
+            bookFromRepo.getAuthors().forEach(u -> u.getBooks().remove(bookFromRepo));
+            bookFromRepo.setAuthors(new LinkedList<>());
+            bookRepository.save(bookFromRepo);
+            listOfAuthors.forEach(author -> author.addBook(bookFromRepo));
         } else {
             bookFromRepo.getAuthors().forEach(u -> u.getBooks().remove(bookFromRepo));
             bookFromRepo.setAuthors(new LinkedList<>());
