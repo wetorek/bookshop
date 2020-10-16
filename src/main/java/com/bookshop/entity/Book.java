@@ -26,8 +26,10 @@ public class Book {
     LocalDate dateOfRelease;
     //@ManyToOne
     // private Publisher publisher;
-    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Author> authors = new LinkedList<>();
+    @ManyToMany(mappedBy = "booksCat", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Category> categories = new LinkedList<>();
 
     public void addAuthor(Author author) {
         this.authors.add(author);

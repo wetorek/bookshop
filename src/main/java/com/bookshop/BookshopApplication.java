@@ -38,7 +38,7 @@ public class BookshopApplication {
 //        updateBooksAddAuthor();
 //        updateBooksRemoveAuthor();
 //        deleteBooks();
-//        detachAuthor();
+        detachAuthor();
 
 
         // System.out.println(bookService.save(book1));
