@@ -54,25 +54,26 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> update(BookDto bookDto) {
-        if (!bookRepository.existsById(bookDto.getId()))
+        if (!bookRepository.existsById(bookDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Book bookFromRepo = bookRepository.findById(bookDto.getId()).get();
-        if (compareAuthors(bookFromRepo, bookDto)) {
-            Book newBook = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
-            newBook.setAuthors(bookFromRepo.getAuthors());
-            bookRepository.save(newBook);
-        } else {
-            Book newBook = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
-            newBook.setAuthors(bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()));
-            bookRepository.save(newBook);
         }
+        Book bookFromRepo = bookRepository.findById(bookDto.getId()).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book newBook = bookMapper.mapBookDtoToEntity(bookDto);
+        if (compareBooksIfHaveTheSameAuthors(bookFromRepo, bookDto)) {
+            newBook.setAuthors(bookFromRepo.getAuthors());
+        } else {
+            newBook.getAuthors().forEach( u -> u.getBooks().remove(newBook));
+            newBook.setAuthors(bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()));
+            newBook.getAuthors().forEach( u -> u.getBooks().add(newBook));
+        }
+        bookRepository.save(newBook);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean compareAuthors(Book book, BookDto bookDto) {
+    private boolean compareBooksIfHaveTheSameAuthors(Book book, BookDto bookDto) {
         List<Long> ids = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
         List<Long> ids2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
-        return ids.containsAll(ids2) && ids2.containsAll(ids);
+        return ids.containsAll(ids2) && ids2.containsAll(ids); // if ids are the same returns true
     }
 
     @Transactional

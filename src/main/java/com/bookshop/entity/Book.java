@@ -28,6 +28,16 @@ public class Book {
     // private Publisher publisher;
     @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Author> authors = new LinkedList<>();
+
+    public void addAuthor(Author author) {
+        this.authors.add(author);
+        author.getBooks().add(this);
+    }
+
+    public void removeAuthor(Author author) {
+        this.authors.remove(author);
+        author.getBooks().remove(this);
+    }
     //@OneToOne
     //private Category category;
 
