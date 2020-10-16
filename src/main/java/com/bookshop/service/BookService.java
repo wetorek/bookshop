@@ -48,36 +48,10 @@ public class BookService {
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
         for (Author author : authors) {
-//            author.getBooks().add(book);
-            //book.getAuthors().add(author);
+            author.addBook(book);
+            authorRepository.save(author);
         }
-        bookRepository.save(book);
-        //createAuthorIfDoesntExist(bookDto.getAuthorDtoList());
-
-        /*Book book = bookMapper.mapBookDtoToEntity(bookDto, authorRepository);
-        bookRepository.save(book); // tutaj książce ustawiam autorów
-        bookDto.getAuthorDtoList()                            // tutaj do autorów trzeba przypisać książke
-                .stream()
-                .map(u -> authorRepository.findById(u.getId()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(u -> {
-                    System.out.println(u);
-                    *//*if (u.getBooks() == null) {
-                        u.setBooks(List.of(book));
-                    } else {
-                        u.getBooks().add(book);
-                    }
-                    System.out.println(u);
-                    authorRepository.save(u);*//*
-                });*/
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private void createAuthorIfDoesntExist(List<AuthorDto> authorDto) {
-        authorDto.stream()
-                .filter(u -> !authorRepository.existsById(u.getId()))
-                .forEach(u -> authorRepository.save(authorMapper.mapAuthorDtoToEntity(u)));
     }
 
     @Transactional

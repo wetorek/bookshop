@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -21,11 +22,11 @@ public class Author {
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable( name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
-    List<Book> books;
+    List<Book> books = new LinkedList<>();
 
     public void addBook(Book book){
         this.books.add(book);
