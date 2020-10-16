@@ -22,5 +22,15 @@ public class Category {
     @JoinTable(name = "categories_books",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
-    List<Book> booksCat = new LinkedList<>();
+    List<Book> booksCategory = new LinkedList<>();
+
+    public void addBook(Book book) {
+        this.booksCategory.add(book);
+        book.getCategories().add(this);
+    }
+
+    public void removeBook(Book book) {
+        this.booksCategory.remove(book);
+        book.getCategories().remove(this);
+    }
 }

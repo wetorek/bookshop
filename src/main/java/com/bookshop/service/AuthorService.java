@@ -61,6 +61,9 @@ public class AuthorService {
         if (!authorRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        Author author = authorRepository.findById(id).orElseThrow();
+        author.getBooksAuthor().forEach(book -> book.removeAuthor(author));
+        authorRepository.save(author);
         authorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

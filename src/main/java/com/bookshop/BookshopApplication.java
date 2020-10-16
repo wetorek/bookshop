@@ -33,7 +33,7 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 
-//        createBooksAndSave();
+        createBooksAndSave();
 //        updateBooks();
 //        updateBooksAddAuthor();
 //        updateBooksRemoveAuthor();

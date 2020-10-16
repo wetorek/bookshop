@@ -61,12 +61,12 @@ public class BookService {
         Book newBook = bookMapper.mapBookDtoToEntity(bookDto);
         if (compareBooksIfHaveTheSameAuthors(bookFromRepo, bookDto)) {
             List<Author> listOfAuthors = bookFromRepo.getAuthors();
-            bookFromRepo.getAuthors().forEach(u -> u.getBooks().remove(bookFromRepo));
+            bookFromRepo.getAuthors().forEach(u -> u.getBooksAuthor().remove(bookFromRepo));
             bookFromRepo.setAuthors(new LinkedList<>());
             bookRepository.save(bookFromRepo);
             listOfAuthors.forEach(author -> author.addBook(bookFromRepo));
         } else {
-            bookFromRepo.getAuthors().forEach(u -> u.getBooks().remove(bookFromRepo));
+            bookFromRepo.getAuthors().forEach(u -> u.getBooksAuthor().remove(bookFromRepo));
             bookFromRepo.setAuthors(new LinkedList<>());
             bookRepository.save(bookFromRepo);
             bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()).forEach(author -> author.addBook(newBook));
@@ -87,7 +87,7 @@ public class BookService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        book.getAuthors().forEach(u -> u.getBooks().remove(book));
+        book.getAuthors().forEach(u -> u.getBooksAuthor().remove(book));
         book.setAuthors(new LinkedList<>());
         bookRepository.save(book);
         bookRepository.deleteById(id);
