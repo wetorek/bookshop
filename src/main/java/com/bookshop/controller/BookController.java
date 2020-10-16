@@ -40,13 +40,13 @@ public class BookController {
         return bookService.delete(id);
     }
 
-    @PatchMapping("/patch/add/{id}")
-    public ResponseEntity<Void> addAuthor (@PathVariable Long id){
-        return bookService.addAuthorToBook(id);
+    @PatchMapping("/patch/add/{bookId}/{authorId}")
+    public ResponseEntity<Void> addAuthor (@PathVariable Long bookId, @PathVariable Long authorId){
+        return bookService.addAuthorToBook(bookId, authorId);
     }
 
-    @PatchMapping("/patch/remove/{id}")
-    public ResponseEntity<Void> removeAuthor (@PathVariable Long id){
-        return bookService.removeAuthorFromBook(id);
+    @PatchMapping("/patch/remove/{bookId}/{authorId}")
+    public ResponseEntity<Void> removeAuthor (@PathVariable Long bookId, @PathVariable Long authorId){
+        return bookService.removeAuthorFromBook(bookId, authorId);
     }
 }

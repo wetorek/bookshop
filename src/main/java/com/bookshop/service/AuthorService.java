@@ -79,4 +79,9 @@ public class AuthorService {
                 .allMatch(u -> authorRepository.existsById(u.getId()));
     }
 
+    public Optional<Author> getAuthorEntity (Long id){
+        return authorRepository.findById(id);
+    }
+
+
 }

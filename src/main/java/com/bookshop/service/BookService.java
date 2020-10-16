@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
     private final AuthorService authorService;
@@ -73,7 +72,7 @@ public class BookService {
             bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()).forEach(author -> author.addBook(newBook));
         }
         bookRepository.save(newBook);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private boolean compareBooksIfHaveTheSameAuthors(Book book, BookDto bookDto) { // if ids are the same returns true
@@ -103,14 +102,19 @@ public class BookService {
     }
 
     @Transactional
-    public ResponseEntity<Void> addAuthorToBook(Long authorId) {
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Void> addAuthorToBook(Long bookId, Long authorId) {
+        if (!bookRepository.existsById(bookId) || authorService.getAuthorEntity(authorId).isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Author author = authorService.getAuthorEntity(authorId).orElseThrow(() -> new IllegalArgumentException("This author does not exist in repo"));
+        bookFromRepo.addAuthor(author);
+        bookRepository.save(bookFromRepo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> removeAuthorFromBook(Long authorId) {
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> removeAuthorFromBook(Long bookId, Long authorId) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
