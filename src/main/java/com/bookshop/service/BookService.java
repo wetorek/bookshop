@@ -80,18 +80,15 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> delete(Long id) {
-        if (bookRepository.existsById(id)) {
-            Book book = bookRepository.findById(id).get();
-            bookRepository.deleteById(id);
-            book.getAuthors().forEach(author -> {
-                List<Book> books = author.getBooks();
-                books.remove(book);
-                author.setBooks(books);
-                authorRepository.save(author);
-            });
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (!bookRepository.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        book.getAuthors().forEach(u -> u.getBooks().remove(book));
+        book.setAuthors(new LinkedList<>());
+        bookRepository.save(book);
+        bookRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
