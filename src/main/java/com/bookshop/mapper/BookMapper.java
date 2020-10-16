@@ -32,8 +32,6 @@ public class BookMapper {
     }
 
     public Book mapBookDtoToEntity(BookDto bookDto) {
-        Book book = modelMapper.map(bookDto, Book.class);
-        book.setAuthors(new LinkedList<>());
-        return book;
+        return modelMapper.map(bookDto, Book.class);
     }
 }

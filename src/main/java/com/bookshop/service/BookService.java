@@ -47,10 +47,8 @@ public class BookService {
         }
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
-        for (Author author : authors) {
-            author.addBook(book);
-            authorRepository.save(author);
-        }
+        authors.forEach(author -> author.addBook(book));
+        bookRepository.save(book);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

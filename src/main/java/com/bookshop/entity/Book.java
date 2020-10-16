@@ -17,8 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "books")
 public class Book {
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
     private Long id;
     @DecimalMin(value = "0.0")
     private BigDecimal price;
@@ -27,7 +26,7 @@ public class Book {
     LocalDate dateOfRelease;
     //@ManyToOne
     // private Publisher publisher;
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(mappedBy = "books", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Author> authors = new LinkedList<>();
     //@OneToOne
     //private Category category;

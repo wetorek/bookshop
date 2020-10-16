@@ -61,7 +61,7 @@ public class AuthorService {
         if (!authorRepository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        authorRepository.deleteById(id); //TODO do sth with his books
+        authorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,8 +69,8 @@ public class AuthorService {
     public List<Author> getAuthorsByList(List<AuthorDto> authorDto) {
         return authorDto.stream()
                 .map(u -> authorRepository.findById(u.getId()))
-                .filter(u -> u.isPresent())
-                .map(u -> u.get())
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 

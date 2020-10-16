@@ -2,11 +2,8 @@ package com.bookshop;
 
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
-import com.bookshop.entity.Author;
-import com.bookshop.entity.Book;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
-import com.bookshop.repository.AuthorRepository;
 import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -19,7 +16,6 @@ import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
 @SpringBootApplication
@@ -36,17 +32,16 @@ public class BookshopApplication {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-        AuthorDto authorDto1 = new AuthorDto(2L, "Puszek", "Wielki");
-        //AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
+        AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
+        AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
         System.out.println(authorService.saveAuthor(authorDto1));
-        //System.out.println(authorService.saveAuthor(authorDto2));
+        System.out.println(authorService.saveAuthor(authorDto2));
         BookDto book1 = new BookDto(99L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), List.of(authorDto1));
-       // BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2));
-       // BookDto book3 = new BookDto(31L,new BigDecimal("23.22"), "Tomek u murzymnów", LocalDate.of(2014, 1, 3), List.of(authorDto2));System.out.println(bookService.save(book1));
-
-
+        BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2));
+        BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u murzymnów", LocalDate.of(2014, 1, 3), List.of(authorDto2));
         System.out.println(bookService.save(book1));
-
+        System.out.println(bookService.save(book2));
+        System.out.println(bookService.save(book3));
 
 
         // System.out.println(bookService.save(book1));
