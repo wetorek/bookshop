@@ -115,6 +115,16 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> removeAuthorFromBook(Long bookId, Long authorId) {
+        if (!bookRepository.existsById(bookId)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        if ( bookFromRepo.getAuthors().stream().map(Author::getId).noneMatch(u -> u.equals(authorId))){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Author author = bookFromRepo.getAuthors().stream().filter(u -> u.getId().equals(authorId)).findFirst().orElseThrow();
+        bookFromRepo.removeAuthor(author);
+        bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -38,7 +38,7 @@ public class BookshopApplication {
 //        updateBooksAddAuthor();
 //        updateBooksRemoveAuthor();
 //        deleteBooks();
-        attachAuthor();
+//        detachAuthor();
 
 
         // System.out.println(bookService.save(book1));
@@ -139,6 +139,17 @@ public class BookshopApplication {
         System.out.println(bookService.save(book2));
         System.out.println(bookService.save(book1));
         System.out.println(bookService.addAuthorToBook(11L, 2L));
+    }
+    private void detachAuthor (){
+        AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
+        AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
+        System.out.println(authorService.saveAuthor(authorDto1));
+        System.out.println(authorService.saveAuthor(authorDto2));
+        BookDto book1 = new BookDto(11L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), List.of(authorDto1));
+        BookDto book2 = new BookDto(22L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2));
+        System.out.println(bookService.save(book2));
+        System.out.println(bookService.save(book1));
+        System.out.println(bookService.removeAuthorFromBook(22L, 1L));
     }
 
     @Bean
