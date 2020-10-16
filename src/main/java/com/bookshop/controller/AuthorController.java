@@ -40,7 +40,4 @@ public class AuthorController {
         return authorService.deleteAuthor(id);
     }
 
-
-    //todo delete book from author
-    //todo add book to author
 }

@@ -50,7 +50,7 @@ public class BookService {
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
         authors.forEach(author -> author.addBook(book));
         bookRepository.save(book);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Transactional
@@ -100,5 +100,17 @@ public class BookService {
         return bookRepository.findById(id)
                 .map(bookMapper::mapBookEntityToDto)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @Transactional
+    public ResponseEntity<Void> addAuthorToBook(Long authorId) {
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Transactional
+    public ResponseEntity<Void> removeAuthorFromBook(Long authorId) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
