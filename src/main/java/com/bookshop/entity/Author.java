@@ -22,18 +22,18 @@ public class Author {
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable( name = "authors_books",
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     List<Book> books = new LinkedList<>();
 
-    public void addBook(Book book){
+    public void addBook(Book book) {
         this.books.add(book);
         book.getAuthors().add(this);
     }
 
-    public void removeBook (Book book){
+    public void removeBook(Book book) {
         this.books.remove(book);
         book.getAuthors().remove(this);
     }

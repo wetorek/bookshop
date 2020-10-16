@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,18 +63,19 @@ public class BookService {
         if (compareBooksIfHaveTheSameAuthors(bookFromRepo, bookDto)) {
             newBook.setAuthors(bookFromRepo.getAuthors());
         } else {
-            newBook.getAuthors().forEach( u -> u.getBooks().remove(newBook));
-            newBook.setAuthors(bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()));
-            newBook.getAuthors().forEach( u -> u.getBooks().add(newBook));
+            bookFromRepo.getAuthors().forEach(u -> u.getBooks().remove(bookFromRepo));
+            bookFromRepo.setAuthors(new LinkedList<>());
+            bookRepository.save(bookFromRepo);
+            bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()).forEach(author -> author.addBook(newBook));
         }
         bookRepository.save(newBook);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean compareBooksIfHaveTheSameAuthors(Book book, BookDto bookDto) {
+    private boolean compareBooksIfHaveTheSameAuthors(Book book, BookDto bookDto) { // if ids are the same returns true
         List<Long> ids = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
         List<Long> ids2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
-        return ids.containsAll(ids2) && ids2.containsAll(ids); // if ids are the same returns true
+        return ids.containsAll(ids2) && ids2.containsAll(ids);
     }
 
     @Transactional
