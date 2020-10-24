@@ -42,9 +42,10 @@ public class BookshopApplication {
 //            updateBooksPatch();
 //        updateBooksAddAuthorAndCategory();
 //        updateBooksRemoveAuthorCategory();
-//        deleteBooks();
+        deleteBooks();
 //        detachAuthor();
 //        categories();
+//        deleteCategory();
 
 
     }
@@ -73,11 +74,11 @@ public class BookshopApplication {
 
 
     private void deleteBooks() {
-        System.out.println(bookService.delete(21L));
+        System.out.println(bookService.delete(31L));
     }
 
-    private void deleteBook() {
-
+    private void deleteCategory() {
+        System.out.println(categoryService.deleteById(2L));
     }
 
 

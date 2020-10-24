@@ -112,7 +112,9 @@ public class BookService {
         }
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
         book.getAuthors().forEach(u -> u.getBooksAuthor().remove(book));
+        book.getCategories().forEach(u -> u.getBooksCategory().remove(book));
         book.setAuthors(new LinkedList<>());
+        book.setCategories(new LinkedList<>());
         bookRepository.save(book);
         bookRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
