@@ -1,6 +1,8 @@
 package com.bookshop.service;
 
+import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
+import com.bookshop.entity.Author;
 import com.bookshop.entity.Category;
 import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.repository.CategoryRepository;
@@ -36,7 +38,7 @@ public class CategoryService {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Transactional
@@ -65,4 +67,22 @@ public class CategoryService {
         Optional<CategoryDto> categoryDto = categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToDto);
         return categoryDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
+
+
+
+    @Transactional(readOnly = true)
+    public List<Category> getCategoriesByList(List<CategoryDto> categoryDtos) {
+        return categoryDtos.stream()
+                .map(u -> categoryRepository.findById(u.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+    public boolean existAll(List<CategoryDto> categoryDtos) {
+        return categoryDtos.stream()
+                .allMatch(u -> categoryRepository.existsById(u.getId()));
+    }
+
+
+
 }

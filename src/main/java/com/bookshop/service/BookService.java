@@ -4,6 +4,7 @@ import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
+import com.bookshop.entity.Category;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.BookRepository;
@@ -27,6 +28,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
     private final AuthorService authorService;
+    private final CategoryService categoryService;
 
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
@@ -41,14 +43,19 @@ public class BookService {
         if (bookRepository.existsById(bookDto.getId())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        if (!authorService.existAll(bookDto.getAuthorDtoList())) {
+        if (!authorService.existAll(bookDto.getAuthorDtoList()) || !categoryService.existAll(bookDto.getCategoryDtoList())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        bookRepository.save(matchBookWithEntities(bookDto));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    private Book matchBookWithEntities (BookDto bookDto){
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
         authors.forEach(author -> author.addBook(book));
-        bookRepository.save(book);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        List<Category> categories = categoryService.getCategoriesByList(bookDto.getCategoryDtoList());
+        categories.forEach( category -> category.addBook(book));
+        return book;
     }
 
     @Transactional

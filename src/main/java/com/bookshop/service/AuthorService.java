@@ -44,7 +44,7 @@ public class AuthorService {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Transactional
