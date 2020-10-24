@@ -140,6 +140,18 @@ public class BookService {
     }
 
     @Transactional
+    public ResponseEntity<Void> addCategoryToBook(Long bookId, Long categoryId) {
+        if (!bookRepository.existsById(bookId) || categoryService.getCategoryEntity(categoryId).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Category category = categoryService.getCategoryEntity(categoryId).orElseThrow(() -> new IllegalArgumentException("This category does not exist in repo"));
+        bookFromRepo.addCategory(category);
+        bookRepository.save(bookFromRepo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional
     public ResponseEntity<Void> removeAuthorFromBook(Long bookId, Long authorId) {
         if (!bookRepository.existsById(bookId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -150,6 +162,21 @@ public class BookService {
         }
         Author author = bookFromRepo.getAuthors().stream().filter(u -> u.getId().equals(authorId)).findFirst().orElseThrow();
         bookFromRepo.removeAuthor(author);
+        bookRepository.save(bookFromRepo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional
+    public ResponseEntity<Void> removeCategoryFromBook(Long bookId, Long categoryId) {
+        if (!bookRepository.existsById(bookId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        if (bookFromRepo.getCategories().stream().map(Category::getId).noneMatch(u -> u.equals(categoryId))) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Category category = categoryService.getCategoryEntity(categoryId).orElseThrow();
+        bookFromRepo.removeCategory(category);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
