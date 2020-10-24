@@ -29,9 +29,9 @@ public class Book {
     private String name;
     //@ManyToOne
     // private Publisher publisher;
-    @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Author> authors = new LinkedList<>();
-    @ManyToMany(mappedBy = "booksCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "booksCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Category> categories = new LinkedList<>();
 
     public void addAuthor(Author author) {

@@ -1,8 +1,6 @@
 package com.bookshop.service;
 
-import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
-import com.bookshop.entity.Author;
 import com.bookshop.entity.Category;
 import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.repository.CategoryRepository;
@@ -69,7 +67,6 @@ public class CategoryService {
     }
 
 
-
     @Transactional(readOnly = true)
     public List<Category> getCategoriesByList(List<CategoryDto> categoryDtos) {
         return categoryDtos.stream()
@@ -78,11 +75,15 @@ public class CategoryService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
     public boolean existAll(List<CategoryDto> categoryDtos) {
         return categoryDtos.stream()
                 .allMatch(u -> categoryRepository.existsById(u.getId()));
     }
 
+    public Optional<Category> getCategoryEntity(Long id) {
+        return categoryRepository.findById(id);
+    }
 
 
 }

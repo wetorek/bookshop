@@ -2,11 +2,13 @@ package com.bookshop.service;
 
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
+import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
+import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
+    private final CategoryMapper categoryMapper;
     private final AuthorService authorService;
     private final CategoryService categoryService;
 
@@ -49,12 +53,13 @@ public class BookService {
         bookRepository.save(matchBookWithEntities(bookDto));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    private Book matchBookWithEntities (BookDto bookDto){
+
+    private Book matchBookWithEntities(BookDto bookDto) {
         List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
         authors.forEach(author -> author.addBook(book));
         List<Category> categories = categoryService.getCategoriesByList(bookDto.getCategoryDtoList());
-        categories.forEach( category -> category.addBook(book));
+        categories.forEach(category -> category.addBook(book));
         return book;
     }
 
@@ -64,27 +69,40 @@ public class BookService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookDto.getId()).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        Book newBook = bookMapper.mapBookDtoToEntity(bookDto);
-        if (compareBooksIfHaveTheSameAuthors(bookFromRepo, bookDto)) {
-            List<Author> listOfAuthors = bookFromRepo.getAuthors();
-            bookFromRepo.getAuthors().forEach(u -> u.getBooksAuthor().remove(bookFromRepo));
-            bookFromRepo.setAuthors(new LinkedList<>());
+        if (compareBooksIfHaveTheSameEntities(bookFromRepo, bookDto)) {
+            Book newBook = bookMapper.mapBookEntityToEntity(bookFromRepo, bookDto);
             bookRepository.save(bookFromRepo);
-            listOfAuthors.forEach(author -> author.addBook(bookFromRepo));
+            bookRepository.save(newBook);
         } else {
-            bookFromRepo.getAuthors().forEach(u -> u.getBooksAuthor().remove(bookFromRepo));
-            bookFromRepo.setAuthors(new LinkedList<>());
+            bookFromRepo.getAuthors().forEach(author -> author.getBooksAuthor().remove(bookFromRepo));
+            bookFromRepo.getCategories().forEach(category -> category.getBooksCategory().remove(bookFromRepo));
+            attachEntitiesToBook(bookFromRepo, bookDto);
             bookRepository.save(bookFromRepo);
-            bookDto.getAuthorDtoList().stream().map(authorMapper::mapAuthorDtoToEntity).collect(Collectors.toList()).forEach(author -> author.addBook(newBook));
         }
-        bookRepository.save(newBook);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private boolean compareBooksIfHaveTheSameAuthors(Book book, BookDto bookDto) { // if ids are the same returns true
-        List<Long> ids = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
-        List<Long> ids2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
-        return ids.containsAll(ids2) && ids2.containsAll(ids);
+    private void attachEntitiesToBook(Book bookFromRepo, BookDto bookDto) {
+        bookDto.getAuthorDtoList().stream()
+                .map(author -> authorService.getAuthorEntity(author.getId()))
+                .filter(Optional::isPresent).map(Optional::get)
+                .forEach(bookFromRepo::addAuthor);
+        bookDto.getCategoryDtoList().stream()
+                .map(category -> categoryService.getCategoryEntity(category.getId()))
+                .filter(Optional::isPresent).map(Optional::get)
+                .forEach(bookFromRepo::addCategory);
+    }
+
+    private boolean compareBooksIfHaveTheSameEntities(Book book, BookDto bookDto) { // if ids are the same returns true
+        List<Long> authors = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
+        List<Long> authors2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
+        List<Long> categories = book.getCategories().stream().map(Category::getId).collect(Collectors.toList());
+        List<Long> categories2 = bookDto.getCategoryDtoList().stream().map(CategoryDto::getId).collect(Collectors.toList());
+        return compareLists(authors, authors2) && compareLists(categories, categories2);
+    }
+
+    private boolean compareLists(List<Long> list1, List<Long> list2) {
+        return list1.containsAll(list2) && list2.containsAll(list1);
     }
 
     @Transactional
