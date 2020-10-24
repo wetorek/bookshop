@@ -33,12 +33,13 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 
-        createBooksAndSave();
+//        createBooksAndSave();
 //        updateBooks();
 //        updateBooksAddAuthor();
 //        updateBooksRemoveAuthor();
 //        deleteBooks();
 //        detachAuthor();
+
 
 
         // System.out.println(bookService.save(book1));
@@ -67,6 +68,10 @@ public class BookshopApplication {
         bookRepository.save(book1);
         bookRepository.save(book2);
         bookRepository.save(book3);*/
+    }
+
+    private void addCategories (){
+
     }
 
     private void createBooksAndSave() {

@@ -1,15 +1,13 @@
 package com.bookshop.controller;
 
 
-import com.bookshop.entity.Category;
+import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/categories")
@@ -18,31 +16,27 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return ResponseEntity.ok().body(categoryService.getAll());
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Optional<Category> category = categoryService.getCategoryById(id);
-        return category.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
+        return categoryService.deleteById(id);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addCategory(@RequestBody Category category) {
-        categoryService.save(category);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> addCategory(@RequestBody CategoryDto categoryDto) {
+        return categoryService.save(categoryDto);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> updateCategory(@RequestBody Category category) {
-        categoryService.update(category);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> updateCategory(@RequestBody CategoryDto categoryDto) {
+        return categoryService.update(categoryDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return categoryService.deleteById(id);
     }
 }
