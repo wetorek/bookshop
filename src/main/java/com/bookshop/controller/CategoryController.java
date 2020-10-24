@@ -2,9 +2,7 @@ package com.bookshop.controller;
 
 
 
-import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
-import com.bookshop.service.AuthorService;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok().body(categoryService.getAll());
+        return ResponseEntity.ok().body(categoryService.getAllCategories());
     }
 
     @GetMapping("/category/{id}")
@@ -29,7 +27,7 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ResponseEntity<Void> addCategory(@RequestBody CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+        return categoryService.saveCategory(categoryDto);
     }
 
     @PutMapping("/update")

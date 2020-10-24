@@ -4,6 +4,7 @@ import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
+import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -33,12 +34,12 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 
-        createBooksAndSave();
-        updateBooks();
-        updateBooksAddAuthor();
-        updateBooksRemoveAuthor();
-        deleteBooks();
-        detachAuthor();
+//        createBooksAndSave();
+//        updateBooks();
+//        updateBooksAddAuthor();
+//        updateBooksRemoveAuthor();
+//        deleteBooks();
+//        detachAuthor();
 
 
         // System.out.println(bookService.save(book1));
@@ -170,5 +171,10 @@ public class BookshopApplication {
     @Bean
     public BookMapper bookMapper() {
         return new BookMapper(new ModelMapper());
+    }
+
+    @Bean
+    public CategoryMapper categoryMapper(){
+        return new CategoryMapper(new ModelMapper());
     }
 }

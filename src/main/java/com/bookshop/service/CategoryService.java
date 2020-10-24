@@ -1,11 +1,11 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.CategoryDto;
-import com.bookshop.entity.Category;
 import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,29 +20,40 @@ import java.util.stream.Collectors;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+
     @Transactional(readOnly = true)
-    public List<CategoryDto> getAll() {
+    public List<CategoryDto> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::mapCategoryEntityToDto)
                 .collect(Collectors.toList());
     }
 
-    public void save(Category category) {
-        categoryRepository.save(category);
+    @Transactional
+    public ResponseEntity<Void> saveCategory(CategoryDto categoryDto) {
+        if (categoryRepository.existsById(categoryDto.getId())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public void update(Category category) {
-        categoryRepository.save(category);
+    @Transactional
+    public ResponseEntity<Void> update(CategoryDto categoryDto) {
+//        categoryRepository.save(categoryDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public void deleteById(Long id) {
-        categoryRepository.deleteById(id);
+    @Transactional
+    public ResponseEntity<Void> deleteById(Long id) {
+//        categoryRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<CategoryDto> getCategoryById(Long id) {
-        Optional<CategoryDto> categoryDto  = categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToDto);
+        Optional<CategoryDto> categoryDto = categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToDto);
         return categoryDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
