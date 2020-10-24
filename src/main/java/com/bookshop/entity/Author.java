@@ -16,17 +16,17 @@ import java.util.List;
 @Entity(name = "authors")
 public class Author {
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "authors_books",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    List<Book> booksAuthor = new LinkedList<>();
     @Id
     private Long id;
     @NotBlank(message = "First name is required")
     private String firstName;
     @NotBlank(message = "Second name is required")
     private String secondName;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(name = "authors_books",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
-    List<Book> booksAuthor = new LinkedList<>();
 
     public void addBook(Book book) {
         this.booksAuthor.add(book);

@@ -33,13 +33,12 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 
-//        createBooksAndSave();
-//        updateBooks();
-//        updateBooksAddAuthor();
-//        updateBooksRemoveAuthor();
-//        deleteBooks();
-//        detachAuthor();
-
+        createBooksAndSave();
+        updateBooks();
+        updateBooksAddAuthor();
+        updateBooksRemoveAuthor();
+        deleteBooks();
+        detachAuthor();
 
 
         // System.out.println(bookService.save(book1));
@@ -70,7 +69,7 @@ public class BookshopApplication {
         bookRepository.save(book3);*/
     }
 
-    private void addCategories (){
+    private void addCategories() {
 
     }
 
@@ -134,7 +133,7 @@ public class BookshopApplication {
         System.out.println(bookService.update(book3));
     }
 
-    private void attachAuthor (){
+    private void attachAuthor() {
         AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
         System.out.println(authorService.saveAuthor(authorDto1));
@@ -145,7 +144,8 @@ public class BookshopApplication {
         System.out.println(bookService.save(book1));
         System.out.println(bookService.addAuthorToBook(11L, 2L));
     }
-    private void detachAuthor (){
+
+    private void detachAuthor() {
         AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
         System.out.println(authorService.saveAuthor(authorDto1));

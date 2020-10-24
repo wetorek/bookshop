@@ -20,13 +20,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "books")
 public class Book {
+    LocalDate dateOfRelease;
     @Id
     private Long id;
     @DecimalMin(value = "0.0")
     private BigDecimal price;
     @NotBlank(message = "Name is required")
     private String name;
-    LocalDate dateOfRelease;
     //@ManyToOne
     // private Publisher publisher;
     @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})

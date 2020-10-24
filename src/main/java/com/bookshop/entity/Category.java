@@ -14,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Category {
-    @Id
-    private Long id;
-    @NotBlank(message = "Name is required")
-    private String name;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "categories_books",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     List<Book> booksCategory = new LinkedList<>();
+    @Id
+    private Long id;
+    @NotBlank(message = "Name is required")
+    private String name;
 
     public void addBook(Book book) {
         this.booksCategory.add(book);

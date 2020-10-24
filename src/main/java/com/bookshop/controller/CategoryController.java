@@ -1,13 +1,10 @@
 package com.bookshop.controller;
 
 
-import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/categories")
@@ -15,7 +12,7 @@ import java.util.List;
 public class CategoryController {
     CategoryService categoryService;
 
-    @GetMapping("/all")
+   /* @GetMapping("/all")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return ResponseEntity.ok().body(categoryService.getAll());
     }
@@ -38,5 +35,5 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         return categoryService.deleteById(id);
-    }
+    }*/
 }

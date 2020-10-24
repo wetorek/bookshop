@@ -6,7 +6,6 @@ import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
-import com.bookshop.repository.AuthorRepository;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -103,7 +102,7 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> addAuthorToBook(Long bookId, Long authorId) {
-        if (!bookRepository.existsById(bookId) || authorService.getAuthorEntity(authorId).isEmpty()){
+        if (!bookRepository.existsById(bookId) || authorService.getAuthorEntity(authorId).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
@@ -115,11 +114,11 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> removeAuthorFromBook(Long bookId, Long authorId) {
-        if (!bookRepository.existsById(bookId)){
+        if (!bookRepository.existsById(bookId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        if ( bookFromRepo.getAuthors().stream().map(Author::getId).noneMatch(u -> u.equals(authorId))){
+        if (bookFromRepo.getAuthors().stream().map(Author::getId).noneMatch(u -> u.equals(authorId))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Author author = bookFromRepo.getAuthors().stream().filter(u -> u.getId().equals(authorId)).findFirst().orElseThrow();
