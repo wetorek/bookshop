@@ -1,12 +1,12 @@
 package com.bookshop.controller;
 
 
-
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -32,7 +32,7 @@ public class CategoryController {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updateCategory(@RequestBody CategoryDto categoryDto) {
-        return categoryService.update(categoryDto);
+        return categoryService.updateCategory(categoryDto);
     }
 
     @DeleteMapping("/delete/{id}")

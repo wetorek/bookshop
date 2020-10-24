@@ -1,6 +1,7 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.CategoryDto;
+import com.bookshop.entity.Category;
 import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
@@ -39,16 +40,24 @@ public class CategoryService {
     }
 
     @Transactional
-    public ResponseEntity<Void> update(CategoryDto categoryDto) {
-//        categoryRepository.save(categoryDto);
+    public ResponseEntity<Void> updateCategory(CategoryDto categoryDto) {
+        if (!categoryRepository.existsById(categoryDto.getId())) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity<Void> deleteById(Long id) {
-//        categoryRepository.deleteById(id);
+        if (!categoryRepository.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Category category = categoryRepository.findById(id).orElseThrow();
+        category.getBooksCategory().forEach(book -> book.removeCategory(category));
+        categoryRepository.save(category);
+        categoryRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @Transactional(readOnly = true)

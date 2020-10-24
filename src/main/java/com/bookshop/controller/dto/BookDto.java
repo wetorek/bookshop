@@ -17,4 +17,5 @@ public class BookDto {
     private String name;
     private LocalDate dateOfRelease;
     private List<AuthorDto> authorDtoList;
+    private List<CategoryDto> categoryDtoList;
 }

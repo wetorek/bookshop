@@ -1,6 +1,5 @@
 package com.bookshop;
 
-import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
@@ -17,7 +16,7 @@ import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.LinkedList;
 
 @SpringBootApplication
 public class BookshopApplication {
@@ -40,7 +39,7 @@ public class BookshopApplication {
 //        updateBooksRemoveAuthor();
 //        deleteBooks();
 //        detachAuthor();
-
+        categories();
 
         // System.out.println(bookService.save(book1));
         /*System.out.println(bookService.save(book2));
@@ -70,11 +69,12 @@ public class BookshopApplication {
         bookRepository.save(book3);*/
     }
 
-    private void addCategories() {
-
+    private void categories() {
+        BookDto bookDto = new BookDto(1L, BigDecimal.TEN, "sadads", LocalDate.of(1999, 12, 3), new LinkedList<>(), new LinkedList<>());
+        bookService.save(bookDto);
     }
 
-    private void createBooksAndSave() {
+    /*private void createBooksAndSave() {
         AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
         System.out.println(authorService.saveAuthor(authorDto1));
@@ -156,7 +156,7 @@ public class BookshopApplication {
         System.out.println(bookService.save(book2));
         System.out.println(bookService.save(book1));
         System.out.println(bookService.removeAuthorFromBook(22L, 1L));
-    }
+    }*/
 
     @Bean
     public ModelMapper modelMapper() {
@@ -174,7 +174,7 @@ public class BookshopApplication {
     }
 
     @Bean
-    public CategoryMapper categoryMapper(){
+    public CategoryMapper categoryMapper() {
         return new CategoryMapper(new ModelMapper());
     }
 }
