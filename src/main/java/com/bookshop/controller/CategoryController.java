@@ -1,10 +1,15 @@
 package com.bookshop.controller;
 
 
+
+import com.bookshop.controller.dto.AuthorDto;
+import com.bookshop.controller.dto.CategoryDto;
+import com.bookshop.service.AuthorService;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -12,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     CategoryService categoryService;
 
-   /* @GetMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return ResponseEntity.ok().body(categoryService.getAll());
     }
 
     @GetMapping("/category/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        return categoryService.deleteById(id);
+        return categoryService.getCategoryById(id);
     }
 
     @PostMapping("/add")
@@ -35,5 +40,5 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         return categoryService.deleteById(id);
-    }*/
+    }
 }
