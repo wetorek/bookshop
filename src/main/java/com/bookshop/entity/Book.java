@@ -27,12 +27,13 @@ public class Book {
     private BigDecimal price;
     @NotBlank(message = "Name is required")
     private String name;
-    //@ManyToOne
-    // private Publisher publisher;
+
     @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Author> authors = new LinkedList<>();
     @ManyToMany(mappedBy = "booksCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Category> categories = new LinkedList<>();
+    @ManyToMany(mappedBy = "booksPublisher", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Publisher> publishers = new LinkedList<>();
 
     public void addAuthor(Author author) {
         this.authors.add(author);

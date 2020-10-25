@@ -18,4 +18,5 @@ public class BookDto {
     private LocalDate dateOfRelease;
     private List<AuthorDto> authorDtoList;
     private List<CategoryDto> categoryDtoList;
+    private List<PublisherDto> publisherDtoList;
 }
