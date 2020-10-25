@@ -1,5 +1,6 @@
 package com.bookshop.controller;
 
+import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.entity.Publisher;
 import com.bookshop.service.PublisherService;
 import lombok.AllArgsConstructor;
@@ -23,27 +24,23 @@ public class PublisherController {
     }
 
     @GetMapping("/publisher/{id}")
-    public ResponseEntity<Publisher> getPublisherById(@PathVariable Long id) {
-        Optional<Publisher> publisher = publisherService.getPublisherById(id);
-        return publisher.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PublisherDto> getPublisherById(@PathVariable Long id) {
+        return publisherService.getPublisherById(id);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addPublisher(@RequestBody Publisher publisher) {
-        publisherService.savePublisher(publisher);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> addPublisher(@RequestBody PublisherDto publisherDto) {
+        return publisherService.savePublisher(publisherDto);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> updatePublisher(@RequestBody Publisher publisher) {
-        publisherService.updatePublisher(publisher);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> updatePublisher(@RequestBody PublisherDto publisherDto) {
+        return publisherService.updatePublisher(publisherDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletePublisher(@PathVariable Long id) {
-        publisherService.deletePublisher(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return publisherService.deletePublisher(id);
     }
 
 }
