@@ -1,15 +1,12 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.PublisherDto;
-import com.bookshop.entity.Publisher;
 import com.bookshop.service.PublisherService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/publishers")
@@ -19,7 +16,7 @@ public class PublisherController {
     PublisherService publisherService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Publisher>> getAllPublishers() {
+    public ResponseEntity<List<PublisherDto>> getAllPublishers() {
         return ResponseEntity.ok().body(publisherService.getAllPublishers());
     }
 

@@ -55,4 +55,14 @@ public class Book {
         category.getBooksCategory().remove(this);
     }
 
+    public void addPublisher(Publisher publisher) {
+        this.publishers.add(publisher);
+        publisher.getBooksPublisher().add(this);
+    }
+
+    public void removePublisher(Publisher publisher) {
+        this.publishers.remove(publisher);
+        publisher.getBooksPublisher().remove(this);
+    }
+
 }

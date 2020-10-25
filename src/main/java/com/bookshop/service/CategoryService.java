@@ -40,7 +40,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public ResponseEntity<Void> updateCategory(CategoryDto categoryDto) {
+    public ResponseEntity<Void> updateCategory(CategoryDto categoryDto) { //TODO test it for book with category
         if (!categoryRepository.existsById(categoryDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -68,17 +68,18 @@ public class CategoryService {
 
 
     @Transactional(readOnly = true)
-    public List<Category> getCategoriesByList(List<CategoryDto> categoryDtos) {
-        return categoryDtos.stream()
+    public List<Category> getCategoriesByList(List<CategoryDto> categoryDtoList) {
+        return categoryDtoList.stream()
                 .map(u -> categoryRepository.findById(u.getId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
-    public boolean existAll(List<CategoryDto> categoryDtos) {
-        return categoryDtos.stream()
-                .allMatch(u -> categoryRepository.existsById(u.getId()));
+    public boolean existAll(List<CategoryDto> categoryDtoList) {
+        return categoryDtoList.stream()
+                .map(CategoryDto::getId)
+                .allMatch(categoryRepository::existsById);
     }
 
     public Optional<Category> getCategoryEntity(Long id) {
