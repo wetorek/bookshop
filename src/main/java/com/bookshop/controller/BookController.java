@@ -45,6 +45,11 @@ public class BookController {
         return bookService.addAuthorToBook(bookId, authorId);
     }
 
+    @PatchMapping("/patch/addPublisher/{bookId}/{publisherId}")
+    public ResponseEntity<Void> addPublisher(@PathVariable Long bookId, @PathVariable Long publisherId){
+        return bookService.addPublisherToBook(bookId, publisherId);
+    }
+
     @PatchMapping("/patch/addCategory/{bookId}/{categoryId}")
     public ResponseEntity<Void> addCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
         return bookService.addCategoryToBook(bookId, categoryId);
@@ -59,4 +64,12 @@ public class BookController {
     public ResponseEntity<Void> removeCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
         return bookService.removeCategoryFromBook(bookId, categoryId);
     }
+
+    @PatchMapping("/patch/detachPublisher/{bookId}/{publisherId}")
+    public ResponseEntity<Void> removePublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
+        return bookService.removePublisherFromBook(bookId, publisherId);
+    }
+
+
+
 }
