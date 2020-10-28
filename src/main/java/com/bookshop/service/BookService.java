@@ -3,6 +3,7 @@ package com.bookshop.service;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
+import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
@@ -80,6 +81,7 @@ public class BookService {
         } else {
             bookFromRepo.getAuthors().forEach(author -> author.getBooksAuthor().remove(bookFromRepo));
             bookFromRepo.getCategories().forEach(category -> category.getBooksCategory().remove(bookFromRepo));
+            bookFromRepo.getPublishers().forEach(publisher -> publisher.getBooksPublisher().remove(bookFromRepo));
             attachEntitiesToBook(bookFromRepo, bookDto);
             bookRepository.save(bookFromRepo);
         }
@@ -95,6 +97,11 @@ public class BookService {
                 .map(category -> categoryService.getCategoryEntity(category.getId()))
                 .filter(Optional::isPresent).map(Optional::get)
                 .forEach(bookFromRepo::addCategory);
+        bookDto.getPublisherDtoList().stream()
+                .map(PublisherDto::getId)
+                .map(publisherService::getPublisherEntity)
+                .filter(Optional::isPresent).map(Optional::get)
+                .forEach(bookFromRepo::addPublisher);
     }
 
     private boolean compareBooksIfHaveTheSameEntities(Book book, BookDto bookDto) { // if ids are the same returns true
@@ -102,7 +109,9 @@ public class BookService {
         List<Long> authors2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
         List<Long> categories = book.getCategories().stream().map(Category::getId).collect(Collectors.toList());
         List<Long> categories2 = bookDto.getCategoryDtoList().stream().map(CategoryDto::getId).collect(Collectors.toList());
-        return compareLists(authors, authors2) && compareLists(categories, categories2);
+        List<Long> publishers = bookDto.getPublisherDtoList().stream().map(PublisherDto::getId).collect(Collectors.toList());
+        List<Long> publishers2 = book.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
+        return compareLists(authors, authors2) && compareLists(categories, categories2) && compareLists(publishers, publishers2);
     }
 
     private boolean compareLists(List<Long> list1, List<Long> list2) {
@@ -117,8 +126,10 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
         book.getAuthors().forEach(u -> u.getBooksAuthor().remove(book));
         book.getCategories().forEach(u -> u.getBooksCategory().remove(book));
+        book.getPublishers().forEach(publisher -> publisher.getBooksPublisher().remove(book));
         book.setAuthors(new LinkedList<>());
         book.setCategories(new LinkedList<>());
+        book.setPublishers(new LinkedList<>());
         bookRepository.save(book);
         bookRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -181,6 +192,33 @@ public class BookService {
         }
         Category category = categoryService.getCategoryEntity(categoryId).orElseThrow();
         bookFromRepo.removeCategory(category);
+        bookRepository.save(bookFromRepo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional
+    public ResponseEntity<Void> removePublisherFromBook(Long bookId, Long publisherId) {
+        if (!bookRepository.existsById(bookId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        if (bookFromRepo.getPublishers().stream().map(Publisher::getId).noneMatch(u -> u.equals(publisherId))) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Publisher publisher = publisherService.getPublisherEntity(publisherId).orElseThrow();
+        bookFromRepo.removePublisher(publisher);
+        bookRepository.save(bookFromRepo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional
+    public ResponseEntity<Void> addPublisherToBook(Long bookId, Long publisherId) {
+        if (!bookRepository.existsById(bookId) || publisherService.getPublisherEntity(publisherId).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Publisher publisher = publisherService.getPublisherEntity(publisherId).orElseThrow();
+        bookFromRepo.addPublisher(publisher);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

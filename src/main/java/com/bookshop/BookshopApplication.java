@@ -4,20 +4,14 @@ import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
-import com.bookshop.mapper.AuthorMapper;
-import com.bookshop.mapper.BookMapper;
-import com.bookshop.mapper.CategoryMapper;
-import com.bookshop.mapper.PublisherMapper;
 import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import com.bookshop.service.CategoryService;
 import com.bookshop.service.PublisherService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
@@ -44,10 +38,10 @@ public class BookshopApplication {
     public void appReady(ApplicationReadyEvent event) {
 //        publisherTest();
         setUp();
-//            updateBooksPatch();
-//        updateBooksAddAuthorAndCategory();
+//        updateBooksPatch();
+//        updateBooksAddConnectedEntities();
 //        updateBooksRemoveAuthorCategory();
-        //deleteBooks();
+//        deleteBooks();
 //        detachAuthor();
 //        categories();
 //        deleteCategory();
@@ -114,7 +108,7 @@ public class BookshopApplication {
     }
 
 
-    private void updateBooksAddAuthorAndCategory() {
+    private void updateBooksAddConnectedEntities() {
 
         AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");

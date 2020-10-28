@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class PublisherService {
     private final PublisherRepository publisherRepository;
     private final PublisherMapper publisherMapper;
+
     @Transactional(readOnly = true)
     public List<PublisherDto> getAllPublishers() {
         return publisherRepository.findAll()
@@ -75,7 +76,7 @@ public class PublisherService {
         return publisherRepository.findById(id);
     }
 
-    public List<Publisher> getPublishersByList (List<PublisherDto> publisherDtoList){
+    public List<Publisher> getPublishersByList(List<PublisherDto> publisherDtoList) {
         return publisherDtoList.stream()
                 .map(PublisherDto::getId)
                 .map(publisherRepository::findById)
