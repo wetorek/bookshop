@@ -40,11 +40,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public ResponseEntity<Void> updateCategory(CategoryDto categoryDto) { //TODO test it for book with category
+    public ResponseEntity<Void> updateCategory(CategoryDto categoryDto) {
         if (!categoryRepository.existsById(categoryDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto));
+        categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto)); //TODO error here, cuts all existing connections
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

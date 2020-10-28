@@ -68,6 +68,9 @@ public class BookshopApplication {
         System.out.println(bookService.save(book1));
         System.out.println(bookService.save(book2));
         System.out.println(bookService.save(book3));
+        categoryDto2.setName("dupa12345");
+        System.out.println(categoryService.updateCategory(categoryDto2));
+
     }
 
 
