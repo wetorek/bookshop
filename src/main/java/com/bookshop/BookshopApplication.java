@@ -177,28 +177,5 @@ public class BookshopApplication {
         System.out.println(bookService.removeAuthorFromBook(22L, 1L));
     }*/
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
-    @Bean
-    public AuthorMapper authorMapper() {
-        return new AuthorMapper(new ModelMapper());
-    }
-
-    @Bean
-    public BookMapper bookMapper() {
-        return new BookMapper(new ModelMapper());
-    }
-
-    @Bean
-    public CategoryMapper categoryMapper() {
-        return new CategoryMapper(new ModelMapper());
-    }
-
-    @Bean
-    public PublisherMapper publisherMapper() {
-        return new PublisherMapper(new ModelMapper());
-    }
 }

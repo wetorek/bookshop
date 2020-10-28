@@ -6,6 +6,7 @@ import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
+import com.bookshop.entity.Publisher;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.mapper.CategoryMapper;
@@ -33,6 +34,7 @@ public class BookService {
     private final CategoryMapper categoryMapper;
     private final AuthorService authorService;
     private final CategoryService categoryService;
+    private final PublisherService publisherService;
 
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
@@ -60,6 +62,8 @@ public class BookService {
         authors.forEach(author -> author.addBook(book));
         List<Category> categories = categoryService.getCategoriesByList(bookDto.getCategoryDtoList());
         categories.forEach(category -> category.addBook(book));
+        List<Publisher> publishers = publisherService.getPublishersByList(bookDto.getPublisherDtoList());
+        publishers.forEach(publisher -> publisher.addBook(book));
         return book;
     }
 

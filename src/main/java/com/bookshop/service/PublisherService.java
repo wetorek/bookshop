@@ -75,4 +75,13 @@ public class PublisherService {
         return publisherRepository.findById(id);
     }
 
+    public List<Publisher> getPublishersByList (List<PublisherDto> publisherDtoList){
+        return publisherDtoList.stream()
+                .map(PublisherDto::getId)
+                .map(publisherRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
 }
