@@ -7,9 +7,11 @@ import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.mapper.CategoryMapper;
+import com.bookshop.mapper.PublisherMapper;
 import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import com.bookshop.service.CategoryService;
+import com.bookshop.service.PublisherService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -31,6 +33,8 @@ public class BookshopApplication {
     BookService bookService;
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    PublisherService publisherService;
 
     public static void main(String[] args) {
         SpringApplication.run(BookshopApplication.class, args);
@@ -38,12 +42,12 @@ public class BookshopApplication {
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
-
+//        publisherTest();
         setUp();
 //            updateBooksPatch();
 //        updateBooksAddAuthorAndCategory();
 //        updateBooksRemoveAuthorCategory();
-        deleteBooks();
+        //deleteBooks();
 //        detachAuthor();
 //        categories();
 //        deleteCategory();
@@ -62,7 +66,8 @@ public class BookshopApplication {
         System.out.println(categoryService.saveCategory(categoryDto2));
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
-
+        System.out.println(publisherService.savePublisher(publisherDto1));
+        System.out.println(publisherService.savePublisher(publisherDto2));
         BookDto book1 = new BookDto(11L, new BigDecimal("12.23"), "Tomek w krainie kangurów", LocalDate.of(1999, 12, 9), List.of(authorDto1), List.of(categoryDto1), List.of(publisherDto1));
         BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
         BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u azjatów", LocalDate.of(2014, 1, 3), List.of(authorDto2), List.of(categoryDto2), List.of(publisherDto2));
@@ -72,7 +77,17 @@ public class BookshopApplication {
     }
 
 
-    private void createBooksAndSave() {
+    private void publisherTest() {
+        PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
+        PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
+        System.out.println(publisherService.savePublisher(publisherDto1));
+        System.out.println(publisherService.savePublisher(publisherDto2));
+        System.out.println(publisherService.getAllPublishers());
+        publisherDto2.setName("dupa");
+        publisherService.updatePublisher(publisherDto2);
+        System.out.println(publisherService.getAllPublishers());
+        publisherService.deletePublisher(2L);
+        System.out.println(publisherService.getPublisherById(3L));
 
     }
 
@@ -180,5 +195,10 @@ public class BookshopApplication {
     @Bean
     public CategoryMapper categoryMapper() {
         return new CategoryMapper(new ModelMapper());
+    }
+
+    @Bean
+    public PublisherMapper publisherMapper() {
+        return new PublisherMapper(new ModelMapper());
     }
 }

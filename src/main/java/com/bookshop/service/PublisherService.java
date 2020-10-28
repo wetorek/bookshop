@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class PublisherService {
     private final PublisherRepository publisherRepository;
     private final PublisherMapper publisherMapper;
-
     @Transactional(readOnly = true)
     public List<PublisherDto> getAllPublishers() {
         return publisherRepository.findAll()
