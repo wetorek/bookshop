@@ -44,7 +44,9 @@ public class CategoryService {
         if (!categoryRepository.existsById(categoryDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        categoryRepository.save(categoryMapper.mapCategoryDtoToEntity(categoryDto)); //TODO error here, cuts all existing connections
+        Category categoryFromRepo = categoryRepository.findById(categoryDto.getId()).orElseThrow();
+        Category newCategory = categoryMapper.mapCategoryDtoUsingEntity(categoryDto, categoryFromRepo);
+        categoryRepository.save(newCategory);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

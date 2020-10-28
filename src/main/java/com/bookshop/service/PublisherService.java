@@ -44,7 +44,9 @@ public class PublisherService {
         if (!publisherRepository.existsById(publisherDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        publisherRepository.save(publisherMapper.mapPublisherDtoToEntity(publisherDto));
+        Publisher publisherFromRepo = publisherRepository.findById(publisherDto.getId()).orElseThrow();
+        Publisher newPublisher = publisherMapper.mapPublisherDtoUsingEntity(publisherDto, publisherFromRepo);
+        publisherRepository.save(newPublisher);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

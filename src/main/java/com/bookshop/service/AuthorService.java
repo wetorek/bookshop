@@ -52,7 +52,9 @@ public class AuthorService {
         if (!authorRepository.existsById(authorDto.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
+        Author authorFromRepo = authorRepository.findById(authorDto.getId()).orElseThrow();
+        Author newAuthor = authorMapper.mapAuthorDtoUsingEntity(authorDto, authorFromRepo);
+        authorRepository.save(newAuthor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
