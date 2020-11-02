@@ -21,7 +21,7 @@ public class CategoryMapper {
         return modelMapper.map(categoryDto, Category.class);
     }
 
-    public Category mapCategoryDtoUsingEntity(CategoryDto categoryDto, Category category){
+    public Category mapCategoryDtoUsingEntity(CategoryDto categoryDto, Category category) {
         Category mappedCategory = mapCategoryDtoToEntity(categoryDto);
         List<Book> books = category.getBooksCategory();
         category.getBooksCategory().forEach(book -> book.getCategories().remove(category));
