@@ -1,4 +1,4 @@
-package com.bookshop.Util;
+package com.bookshop.util;
 
 import lombok.experimental.UtilityClass;
 

@@ -1,6 +1,7 @@
 package com.bookshop.service;
 
-import com.bookshop.Util.Constants;
+import com.bookshop.controller.dto.AuthenticationResponse;
+import com.bookshop.controller.dto.LoginRequest;
 import com.bookshop.controller.dto.NotificationEmail;
 import com.bookshop.controller.dto.RegisterRequest;
 import com.bookshop.entity.User;
@@ -8,8 +9,14 @@ import com.bookshop.entity.VerificationToken;
 import com.bookshop.mapper.UserMapper;
 import com.bookshop.repository.UserRepository;
 import com.bookshop.repository.VerificationTokenRepository;
+import com.bookshop.security.JwtProvider;
+import com.bookshop.util.Constants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +33,8 @@ public class AuthService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final MailContentBuilder mailContentBuilder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -37,7 +46,7 @@ public class AuthService {
     }
 
     private String generateVerificationToken(User user) {
-        String token = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString();        //TODO design pattern maybe?
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
@@ -56,5 +65,12 @@ public class AuthService {
         User user = userRepository.findByUsername(username).orElseThrow();
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String authenticationToken = jwtProvider.generateToken(authentication);
+        return new AuthenticationResponse(authenticationToken, loginRequest.getUsername());
     }
 }
