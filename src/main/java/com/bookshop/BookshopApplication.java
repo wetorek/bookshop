@@ -39,7 +39,7 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 //        publisherTest();
-//        setUp();
+        setUp();
 //        updateBooksPatch();
 //        updateBooksAddConnectedEntities();
 //        updateBooksRemoveAuthorCategory();

@@ -41,7 +41,7 @@ public class AuthService {
         User user = userMapper.mapRegisterRequestToUser(registerRequest, passwordEncoder);
         userRepository.save(user);
         String token = generateVerificationToken(user);
-        String message = mailContentBuilder.build("Thank You for creating account, click below to activate Your account:\n" + Constants.ACTIVATION_MAIL + "/" + token);
+        String message = mailContentBuilder.build("Thank You for creating account, click below to activate Your account:\n" + Constants.ACTIVATION_MAIL + "/" + token + '\n');
         mailService.sendMail(new NotificationEmail("Please activate Your account", user.getEmail(), message));
     }
 
