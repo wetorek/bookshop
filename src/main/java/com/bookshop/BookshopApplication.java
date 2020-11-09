@@ -76,7 +76,7 @@ public class BookshopApplication {
         System.out.println(categoryService.updateCategory(categoryDto2));
         System.out.println(publisherService.updatePublisher(publisherDto2));
         System.out.println(authorService.updateAuthor(authorDto2));
-        System.out.println(bookService.getAllBooks());
+//        System.out.println(bookService.getAllBooks());
 
     }
 
