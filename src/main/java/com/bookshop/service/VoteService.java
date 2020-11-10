@@ -22,7 +22,7 @@ public class VoteService {
     private final AuthService authService;
 
     @Transactional
-    public ResponseEntity<Void> vote(VoteDto voteDto) {                         //todo combine votes with book
+    public ResponseEntity<Void> vote(VoteDto voteDto) {                         //todo combine votes with book, create bookrequest and response- rate field in book
         if (voteDto.getRating() < 1L || voteDto.getRating() > 10L) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
