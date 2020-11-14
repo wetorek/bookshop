@@ -4,6 +4,7 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.service.CategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok().body(categoryService.getAllCategories());
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")

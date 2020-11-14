@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.service.PublisherService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class PublisherController {
 
     @GetMapping("/all")
     public ResponseEntity<List<PublisherDto>> getAllPublishers() {
-        return ResponseEntity.ok().body(publisherService.getAllPublishers());
+        return new ResponseEntity<>(publisherService.getAllPublishers(), HttpStatus.OK);
     }
 
     @GetMapping("/publisher/{id}")

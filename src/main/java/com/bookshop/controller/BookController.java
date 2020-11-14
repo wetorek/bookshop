@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,17 @@ public class BookController {
 
     @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
-        return ResponseEntity.ok().body(bookService.getAllBooks());
+        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
 
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
+    }
+
+    @GetMapping("/book/author/{authorID}")
+    public ResponseEntity<List<BookDto>> getBooksByAuthor(@PathVariable Long authorID) {
+        return bookService.getBooksByAuthor(authorID);
     }
 
     @PostMapping("/add")
@@ -69,6 +75,4 @@ public class BookController {
     public ResponseEntity<Void> removePublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
         return bookService.removePublisherFromBook(bookId, publisherId);
     }
-
-
 }

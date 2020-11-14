@@ -31,8 +31,6 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final AuthorMapper authorMapper;
-    private final CategoryMapper categoryMapper;
     private final AuthorService authorService;
     private final CategoryService categoryService;
     private final PublisherService publisherService;
@@ -221,5 +219,17 @@ public class BookService {
         bookFromRepo.addPublisher(publisher);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<BookDto>> getBooksByAuthor(Long authorID) {
+        Optional<Author> author = authorService.getAuthorEntity(authorID);
+        if (author.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<BookDto> bookDtoList = bookRepository.getBooksByAuthorsContains(author.get()).stream()
+                .map(bookMapper::mapBookEntityToDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }
 }

@@ -79,8 +79,8 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    public boolean existAll(List<AuthorDto> authorDtos) {
-        return authorDtos.stream()
+    public boolean existAll(List<AuthorDto> authorDtoList) {
+        return authorDtoList.stream()
                 .allMatch(u -> authorRepository.existsById(u.getId()));
     }
 
