@@ -1,5 +1,6 @@
 package com.bookshop;
 
+import com.bookshop.config.SwaggerConfiguration;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableAsync;
 
@@ -21,6 +23,7 @@ import java.util.List;
 
 @EnableAsync
 @SpringBootApplication
+@Import(SwaggerConfiguration.class)
 public class BookshopApplication {
 
     @Autowired
