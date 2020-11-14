@@ -19,9 +19,9 @@ import static io.jsonwebtoken.Jwts.parser;
 
 @Service
 public class JwtProvider {
-    private KeyStore keyStore;
     @Getter
     private final Long jwtExpirationInMillis = 900000L;
+    private KeyStore keyStore;
 
     @PostConstruct
     public void init() {
@@ -44,7 +44,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateTokenWithUsername( String username){
+    public String generateTokenWithUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(Date.from(Instant.now()))
