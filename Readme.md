@@ -22,7 +22,7 @@
     - [ ] Order
     - [ ] Additional Service ( services like book packaging )
     - [x] Publisher
-    - [ ] User
+    - [X] User
     - [ ] Admin
     - [X] Category of the book 
     - [ ] Shop

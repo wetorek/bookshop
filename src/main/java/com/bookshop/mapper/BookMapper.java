@@ -48,4 +48,11 @@ public class BookMapper {
         listOfPublishers.forEach(publisher -> publisher.addBook(newBook));
         return newBook;
     }
+
+    public List<BookDto> mapListOfEntitiesToDto(List<Book> bookList) {
+        return bookList
+                .stream()
+                .map(this::mapBookEntityToDto)
+                .collect(Collectors.toList());
+    }
 }

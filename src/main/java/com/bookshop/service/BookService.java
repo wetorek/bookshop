@@ -225,9 +225,19 @@ public class BookService {
         if (author.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<BookDto> bookDtoList = bookRepository.getBooksByAuthorsContains(author.get()).stream()
-                .map(bookMapper::mapBookEntityToDto)
-                .collect(Collectors.toList());
+        List<Book> bookList = bookRepository.getBooksByAuthorsContains(author.get());
+        List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
+        return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<BookDto>> getBooksByCategory(Long categoryId) {
+        Optional<Category> category = categoryService.getCategoryEntity(categoryId);
+        if (category.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Book> bookList = bookRepository.getBooksByCategoriesContains(category.get());
+        List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }
 }

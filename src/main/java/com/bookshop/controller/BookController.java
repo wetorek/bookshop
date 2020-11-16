@@ -26,9 +26,14 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
-    @GetMapping("/book/author/{authorID}")
-    public ResponseEntity<List<BookDto>> getBooksByAuthor(@PathVariable Long authorID) {
-        return bookService.getBooksByAuthor(authorID);
+    @GetMapping("/book/author/{authorId}")
+    public ResponseEntity<List<BookDto>> getBooksByAuthor(@PathVariable Long authorId) {
+        return bookService.getBooksByAuthor(authorId);
+    }
+
+    @GetMapping("/book/author/{categoryId}")
+    public ResponseEntity<List<BookDto>> getBooksByCategory(@PathVariable Long categoryId) {
+        return bookService.getBooksByCategory(categoryId);
     }
 
     @PostMapping("/add")
