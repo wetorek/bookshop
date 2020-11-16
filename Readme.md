@@ -1,5 +1,5 @@
 # Business analysis:
-  - securing application!
+  - securing application!- done
   - endpoints to show:
     - [X] display all books
     - [x] get books by name
@@ -32,10 +32,10 @@
     - [X] authors repository 
     - [X] publishers repository
     - [ ] orders repository
-    - [ ] cart repository 
+    - [X] cart repository 
     - [X] category repository
     - [ ] shop data repository
-    - [ ] feature  to implement in the future: how many books are available in location
+    - [ ] a possible feature to implement in the future: how many books are available in location
     
     
     
