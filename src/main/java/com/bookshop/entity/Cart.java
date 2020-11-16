@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

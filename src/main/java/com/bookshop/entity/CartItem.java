@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "cartItems")
+@Entity(name = "cart_items")
 public class CartItem {
     @Id
     private Long Id;

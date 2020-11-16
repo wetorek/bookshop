@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "additionalServices")
+@Entity(name = "additional_services")
 public class AdditionalService {
     @Id
     private Long Id;

@@ -18,9 +18,9 @@
   - entities:
     - [x] Book
     - [x] Author
-    - [ ] Cart
+    - [X] Cart
     - [ ] Order
-    - [ ] Additional Service ( services like book packaging )
+    - [X] Additional Service ( services like book packaging )
     - [x] Publisher
     - [X] User
     - [ ] Admin
