@@ -33,6 +33,12 @@ public class AppConfig {
     }
 
     @Bean
+    public AdditionalServicesMapper additionalServicesMapper() {
+        return new AdditionalServicesMapper(new ModelMapper());
+    }
+
+
+    @Bean
     public UserMapper userMapper() {
         return new UserMapper(new ModelMapper());
     }

@@ -1,7 +1,6 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.AdditionalServiceDto;
-import com.bookshop.entity.Publisher;
 import com.bookshop.service.AdditionalServicesService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +15,12 @@ public class AdditionalServicesController {
     private final AdditionalServicesService additionalServicesService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<AdditionalServiceDto>> getAll (){
+    public ResponseEntity<List<AdditionalServiceDto>> getAll() {
         return additionalServicesService.getAllServices();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addAdditionalService (@RequestBody AdditionalServiceDto additionalServiceDto){
+    public ResponseEntity<Void> addAdditionalService(@RequestBody AdditionalServiceDto additionalServiceDto) {
         return additionalServicesService.addService(additionalServiceDto);
     }
 }
