@@ -10,7 +10,7 @@
     - [ ] get all books on sale
     - [ ] list all orders by user 
     - [X] list all categories
-    - [ ] get all books in this category
+    - [X] get all books in this category
     - [ ] list all shops
     - [ ] list shops where this book is
     - [ ] adding reviews and comments
@@ -35,7 +35,9 @@
     - [ ] cart repository 
     - [X] category repository
     - [ ] shop data repository
-    - [ ] feature in the future: how many books are available in location
+    - [ ] feature  to implement in the future: how many books are available in location
+    
+    
     
      
 
