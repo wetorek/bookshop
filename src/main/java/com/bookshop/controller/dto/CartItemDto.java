@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDto {
-    private BigDecimal total;
-    private List<CartItemDto> cartItems;
-    private List<AdditionalServiceDto> additionalServices;
+public class CartItemDto {
+    private Long amountOfItems;
+    private List<BookDto> books;
+    private BigDecimal subTotal;
 }

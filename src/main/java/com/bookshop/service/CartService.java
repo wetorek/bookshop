@@ -27,8 +27,8 @@ public class CartService {
         });
     }
 
-    public CartDto getCartDto (){
-        return cartMapper.
+    public CartDto getCartDto() {
+        return cartMapper.mapCartToDto(getCart());
     }
 
     private Cart createNewCart(User user) {
