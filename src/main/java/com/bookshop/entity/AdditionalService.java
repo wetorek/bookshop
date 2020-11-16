@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Entity(name = "additional_services")
 public class AdditionalService {
     @Id
-    @GeneratedValue()
     private Long Id;
     private BigDecimal price;
     private BigDecimal description;

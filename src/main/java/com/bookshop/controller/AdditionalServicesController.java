@@ -5,9 +5,7 @@ import com.bookshop.entity.Publisher;
 import com.bookshop.service.AdditionalServicesService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,10 @@ public class AdditionalServicesController {
     @GetMapping("/all")
     public ResponseEntity<List<AdditionalServiceDto>> getAll (){
         return additionalServicesService.getAllServices();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Void> addAdditionalService (@RequestBody AdditionalServiceDto additionalServiceDto){
+        return additionalServicesService.addService(additionalServiceDto);
     }
 }
