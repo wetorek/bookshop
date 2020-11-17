@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     private String generateVerificationToken(User user) {
-        String token = UUID.randomUUID().toString();        //TODO design pattern maybe?
+        String token = UUID.randomUUID().toString();        //TODO design pattern maybe?, fabryka
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);

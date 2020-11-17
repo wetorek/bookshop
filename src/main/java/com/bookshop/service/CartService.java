@@ -31,7 +31,7 @@ public class CartService {
         return cartMapper.mapCartToDto(getCart());
     }
 
-    private Cart createNewCart(User user) {
+    private Cart createNewCart(User user) {//TODO builder
         Cart cart = new Cart();
         cart.setAdditionalServices(new LinkedList<>()); //TODO is required?
         cart.setCartItems(new LinkedList<>());
