@@ -40,10 +40,11 @@
     
     
 ##Used design patterns:
+    https://www.freecodecamp.org/news/the-basic-design-patterns-all-developers-need-to-know/
   - [ ] singleton ?   <br />
   ads
   - [X] MVC  
-  standard Spring architecture with Controllers, Services and Repository layers
+  Standard Spring architecture with Controllers, Services and Repository layers
   - [X] Builder  
   Used in com.bookshop.service.AuthService.refreshToken and .login() to build an AuthenticationResponse 
   - [X] Dependency Injection  
@@ -52,13 +53,16 @@
     According to Wikipedia "A Data Mapper is a Data Access Layer that performs bidirectional transfer of data between a persistent data store 
     (often a relational database), and an in-memory data representation (the domain layer)."\
     In my project whole com.bookshop.mapper package contains mapper classes, which map (Entities) DAO <-> DTO.
-    
   - [ ] Strategy\
-  find a place to implement
+  d
   - [ ] Adapter\
   find a place to implement
-  - [ ] Factory\
+  - [ ] Factory method\
   to create verification token in AuthService OOORRR... create a new cart?
+  - [ ] State\
+  User and admin filter?
+  - [ ] Chain of responsibility\
+  could be useful, to research
   
   
     
