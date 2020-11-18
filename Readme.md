@@ -41,7 +41,7 @@
     
 ##Used design patterns:
     https://www.freecodecamp.org/news/the-basic-design-patterns-all-developers-need-to-know/
-  - [ ] singleton ?   <br />
+  - [ ] singleton ?\
   ads
   - [X] MVC  
   Standard Spring architecture with Controllers, Services and Repository layers
@@ -54,15 +54,21 @@
     (often a relational database), and an in-memory data representation (the domain layer)."\
     In my project whole com.bookshop.mapper package contains mapper classes, which map (Entities) DAO <-> DTO.
   - [ ] Strategy\
-  d
+  https://refactoring.guru/pl/design-patterns/strategy/java/example  
+  implementation- paying for order
   - [ ] Adapter\
   find a place to implement
-  - [ ] Factory method\
+  - [ ] Factory\
+  Creating a logger in Bookservice\
   to create verification token in AuthService OOORRR... create a new cart?
   - [ ] State\
+  Of an order\
   User and admin filter?
   - [ ] Chain of responsibility\
-  could be useful, to research
+  could be useful to research
+  - [ ] Facade\
+  get object (entity) from some service?
+  
   
   
     

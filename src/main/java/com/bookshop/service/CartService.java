@@ -6,6 +6,8 @@ import com.bookshop.entity.User;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -27,16 +29,26 @@ public class CartService {
         });
     }
 
-    public CartDto getCartDto() {
-        return cartMapper.mapCartToDto(getCart());
+    public ResponseEntity<CartDto> getCartDto() {
+        return new ResponseEntity<>(cartMapper.mapCartToDto(getCart()), HttpStatus.OK);
     }
 
-    private Cart createNewCart(User user) {//TODO builder
-        Cart cart = new Cart();
-        cart.setAdditionalServices(new LinkedList<>()); //TODO is required?
-        cart.setCartItems(new LinkedList<>());
-        cart.setTotal(BigDecimal.ZERO);
-        cart.setUser(user);
-        return cart;
+    public ResponseEntity<CartDto> addItemToCart(){
+        //TODO create BookRequest and BookResponse
     }
+
+    public ResponseEntity<CartDto> removeItemFromCart(){
+
+    }
+
+    private Cart createNewCart(User user) {
+        return Cart.builder()
+                .additionalServices(new LinkedList<>())
+                .cartItems(new LinkedList<>())
+                .total(BigDecimal.ZERO)
+                .user(user)
+                .build();
+    }
+
+
 }

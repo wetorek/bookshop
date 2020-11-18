@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No user " + username));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities("USER"));
-    }//TODO adapter
+    }//TODO strategy or factory to create users
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return List.of(new SimpleGrantedAuthority(role));
