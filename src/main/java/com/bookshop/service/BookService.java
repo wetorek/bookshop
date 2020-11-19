@@ -241,4 +241,8 @@ public class BookService {
         List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }
+
+    Optional<Book> getBookByID(Long id) {
+        return bookRepository.findById(id);
+    }
 }
