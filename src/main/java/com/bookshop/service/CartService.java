@@ -47,7 +47,7 @@ public class CartService {
         if (bookService.getBookByID(cartItemRequest.getBooksId()).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        CartItem cartItem = mapCartItemRequestToEntity(bookService, cartItemRequest);
+        CartItem cartItem = buildCartItem(bookService, cartItemRequest);
         if (cartItem.getAmountOfItems() > cartItem.getBook().getInSock()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -73,7 +73,7 @@ public class CartService {
                 .findFirst();
     }
 
-    private CartItem mapCartItemRequestToEntity(BookService bookService, CartItemRequest cartItemRequest) {
+    private CartItem buildCartItem(BookService bookService, CartItemRequest cartItemRequest) {
         Book book = bookService.getBookByID(cartItemRequest.getBooksId()).orElseThrow(() -> new RuntimeException("Book not found"));
         BigDecimal price = book.getPrice().multiply(BigDecimal.valueOf(cartItemRequest.getAmountOfItems()));
         return CartItem.builder()
@@ -82,6 +82,7 @@ public class CartService {
                 .subTotal(price)
                 .build();
     }
+
 
     public ResponseEntity<CartDto> removeItemFromCart(CartItemRequest cartItemRequest) {
         Cart cart = getCart();

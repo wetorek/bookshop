@@ -41,8 +41,10 @@
     
 ##Used design patterns:
     https://www.freecodecamp.org/news/the-basic-design-patterns-all-developers-need-to-know/
-  - [ ] singleton ?\
-  ads
+  - [X] Singleton\
+  com.bookshop.security.JwtAuthenticationFilter.doFilterInternal and com.bookshop.service.AuthService.getCurrentUser\
+  Used in logger in BookService\
+  SecurityContextHolder is an example of a Singleton class. It is static and has only one instance, because we need one instance of a class, which is holding our credentials.
   - [X] MVC  
   Standard Spring architecture with Controllers, Services and Repository layers
   - [X] Builder  
@@ -53,14 +55,18 @@
     According to Wikipedia "A Data Mapper is a Data Access Layer that performs bidirectional transfer of data between a persistent data store 
     (often a relational database), and an in-memory data representation (the domain layer)."\
     In my project whole com.bookshop.mapper package contains mapper classes, which map (Entities) DAO <-> DTO.
-  - [ ] Strategy\
+  - [X] Strategy\
+  com.bookshop.security.JwtAuthenticationFilter- A filter is an object that performs filtering tasks on either the request to a resource (a servlet or static content), or on the response from a resource, or both.
+  I create an instance of a Filter(JwtAuthenticationFilter) in security config, all the filters implement the Filter interface.\
+  Filter is set to usage in com.bookshop.config.SecurityConfig class.
+  Regard to "an example of strategy usage in JDK":\
+  https://javadeveloper.pl/wzorzec-strategia/ \
   https://refactoring.guru/pl/design-patterns/strategy/java/example  
   implementation- paying for order
   - [ ] Adapter\
   find a place to implement
-  - [ ] Factory\
-  Creating a logger in Bookservice\
-  to create verification token in AuthService OOORRR... create a new cart?
+  - [X] Factory\
+  Creating a logger in com.bookshop.service.BookService
   - [ ] State\
   Of an order\
   User and admin filter?
