@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +28,8 @@ public class Book {
     private BigDecimal price;
     @NotBlank(message = "Name is required")
     private String name;
+    @Min(0L)
+    private Long inSock;
 
     @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Author> authors = new LinkedList<>();

@@ -1,9 +1,9 @@
 package com.bookshop.mapper;
 
 import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
+import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;

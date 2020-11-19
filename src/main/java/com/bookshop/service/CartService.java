@@ -33,11 +33,11 @@ public class CartService {
         return new ResponseEntity<>(cartMapper.mapCartToDto(getCart()), HttpStatus.OK);
     }
 
-    public ResponseEntity<CartDto> addItemToCart(){
+    public ResponseEntity<CartDto> addItemToCart() {
         //TODO create BookRequest and BookResponse
     }
 
-    public ResponseEntity<CartDto> removeItemFromCart(){
+    public ResponseEntity<CartDto> removeItemFromCart() {
 
     }
 

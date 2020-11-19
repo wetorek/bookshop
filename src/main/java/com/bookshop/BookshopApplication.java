@@ -2,9 +2,9 @@ package com.bookshop;
 
 import com.bookshop.config.SwaggerConfiguration;
 import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
+import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.service.AuthorService;
 import com.bookshop.service.BookService;
 import com.bookshop.service.CategoryService;

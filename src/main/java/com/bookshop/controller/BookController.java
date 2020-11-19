@@ -1,6 +1,6 @@
 package com.bookshop.controller;
 
-import com.bookshop.controller.dto.BookDto;
+import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

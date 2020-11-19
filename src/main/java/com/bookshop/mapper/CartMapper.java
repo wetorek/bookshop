@@ -1,8 +1,8 @@
 package com.bookshop.mapper;
 
-import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CartDto;
 import com.bookshop.controller.dto.CartItemDto;
+import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Cart;
 import com.bookshop.entity.CartItem;
 import lombok.AllArgsConstructor;

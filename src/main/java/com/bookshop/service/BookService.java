@@ -1,9 +1,9 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.controller.dto.BookDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
+import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
@@ -11,7 +11,6 @@ import com.bookshop.entity.Publisher;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

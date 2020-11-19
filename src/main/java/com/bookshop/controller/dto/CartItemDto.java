@@ -1,5 +1,6 @@
 package com.bookshop.controller.dto;
 
+import com.bookshop.controller.dto.book.BookDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
