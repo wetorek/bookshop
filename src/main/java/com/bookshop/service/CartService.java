@@ -1,11 +1,9 @@
 package com.bookshop.service;
 
+import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.CartDto;
 import com.bookshop.controller.dto.CartItemRequest;
-import com.bookshop.entity.Book;
-import com.bookshop.entity.Cart;
-import com.bookshop.entity.CartItem;
-import com.bookshop.entity.User;
+import com.bookshop.entity.*;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
 import lombok.AllArgsConstructor;
@@ -24,6 +22,7 @@ public class CartService {
     private final AuthService authService;
     private final CartMapper cartMapper;
     private final BookService bookService;
+    private final AdditionalServicesService additionalServicesService;
 
     public Cart getCart() {
         User user = authService.getCurrentUser();
@@ -119,6 +118,27 @@ public class CartService {
                 .total(BigDecimal.ZERO)
                 .user(user)
                 .build();
+    }
+
+    public ResponseEntity<CartDto> addAdditionalService(AdditionalServiceDto additionalServiceDto) {
+        Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
+        if (additionalService.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Cart cart = getCart();
+        additionalService.ifPresent(cart.getAdditionalServices()::add);
+        return new ResponseEntity<>(cartMapper.mapCartToDto(cart), HttpStatus.OK);
+    }
+
+    public ResponseEntity<CartDto> removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
+        Cart cart = getCart();
+        Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
+        if (additionalService.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        additionalService.ifPresent(cart.getAdditionalServices()::remove);
+        return new ResponseEntity<>(cartMapper.mapCartToDto(cart), HttpStatus.OK);
+
     }
 
 

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,5 +32,9 @@ public class AdditionalServicesService {
         AdditionalService additionalService = additionalServicesMapper.mapDtoToEntity(additionalServiceDto);
         additionalServicesRepository.save(additionalService);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    public Optional<AdditionalService> getById(Long id) {
+        return additionalServicesRepository.findById(id);
     }
 }

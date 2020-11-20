@@ -40,7 +40,6 @@
     
     
 ##Used design patterns:
-    https://www.freecodecamp.org/news/the-basic-design-patterns-all-developers-need-to-know/
   - [X] Singleton\
   com.bookshop.security.JwtAuthenticationFilter.doFilterInternal and com.bookshop.service.AuthService.getCurrentUser\
   Used in logger in BookService\
@@ -62,7 +61,7 @@
   Regard to "an example of strategy usage in JDK":\
   https://javadeveloper.pl/wzorzec-strategia/ \
   https://refactoring.guru/pl/design-patterns/strategy/java/example  
-  implementation- paying for order
+  implementation- paying for order.
   - [ ] Adapter\
   find a place to implement
   - [X] Factory\
