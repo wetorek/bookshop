@@ -69,8 +69,6 @@
   - [ ] State\
   Of an order\
   User and admin filter?
-  - [ ] Chain of responsibility\
-  could be useful to research
   - [ ] Facade\
   get object (entity) from some service?
   
