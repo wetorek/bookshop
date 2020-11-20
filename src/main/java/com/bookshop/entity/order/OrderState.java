@@ -9,7 +9,10 @@ public abstract class OrderState {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
+
     abstract Order placeNewOrder();
+
     abstract void pay();
+
     abstract void finishOrder();
 }

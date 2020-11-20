@@ -26,8 +26,7 @@ public class OrderStatus {
     public Optional<Order> createNewOrder() {
         try {
             orderState.placeNewOrder();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         return Optional.empty();

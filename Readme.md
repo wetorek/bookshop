@@ -1,5 +1,6 @@
 # Business analysis:
-  - securing application!- done
+  - [ ] find a way to correctly design controllers- what should they return- exception? What service should return? 
+  - [x] securing application!
   - endpoints to show:
     - [X] display all books
     - [x] get books by name
