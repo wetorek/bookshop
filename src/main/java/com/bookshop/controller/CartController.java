@@ -1,15 +1,14 @@
 package com.bookshop.controller;
 
+import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.CartDto;
+import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.Cart;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
@@ -18,10 +17,39 @@ public class CartController {
     private final CartService cartService;
     private final CartMapper cartMapper;
 
-    @GetMapping
+    @GetMapping("/get")
     @ResponseStatus(HttpStatus.OK)
     public CartDto getCartResponse() {
         Cart cart = cartService.getCart();
         return cartMapper.mapCartToDto(cart);
     }
+
+    @PatchMapping("/cart-item/add")
+    @ResponseStatus(HttpStatus.OK)
+    public CartDto addItemToCart(CartItemRequest cartItemRequest) {
+        Cart cart = cartService.addItemToCart(cartItemRequest);
+        return cartMapper.mapCartToDto(cart);
+    }
+
+    @PatchMapping("/cart-item/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public CartDto removeItemFromCart(CartItemRequest cartItemRequest) {
+        Cart cart = cartService.removeItemFromCart(cartItemRequest);
+        return cartMapper.mapCartToDto(cart);
+    }
+
+    @PatchMapping("additional-service/add")
+    @ResponseStatus(HttpStatus.OK)
+    public CartDto addAdditionalServ(AdditionalServiceDto additionalServiceDto) {
+        Cart cart = cartService.addAdditionalService(additionalServiceDto);
+        return cartMapper.mapCartToDto(cart);
+    }
+
+    @PatchMapping("additional-service/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public CartDto removeAdditionalServ(AdditionalServiceDto additionalServiceDto) {
+        Cart cart = cartService.removeAdditionalService(additionalServiceDto);
+        return cartMapper.mapCartToDto(cart);
+    }
+
 }

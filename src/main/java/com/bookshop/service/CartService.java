@@ -1,17 +1,16 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.AdditionalServiceDto;
-import com.bookshop.controller.dto.CartDto;
 import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.*;
+import com.bookshop.exceptions.AdditionalServiceConflictEx;
+import com.bookshop.exceptions.AdditionalServiceNotFoundEx;
 import com.bookshop.exceptions.BookConflictException;
 import com.bookshop.exceptions.BookNotFoundException;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
 import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class CartService {
         }
         CartItem cartItem = CartUtils.buildCartItem(bookService, cartItemRequest);
         if (cartItem.getAmountOfItems() > cartItem.getBook().getInSock()) {
-            throw new BookConflictException("Selected amount of stock is too big " + cartItemRequest.toString());
+            throw new BookConflictException("Selected amount of stock is too big " + cartItemRequest);
         }
         Cart cart = getCart();
         addCartItemToCart(cart, cartItem);
@@ -69,11 +68,11 @@ public class CartService {
     public Cart removeItemFromCart(CartItemRequest cartItemRequest) {
         Cart cart = getCart();
         if (!doesCartContainProduct(cart, cartItemRequest)) {
-            throw new BookNotFoundException("Book not found");
+            throw new BookNotFoundException("Book not found " + cartItemRequest);
         }
         CartItem cartItem = getCartItemFromCartByBookId(cart, cartItemRequest.getBooksId()).orElseThrow(() -> new BookNotFoundException("Unexpected error occupied."));
         if (!cartItem.getAmountOfItems().equals(cartItemRequest.getAmountOfItems())) {
-            throw new BookConflictException("Removed number of product is bigger than current amount in cart " + cartItemRequest.toString());
+            throw new BookConflictException("Removed number of product is bigger than current amount in cart " + cartItemRequest);
         }
         cart.getCartItems().remove(cartItem);
         cart.setTotal(cart.getTotal().subtract(cartItem.getSubTotal()));
@@ -95,24 +94,24 @@ public class CartService {
     }
 
 
-    public ResponseEntity<CartDto> addAdditionalService(AdditionalServiceDto additionalServiceDto) {
+    public Cart addAdditionalService(AdditionalServiceDto additionalServiceDto) {
         Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
         if (additionalService.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto);
         }
         Cart cart = getCart();
         additionalService.ifPresent(cart.getAdditionalServices()::add);
-        return new ResponseEntity<>(cartMapper.mapCartToDto(cart), HttpStatus.OK);
+        return cart;
     }
 
-    public ResponseEntity<CartDto> removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
+    public Cart removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
         Cart cart = getCart();
         Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
         if (additionalService.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new AdditionalServiceConflictEx("Additional service does not exist in cart: " + additionalServiceDto);
         }
         additionalService.ifPresent(cart.getAdditionalServices()::remove);
-        return new ResponseEntity<>(cartMapper.mapCartToDto(cart), HttpStatus.OK);
+        return cart;
 
     }
 
