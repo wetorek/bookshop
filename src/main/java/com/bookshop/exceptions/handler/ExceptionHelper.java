@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHelper {
 
     @ExceptionHandler(value = {BookNotFoundException.class})
-    private ResponseEntity<Object> handleNotFoundConflict (BookNotFoundException ex){
+    private ResponseEntity<Object> handleNotFoundConflict(BookNotFoundException ex) {
         log.error("Book not found: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {BookConflictException.class})
-    private ResponseEntity<Object> handleBookConflict (BookConflictException ex){
+    private ResponseEntity<Object> handleBookConflict(BookConflictException ex) {
         log.error("Conflict in book: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }

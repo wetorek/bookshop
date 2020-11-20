@@ -30,8 +30,8 @@ public class CartMapper {
 
     public CartItemDto mapCartItemToDto(CartItem cartItem) {
         CartItemDto cartItemDto = modelMapper.map(cartItem, CartItemDto.class);
-        List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(cartItem.getBooks());
-        cartItemDto.setBooks(bookDtoList);
+        BookDto bookDto = bookMapper.mapBookEntityToDto(cartItem.getBook());
+        cartItemDto.setBookId(bookDto.getId());
         return cartItemDto;
     }
 }

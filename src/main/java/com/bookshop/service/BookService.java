@@ -242,7 +242,7 @@ public class BookService {
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }
 
-    Optional<Book> getBookByID(Long id) {
+    public Optional<Book> getBookByID(Long id) {
         return bookRepository.findById(id);
     }
 }
