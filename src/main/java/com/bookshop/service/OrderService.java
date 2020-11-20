@@ -6,8 +6,6 @@ import com.bookshop.entity.CartItem;
 import com.bookshop.entity.order.Order;
 import com.bookshop.entity.order.OrderStatus;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,15 +17,13 @@ public class OrderService {
     private final CartService cartService;
     private final BookService bookService;
 
-    public ResponseEntity<OrderStatus> createNewOrder() {
+    public Optional<Order> createNewOrder() {
         Cart cart = cartService.getCart();
         if (!validateNumberOfBooksInCart(cart)) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            //TODO FIND A SOLUTION throw new
         }
         OrderStatus orderStatus = new OrderStatus();
-        Optional<Order> order = orderStatus.createNewOrder();
-        //Optional<OrderDto> orderDto = order.map()
-        return null;
+        return orderStatus.createNewOrder();
     }
 
 

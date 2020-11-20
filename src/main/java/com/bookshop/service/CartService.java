@@ -4,8 +4,10 @@ import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.CartDto;
 import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.*;
+import com.bookshop.exceptions.BookNotFoundException;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,24 +36,16 @@ public class CartService {
         });
     }
 
-    public ResponseEntity<CartDto> getCartResponse() {
-        return new ResponseEntity<>(cartMapper.mapCartToDto(getCart()), HttpStatus.OK);
-    }
-
-    private CartDto getCartDto() {
-        return cartMapper.mapCartToDto(getCart());
-    }
-
-    public ResponseEntity<CartDto> addItemToCart(CartItemRequest cartItemRequest) {
+    public Cart addItemToCart(CartItemRequest cartItemRequest) {
         if (bookService.getBookByID(cartItemRequest.getBooksId()).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new BookNotFoundException(cartItemRequest.toString());
         }
         CartItem cartItem = buildCartItem(bookService, cartItemRequest);
         if (cartItem.getAmountOfItems() > cartItem.getBook().getInSock()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            //return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         addCartItemToCart(getCart(), cartItem);
-        return new ResponseEntity<>(getCartDto(), HttpStatus.OK);
+        return getCart();
     }
 
     private void addCartItemToCart(Cart cart, CartItem cartItem) { //strategy
