@@ -4,6 +4,7 @@ import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.CartDto;
 import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.*;
+import com.bookshop.exceptions.BookConflictException;
 import com.bookshop.exceptions.BookNotFoundException;
 import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
@@ -42,10 +43,11 @@ public class CartService {
         }
         CartItem cartItem = buildCartItem(bookService, cartItemRequest);
         if (cartItem.getAmountOfItems() > cartItem.getBook().getInSock()) {
-            //return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new BookConflictException("Selected amount of stock is too big " +cartItemRequest.toString());
         }
-        addCartItemToCart(getCart(), cartItem);
-        return getCart();
+        Cart cart = getCart();
+        addCartItemToCart(cart, cartItem);
+        return cart;
     }
 
     private void addCartItemToCart(Cart cart, CartItem cartItem) { //strategy
