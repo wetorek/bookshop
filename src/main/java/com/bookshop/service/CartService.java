@@ -72,11 +72,12 @@ public class CartService {
             throw new BookNotFoundException("Book not found " + cartItemRequest);
         }
         CartItem cartItem = getCartItemFromCartByBookId(cart, cartItemRequest.getBooksId()).orElseThrow(() -> new BookNotFoundException("Unexpected error occupied."));
-        if (!cartItem.getAmountOfItems().equals(cartItemRequest.getAmountOfItems())) {
+        if (cartItem.getAmountOfItems() < cartItemRequest.getAmountOfItems()) {
             throw new BookConflictException("Removed number of product is bigger than current amount in cart " + cartItemRequest);
         }
         cart.getCartItems().remove(cartItem);
         cart.setTotal(cart.getTotal().subtract(cartItem.getSubTotal()));
+        cartRepository.save(cart);
         return cart;
     }
 
@@ -96,22 +97,27 @@ public class CartService {
 
 
     public Cart addAdditionalService(AdditionalServiceDto additionalServiceDto) {
-        Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
-        if (additionalService.isEmpty()) {
-            throw new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto);
-        }
+        System.out.println(additionalServiceDto);
+        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
+                new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto));
         Cart cart = getCart();
-        additionalService.ifPresent(cart.getAdditionalServices()::add);
+        if (cart.getAdditionalServices().contains(additionalService)) {
+            throw new AdditionalServiceConflictEx("This additional service is already in cart! " + additionalServiceDto);
+        }
+        cart.getAdditionalServices().add(additionalService);
+        cartRepository.save(cart);
         return cart;
     }
 
     public Cart removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
+        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
+                new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto));
         Cart cart = getCart();
-        Optional<AdditionalService> additionalService = additionalServicesService.getById(additionalServiceDto.getId());
-        if (additionalService.isEmpty()) {
-            throw new AdditionalServiceConflictEx("Additional service does not exist in cart: " + additionalServiceDto);
+        if (!cart.getAdditionalServices().contains(additionalService)) {
+            throw new AdditionalServiceNotFoundEx("Additional service not found in cart! " + additionalServiceDto);
         }
-        additionalService.ifPresent(cart.getAdditionalServices()::remove);
+        cart.getAdditionalServices().remove(additionalService);
+        cartRepository.save(cart);
         return cart;
     }
 

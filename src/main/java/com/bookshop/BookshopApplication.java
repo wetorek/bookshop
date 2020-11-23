@@ -1,14 +1,12 @@
 package com.bookshop;
 
 import com.bookshop.config.SwaggerConfiguration;
+import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.controller.dto.book.BookDto;
-import com.bookshop.service.AuthorService;
-import com.bookshop.service.BookService;
-import com.bookshop.service.CategoryService;
-import com.bookshop.service.PublisherService;
+import com.bookshop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +32,8 @@ public class BookshopApplication {
     CategoryService categoryService;
     @Autowired
     PublisherService publisherService;
+    @Autowired
+    AdditionalServicesService additionalServicesService;
 
     public static void main(String[] args) {
         SpringApplication.run(BookshopApplication.class, args);
@@ -73,6 +73,10 @@ public class BookshopApplication {
         System.out.println(bookService.save(book1));
         System.out.println(bookService.save(book2));
         System.out.println(bookService.save(book3));
+        AdditionalServiceDto additionalServiceDto1 = new AdditionalServiceDto(1L, BigDecimal.TEN, "service 1");
+        AdditionalServiceDto additionalServiceDto2 = new AdditionalServiceDto(2L, BigDecimal.ONE, "service 2");
+        additionalServicesService.addService(additionalServiceDto1);
+        additionalServicesService.addService(additionalServiceDto2);
 //        System.out.println(bookService.getAllBooks());
 
     }

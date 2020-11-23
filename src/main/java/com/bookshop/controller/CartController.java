@@ -33,21 +33,21 @@ public class CartController {
 
     @PatchMapping("/cart-item/remove")
     @ResponseStatus(HttpStatus.OK)
-    public CartDto removeItemFromCart(CartItemRequest cartItemRequest) {
+    public CartDto removeItemFromCart(@RequestBody CartItemRequest cartItemRequest) {
         Cart cart = cartService.removeItemFromCart(cartItemRequest);
         return cartMapper.mapCartToDto(cart);
     }
 
     @PatchMapping("additional-service/add")
     @ResponseStatus(HttpStatus.OK)
-    public CartDto addAdditionalServ(AdditionalServiceDto additionalServiceDto) {
+    public CartDto addAdditionalServ(@RequestBody AdditionalServiceDto additionalServiceDto) {
         Cart cart = cartService.addAdditionalService(additionalServiceDto);
         return cartMapper.mapCartToDto(cart);
     }
 
     @PatchMapping("additional-service/remove")
     @ResponseStatus(HttpStatus.OK)
-    public CartDto removeAdditionalServ(AdditionalServiceDto additionalServiceDto) {
+    public CartDto removeAdditionalServ(@RequestBody AdditionalServiceDto additionalServiceDto) {
         Cart cart = cartService.removeAdditionalService(additionalServiceDto);
         return cartMapper.mapCartToDto(cart);
     }

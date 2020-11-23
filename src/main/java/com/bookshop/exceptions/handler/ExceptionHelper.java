@@ -14,14 +14,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHelper {
 
-    @ExceptionHandler(value = {BookNotFoundException.class, AdditionalServiceNotFoundEx.class})
-    private ResponseEntity<Object> handleNotFoundConflict(BookNotFoundException ex) {
+    @ExceptionHandler(value = {BookNotFoundException.class})
+    private ResponseEntity<Object> handleBookNotFound(BookNotFoundException ex) {
         log.error("Item not found: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {BookConflictException.class, AdditionalServiceConflictEx.class})
-    private ResponseEntity<Object> handleItemConflict(BookConflictException ex) {
+    @ExceptionHandler(value = {BookConflictException.class})
+    private ResponseEntity<Object> handleBookConflict(BookConflictException ex) {
+        log.error("Conflict in item: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = {AdditionalServiceNotFoundEx.class})
+    private ResponseEntity<Object> handleServiceNotFound(AdditionalServiceNotFoundEx ex) {
+        log.error("Item not found: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {AdditionalServiceConflictEx.class})
+    private ResponseEntity<Object> handleServiceConflict(AdditionalServiceConflictEx ex) {
         log.error("Conflict in item: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }

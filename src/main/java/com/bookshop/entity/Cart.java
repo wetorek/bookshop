@@ -20,9 +20,9 @@ public class Cart {
     private Long cartId;
     private String username;
     private BigDecimal total;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<CartItem> cartItems;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<AdditionalService> additionalServices;
     //discount code?
 }

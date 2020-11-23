@@ -14,7 +14,7 @@ import java.util.List;
 public class AdditionalServicesController {
     private final AdditionalServicesService additionalServicesService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<AdditionalServiceDto>> getAll() {
         return additionalServicesService.getAllServices();
     }

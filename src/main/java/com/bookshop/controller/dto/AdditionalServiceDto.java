@@ -12,5 +12,5 @@ import java.math.BigDecimal;
 public class AdditionalServiceDto {
     private Long Id;
     private BigDecimal price;
-    private BigDecimal description;
+    private String description;
 }
