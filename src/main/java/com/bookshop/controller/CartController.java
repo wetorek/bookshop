@@ -26,7 +26,7 @@ public class CartController {
 
     @PatchMapping("/cart-item/add")
     @ResponseStatus(HttpStatus.OK)
-    public CartDto addItemToCart(CartItemRequest cartItemRequest) {
+    public CartDto addItemToCart(@RequestBody CartItemRequest cartItemRequest) {
         Cart cart = cartService.addItemToCart(cartItemRequest);
         return cartMapper.mapCartToDto(cart);
     }

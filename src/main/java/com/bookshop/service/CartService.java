@@ -26,10 +26,10 @@ public class CartService {
 
     public Cart getCart() {
         User user = authService.getCurrentUser();
-        Optional<Cart> cartOptional = cartRepository.findCartByUser(user);
+        Optional<Cart> cartOptional = cartRepository.findCartByUsername(user.getUsername());
         return cartOptional.orElseGet(() -> {
             log.info("new cart created: " + user.getUsername());
-            Cart tempCart = CartUtils.createNewCart(user);
+            Cart tempCart = CartUtils.createNewCart(user.getUsername());
             cartRepository.save(tempCart);
             return tempCart;
         });
@@ -45,19 +45,19 @@ public class CartService {
         }
         Cart cart = getCart();
         addCartItemToCart(cart, cartItem);
+        cartRepository.save(cart);
         return cart;
     }
 
     private void addCartItemToCart(Cart cart, CartItem cartItem) { //strategy
         if (!doesCartContainProduct(cart, cartItem)) {
             cart.getCartItems().add(cartItem);
-            cart.setTotal(cart.getTotal().add(cart.getTotal()));
         } else {
             CartItem cartItemFromCart = getCartItemFromCartByBookId(cart, cartItem.getBook().getId()).orElseThrow(() -> new BookNotFoundException("Unexpected error occupied"));
             cartItemFromCart.setAmountOfItems(cartItemFromCart.getAmountOfItems() + cartItem.getAmountOfItems());
             cartItemFromCart.setSubTotal(cartItemFromCart.getSubTotal().add(cartItem.getSubTotal()));
-            cart.setTotal(cart.getTotal().add(cartItem.getSubTotal()));
         }
+        cart.setTotal(cart.getTotal().add(cartItem.getSubTotal()));
     }
 
     private Optional<CartItem> getCartItemFromCartByBookId(Cart cart, Long id) {

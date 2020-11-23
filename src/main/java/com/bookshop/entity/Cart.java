@@ -18,8 +18,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cartId;
-    @OneToOne
-    private User user;
+    private String username;
     private BigDecimal total;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<CartItem> cartItems;

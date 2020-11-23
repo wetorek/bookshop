@@ -4,7 +4,6 @@ import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Cart;
 import com.bookshop.entity.CartItem;
-import com.bookshop.entity.User;
 import com.bookshop.exceptions.BookNotFoundException;
 import com.bookshop.service.BookService;
 
@@ -22,12 +21,12 @@ public class CartUtils {
                 .build();
     }
 
-    public static Cart createNewCart(User user) {
+    public static Cart createNewCart(String username) {
         return Cart.builder()
                 .additionalServices(new LinkedList<>())
                 .cartItems(new LinkedList<>())
                 .total(BigDecimal.ZERO)
-                .user(user)
+                .username(username)
                 .build();
     }
 }
