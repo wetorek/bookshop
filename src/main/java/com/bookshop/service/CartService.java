@@ -10,12 +10,14 @@ import com.bookshop.exceptions.BookNotFoundException;
 import com.bookshop.repository.CartRepository;
 import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class CartService {
     private final CartRepository cartRepository;
     private final AuthService authService;
@@ -26,6 +28,7 @@ public class CartService {
         User user = authService.getCurrentUser();
         Optional<Cart> cartOptional = cartRepository.findCartByUser(user);
         return cartOptional.orElseGet(() -> {
+            log.info("new cart created: " + user.getUsername());
             Cart tempCart = CartUtils.createNewCart(user);
             cartRepository.save(tempCart);
             return tempCart;

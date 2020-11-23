@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,13 +16,14 @@ import java.util.List;
 @Entity(name = "cart")
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cartId;
     @OneToOne
     private User user;
     private BigDecimal total;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<CartItem> cartItems;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<AdditionalService> additionalServices;
     //discount code?
 }

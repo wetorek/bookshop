@@ -18,6 +18,7 @@ public class BookDto {
     private Long id;
     private BigDecimal price;
     private String name;
+    private Long inSock;
     private LocalDate dateOfRelease;
     private List<AuthorDto> authorDtoList;
     private List<CategoryDto> categoryDtoList;

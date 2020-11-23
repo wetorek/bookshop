@@ -8,9 +8,6 @@ import com.bookshop.entity.CartItem;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @AllArgsConstructor
 public class CartMapper {
     private final ModelMapper modelMapper;
@@ -19,12 +16,12 @@ public class CartMapper {
 
     public CartDto mapCartToDto(Cart cart) {
         CartDto cartDto = modelMapper.map(cart, CartDto.class);
-        cartDto.setAdditionalServices(additionalServicesMapper.mapListOfEntitiesToDto(cart.getAdditionalServices()));
+        /*cartDto.setAdditionalServices(additionalServicesMapper.mapListOfEntitiesToDto(cart.getAdditionalServices()));
         List<CartItemDto> cartItemDtoList = cart.getCartItems()
                 .stream()
                 .map(this::mapCartItemToDto)
                 .collect(Collectors.toList());
-        cartDto.setCartItems(cartItemDtoList);
+        cartDto.setCartItems(cartItemDtoList);*/
         return cartDto;
     }
 
