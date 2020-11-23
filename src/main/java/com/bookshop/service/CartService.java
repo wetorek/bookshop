@@ -7,7 +7,6 @@ import com.bookshop.exceptions.AdditionalServiceConflictEx;
 import com.bookshop.exceptions.AdditionalServiceNotFoundEx;
 import com.bookshop.exceptions.BookConflictException;
 import com.bookshop.exceptions.BookNotFoundException;
-import com.bookshop.mapper.CartMapper;
 import com.bookshop.repository.CartRepository;
 import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,6 @@ import java.util.Optional;
 public class CartService {
     private final CartRepository cartRepository;
     private final AuthService authService;
-    private final CartMapper cartMapper;
     private final BookService bookService;
     private final AdditionalServicesService additionalServicesService;
 
@@ -112,8 +110,6 @@ public class CartService {
         }
         additionalService.ifPresent(cart.getAdditionalServices()::remove);
         return cart;
-
     }
-
 
 }

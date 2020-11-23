@@ -1,5 +1,7 @@
+/*
 package com.bookshop.entity.order;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,8 +11,9 @@ import javax.persistence.OneToOne;
 import java.util.Optional;
 
 @Data
+@AllArgsConstructor
 @Builder
-@Entity(name = "ORDER_STATE")
+@Entity(name = "ORDER_STATUS")
 public class OrderStatus {
     @Id
     private Long orderId;
@@ -40,3 +43,4 @@ public class OrderStatus {
         orderState.pay();
     }
 }
+*/

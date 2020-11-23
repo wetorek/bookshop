@@ -1,9 +1,15 @@
+/*
 package com.bookshop.entity.order;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 
-@Entity
+@Entity(name = "ORDER_STATE")
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class OrderState {
     @Id
@@ -16,3 +22,4 @@ public abstract class OrderState {
 
     abstract void finishOrder();
 }
+*/

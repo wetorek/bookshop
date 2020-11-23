@@ -37,6 +37,10 @@ public class AppConfig {
         return new AdditionalServicesMapper(new ModelMapper());
     }
 
+    @Bean
+    public CartMapper cartMapper() {
+        return new CartMapper(modelMapper(), additionalServicesMapper(), bookMapper());
+    }
 
     @Bean
     public UserMapper userMapper() {

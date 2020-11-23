@@ -1,3 +1,4 @@
+/*
 package com.bookshop.entity.order;
 
 import lombok.NoArgsConstructor;
@@ -27,3 +28,4 @@ public class FinishedOrder extends OrderState {
 
     }
 }
+*/
