@@ -1,9 +1,10 @@
-/*
 package com.bookshop.entity.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,10 +17,12 @@ import java.util.Optional;
 @Entity(name = "ORDER_STATUS")
 public class OrderStatus {
     @Id
-    private Long orderId;
-    @OneToOne
-    private Order order;
+    private Long orderStatusId;
+    /* @OneToOne
+     private Order order;*/
     @OneToOne(targetEntity = OrderState.class)
+    @Cascade(CascadeType.ALL)
+
     private OrderState orderState;
 
     public OrderStatus() {
@@ -43,4 +46,3 @@ public class OrderStatus {
         orderState.pay();
     }
 }
-*/

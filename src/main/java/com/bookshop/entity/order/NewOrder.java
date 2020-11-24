@@ -1,19 +1,15 @@
-/*
 package com.bookshop.entity.order;
 
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Entity
 @NoArgsConstructor
 public class NewOrder extends OrderState {
-    @OneToOne
-    private OrderStatus orderStatus;
 
     public NewOrder(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+        super(orderStatus);
     }
 
     @Override
@@ -24,7 +20,7 @@ public class NewOrder extends OrderState {
 
     @Override
     public void pay() {
-        orderStatus.setOrderState(new PaidOrder(orderStatus));
+        getOrderStatus().setOrderState(new PaidOrder(getOrderStatus()));
     }
 
     @Override
@@ -32,4 +28,3 @@ public class NewOrder extends OrderState {
         System.out.println("invalid");
     }
 }
-*/

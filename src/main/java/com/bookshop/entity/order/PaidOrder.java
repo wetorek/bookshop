@@ -1,18 +1,15 @@
-/*
 package com.bookshop.entity.order;
 
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Entity
 @NoArgsConstructor
 public class PaidOrder extends OrderState {
-    @OneToOne
-    private OrderStatus orderStatus;
 
     public PaidOrder(OrderStatus orderStatus) {
+        super(orderStatus);
         pay();
         // this.orderStatus = orderStatus;
     }
@@ -32,4 +29,3 @@ public class PaidOrder extends OrderState {
 
     }
 }
-*/
