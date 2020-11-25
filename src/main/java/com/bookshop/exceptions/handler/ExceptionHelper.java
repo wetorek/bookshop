@@ -1,9 +1,6 @@
 package com.bookshop.exceptions.handler;
 
-import com.bookshop.exceptions.AdditionalServiceConflictEx;
-import com.bookshop.exceptions.AdditionalServiceNotFoundEx;
-import com.bookshop.exceptions.BookConflictException;
-import com.bookshop.exceptions.BookNotFoundException;
+import com.bookshop.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +32,12 @@ public class ExceptionHelper {
     @ExceptionHandler(value = {AdditionalServiceConflictEx.class})
     private ResponseEntity<Object> handleServiceConflict(AdditionalServiceConflictEx ex) {
         log.error("Conflict in item: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = InvalidCartException.class)
+    private ResponseEntity<Object> handleCartConflict (InvalidCartException ex){
+        log.error("Conflict in cart: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

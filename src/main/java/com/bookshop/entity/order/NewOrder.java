@@ -14,12 +14,13 @@ public class NewOrder extends OrderState {
 
     @Override
     public Order placeNewOrder() {
-        System.out.println("place order");
+        System.out.println("placing new Order");
         return null;
     }
 
     @Override
     public void pay() {
+        System.out.println("order is being paid");
         getOrderStatus().setOrderState(new PaidOrder(getOrderStatus()));
     }
 
