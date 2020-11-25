@@ -22,18 +22,18 @@ public class OrderController {
         return orderMapper.mapEntityTODto(order);
     }
 
-    @PatchMapping("/pay")
+    @PatchMapping("/pay/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto payOrder() {
-        //Order order = orderService.createNewOrder().orElseThrow();
+    public OrderDto payOrder(@PathVariable Long id) {
+        Order order = orderService.payForOrder(id).orElseThrow();
         //return orderMapper.mapEntityTODto(order);
         return null;
     }
 
-    @PatchMapping("/finish")
+    @PatchMapping("/finish/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto finishOrder() {
-
+    public OrderDto finishOrder(@PathVariable Long id) {
+        Order order = orderService.finishOrder(id).orElseThrow();
         return null;
     }
 
