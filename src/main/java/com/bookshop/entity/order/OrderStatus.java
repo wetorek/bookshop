@@ -6,9 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Optional;
 
 @Data
@@ -17,9 +15,10 @@ import java.util.Optional;
 @Entity(name = "ORDER_STATUS")
 public class OrderStatus {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderStatusId;
-    /* @OneToOne
-     private Order order;*/
+//     @OneToOne
+//     private Order order;
     @OneToOne(targetEntity = OrderState.class)
     @Cascade(CascadeType.ALL)
 

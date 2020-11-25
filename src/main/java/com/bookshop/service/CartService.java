@@ -5,8 +5,8 @@ import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.*;
 import com.bookshop.exceptions.AdditionalServiceConflictEx;
 import com.bookshop.exceptions.AdditionalServiceNotFoundEx;
-import com.bookshop.exceptions.BookConflictException;
-import com.bookshop.exceptions.BookNotFoundException;
+import com.bookshop.exceptions.BookConflictEx;
+import com.bookshop.exceptions.BookNotFoundEx;
 import com.bookshop.repository.CartRepository;
 import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
@@ -37,11 +37,11 @@ public class CartService {
 
     public Cart addItemToCart(CartItemRequest cartItemRequest) {
         if (bookService.getBookByID(cartItemRequest.getBooksId()).isEmpty()) {
-            throw new BookNotFoundException(cartItemRequest.toString());
+            throw new BookNotFoundEx(cartItemRequest.toString());
         }
         CartItem cartItem = CartUtils.buildCartItem(bookService, cartItemRequest);
         if (cartItem.getAmountOfItems() > cartItem.getBook().getInSock()) {
-            throw new BookConflictException("Selected amount of stock is too big " + cartItemRequest);
+            throw new BookConflictEx("Selected amount of stock is too big " + cartItemRequest);
         }
         Cart cart = getCart();
         addCartItemToCart(cart, cartItem);
@@ -53,7 +53,7 @@ public class CartService {
         if (!doesCartContainProduct(cart, cartItem)) {
             cart.getCartItems().add(cartItem);
         } else {
-            CartItem cartItemFromCart = getCartItemFromCartByBookId(cart, cartItem.getBook().getId()).orElseThrow(() -> new BookNotFoundException("Unexpected error occupied"));
+            CartItem cartItemFromCart = getCartItemFromCartByBookId(cart, cartItem.getBook().getId()).orElseThrow(() -> new BookNotFoundEx("Unexpected error occupied"));
             cartItemFromCart.setAmountOfItems(cartItemFromCart.getAmountOfItems() + cartItem.getAmountOfItems());
             cartItemFromCart.setSubTotal(cartItemFromCart.getSubTotal().add(cartItem.getSubTotal()));
         }
@@ -69,11 +69,11 @@ public class CartService {
     public Cart removeItemFromCart(CartItemRequest cartItemRequest) {
         Cart cart = getCart();
         if (!doesCartContainProduct(cart, cartItemRequest)) {
-            throw new BookNotFoundException("Book not found " + cartItemRequest);
+            throw new BookNotFoundEx("Book not found " + cartItemRequest);
         }
-        CartItem cartItem = getCartItemFromCartByBookId(cart, cartItemRequest.getBooksId()).orElseThrow(() -> new BookNotFoundException("Unexpected error occupied."));
+        CartItem cartItem = getCartItemFromCartByBookId(cart, cartItemRequest.getBooksId()).orElseThrow(() -> new BookNotFoundEx("Unexpected error occupied."));
         if (cartItem.getAmountOfItems() < cartItemRequest.getAmountOfItems()) {
-            throw new BookConflictException("Removed number of product is bigger than current amount in cart " + cartItemRequest);
+            throw new BookConflictEx("Removed number of product is bigger than current amount in cart " + cartItemRequest);
         }
         cart.getCartItems().remove(cartItem);
         cart.setTotal(cart.getTotal().subtract(cartItem.getSubTotal()));

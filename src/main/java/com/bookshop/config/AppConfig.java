@@ -14,27 +14,27 @@ public class AppConfig {
 
     @Bean
     public AuthorMapper authorMapper() {
-        return new AuthorMapper(new ModelMapper());
+        return new AuthorMapper(modelMapper());
     }
 
     @Bean
     public BookMapper bookMapper() {
-        return new BookMapper(new ModelMapper());
+        return new BookMapper(modelMapper());
     }
 
     @Bean
     public CategoryMapper categoryMapper() {
-        return new CategoryMapper(new ModelMapper());
+        return new CategoryMapper(modelMapper());
     }
 
     @Bean
     public PublisherMapper publisherMapper() {
-        return new PublisherMapper(new ModelMapper());
+        return new PublisherMapper(modelMapper());
     }
 
     @Bean
     public AdditionalServicesMapper additionalServicesMapper() {
-        return new AdditionalServicesMapper(new ModelMapper());
+        return new AdditionalServicesMapper(modelMapper());
     }
 
     @Bean
@@ -44,6 +44,11 @@ public class AppConfig {
 
     @Bean
     public UserMapper userMapper() {
-        return new UserMapper(new ModelMapper());
+        return new UserMapper(modelMapper());
+    }
+
+    @Bean
+    public OrderMapper orderMapper(){
+        return new OrderMapper(modelMapper());
     }
 }

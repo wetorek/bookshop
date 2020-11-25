@@ -1,5 +1,6 @@
 package com.bookshop.entity.order;
 
+import com.bookshop.exceptions.OrderChangeNotAllowedEx;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -16,16 +17,16 @@ public class PaidOrder extends OrderState {
 
     @Override
     public Order placeNewOrder() {
-        return null;
+        throw new OrderChangeNotAllowedEx("Place new Order operation is not allowed: ");
     }
 
     @Override
     public void pay() {
-
+        System.out.println("Paying for order!");
     }
 
     @Override
     public void finishOrder() {
-
+        getOrderStatus().setOrderState(new FinishedOrder(getOrderStatus()));
     }
 }
