@@ -26,22 +26,24 @@ public class OrderService {
         if (!validateNumberOfBooksInCart(cart)) {
             throw new InvalidCartEx("This amount of items is too big: " + cart.getUsername());
         }
-        OrderStatus orderStatus = new OrderStatus();
+        OrderStatus orderStatus = new OrderStatus(cartService.getCart());
         orderStatus.payForOrder();
         orderStatus.finishOrder();
         orderStatusRepository.save(orderStatus);
-        return Optional.empty();
+        return Optional.of(orderStatus.getOrder());
     }
 
     public Optional<Order> payForOrder(Long id) {
         OrderStatus orderStatus = orderStatusRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
         orderStatus.payForOrder();
+        orderStatusRepository.save(orderStatus);
         return Optional.empty();
     }
 
     public Optional<Order> finishOrder(Long id) {
         OrderStatus orderStatus = orderStatusRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
         orderStatus.finishOrder();
+        orderStatusRepository.save(orderStatus);
         return Optional.empty();
     }
 

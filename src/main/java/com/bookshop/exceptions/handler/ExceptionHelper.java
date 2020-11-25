@@ -48,7 +48,7 @@ public class ExceptionHelper {
     }
 
     @ExceptionHandler(value = OrderNotFoundEx.class)
-    private ResponseEntity<Object> orderNotFoundHandler (OrderNotFoundEx ex){
+    private ResponseEntity<Object> orderNotFoundHandler(OrderNotFoundEx ex) {
         log.error("Order not found: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }

@@ -48,7 +48,7 @@ public class AppConfig {
     }
 
     @Bean
-    public OrderMapper orderMapper(){
+    public OrderMapper orderMapper() {
         return new OrderMapper(modelMapper());
     }
 }

@@ -1,5 +1,6 @@
 package com.bookshop.entity.order;
 
+import com.bookshop.entity.Cart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,14 +15,14 @@ public abstract class OrderState {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private OrderStatus orderStatus;
 
     public OrderState(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-    abstract Order placeNewOrder();
+    abstract Order placeNewOrder(Cart cart);
 
     abstract void pay();
 

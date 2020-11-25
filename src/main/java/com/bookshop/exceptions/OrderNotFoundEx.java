@@ -1,6 +1,6 @@
 package com.bookshop.exceptions;
 
-public class OrderNotFoundEx extends RuntimeException{
+public class OrderNotFoundEx extends RuntimeException {
     public OrderNotFoundEx(String message) {
         super(message);
     }

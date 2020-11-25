@@ -1,6 +1,6 @@
 package com.bookshop.exceptions;
 
-public class OrderChangeNotAllowedEx extends  RuntimeException{
+public class OrderChangeNotAllowedEx extends RuntimeException {
     public OrderChangeNotAllowedEx(String message) {
         super(message);
     }

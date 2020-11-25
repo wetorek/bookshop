@@ -1,12 +1,15 @@
 package com.bookshop.entity.order;
 
+import com.bookshop.entity.Cart;
 import com.bookshop.exceptions.OrderChangeNotAllowedEx;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
 
 @Entity
 @NoArgsConstructor
+@Slf4j
 public class FinishedOrder extends OrderState {
     public FinishedOrder(OrderStatus orderStatus) {
         super(orderStatus);
@@ -14,7 +17,7 @@ public class FinishedOrder extends OrderState {
     }
 
     @Override
-    public Order placeNewOrder() {
+    public Order placeNewOrder(Cart cart) {
         throw new OrderChangeNotAllowedEx("Place new Order operation is not allowed: ");
     }
 
@@ -25,7 +28,7 @@ public class FinishedOrder extends OrderState {
 
     @Override
     public void finishOrder() {
-        System.out.println("finishing order");
+        log.info("finishing order");
         /*
         throw new OrderChangeNotAllowedException("Finishing Order operation is not allowed: ");*/
     }
