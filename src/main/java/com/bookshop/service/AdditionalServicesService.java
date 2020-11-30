@@ -2,12 +2,11 @@ package com.bookshop.service;
 
 import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.entity.AdditionalService;
+import com.bookshop.exceptions.AdditionalServiceConflictEx;
 import com.bookshop.mapper.AdditionalServicesMapper;
 import com.bookshop.repository.AdditionalServicesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +19,16 @@ public class AdditionalServicesService {
     private final AdditionalServicesRepository additionalServicesRepository;
     private final AdditionalServicesMapper additionalServicesMapper;
 
-    public ResponseEntity<List<AdditionalServiceDto>> getAllServices() {
-        List<AdditionalServiceDto> additionalServiceDtoList = additionalServicesMapper.mapListOfEntitiesToDto(additionalServicesRepository.findAll());
-        return new ResponseEntity<>(additionalServiceDtoList, HttpStatus.OK);
+    public List<AdditionalService> getAllServices() {
+        return additionalServicesRepository.findAll();
     }
 
-    public ResponseEntity<Void> addService(AdditionalServiceDto additionalServiceDto) {
+    public void addService(AdditionalServiceDto additionalServiceDto) {
         if (additionalServicesRepository.existsById(additionalServiceDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new AdditionalServiceConflictEx("Additional service already exists" + additionalServiceDto);
         }
         AdditionalService additionalService = additionalServicesMapper.mapDtoToEntity(additionalServiceDto);
         additionalServicesRepository.save(additionalService);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     public Optional<AdditionalService> getById(Long id) {
