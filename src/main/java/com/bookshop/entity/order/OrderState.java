@@ -1,6 +1,7 @@
 package com.bookshop.entity.order;
 
-import com.bookshop.entity.Cart;
+import com.bookshop.exceptions.OrderChangeNotAllowedEx;
+import com.bookshop.service.CartService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,9 +23,15 @@ public abstract class OrderState {
         this.orderStatus = orderStatus;
     }
 
-    abstract Order placeNewOrder(Cart cart);
+    Order placeNewOrder(CartService cartService) {
+        throw new OrderChangeNotAllowedEx("Creating Order operation is not allowed: ");
+    }
 
-    abstract void pay();
+    void pay() {
+        throw new OrderChangeNotAllowedEx("Paying for order operation is not allowed: ");
+    }
 
-    abstract void finishOrder();
+    void finishOrder() {
+        throw new OrderChangeNotAllowedEx("Finishing Order operation is not allowed: ");
+    }
 }

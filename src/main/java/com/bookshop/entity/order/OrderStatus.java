@@ -1,15 +1,13 @@
 package com.bookshop.entity.order;
 
-import com.bookshop.entity.Cart;
+import com.bookshop.service.CartService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import java.util.Optional;
+
 
 @Data
 @NoArgsConstructor
@@ -20,21 +18,16 @@ public class OrderStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderStatusId;
-    @Cascade(CascadeType.ALL)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Order order;
-    @OneToOne(targetEntity = OrderState.class)
-    @Cascade(CascadeType.ALL)
+    @OneToOne(targetEntity = OrderState.class, cascade = CascadeType.ALL)
     private OrderState orderState;
 
-    public OrderStatus(Cart cart) {
-        this.orderState = new NewOrder(this, cart);
+    public OrderStatus(CartService cartService) {
+        this.orderState = new NewOrder(this);
+        order = orderState.placeNewOrder(cartService);
     }
 
-    public Optional<Order> createNewOrder(Cart cart) {
-        order = orderState.placeNewOrder(cart);
-        return Optional.of(order);
-    }
 
     public void finishOrder() {
         orderState.finishOrder();

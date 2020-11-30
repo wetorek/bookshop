@@ -7,9 +7,11 @@ import com.bookshop.entity.order.Order;
 import com.bookshop.entity.order.OrderStatus;
 import com.bookshop.exceptions.InvalidCartEx;
 import com.bookshop.exceptions.OrderNotFoundEx;
+import com.bookshop.repository.OrderRepository;
 import com.bookshop.repository.OrderStatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
@@ -20,31 +22,43 @@ public class OrderService {
     private final CartService cartService;
     private final BookService bookService;
     private final OrderStatusRepository orderStatusRepository;
+    private final OrderRepository orderRepository;
 
-    public Optional<Order> createNewOrder() {
+    @Transactional
+    public Order createNewOrder() {
         Cart cart = cartService.getCart();
         if (!validateNumberOfBooksInCart(cart)) {
             throw new InvalidCartEx("This amount of items is too big: " + cart.getUsername());
         }
-        OrderStatus orderStatus = new OrderStatus(cartService.getCart());
-        orderStatus.payForOrder();
-        orderStatus.finishOrder();
+        /*Order order = Order.builder()
+                .additionalServices(cart.getAdditionalServices())
+                .cartItems(cart.getCartItems())
+                .total(cart.getTotal())
+                .username(cart.getUsername())
+                .build();
+        cartService.emptyCart();
+        orderRepository.save(order);*/
+        OrderStatus orderStatus = new OrderStatus(cartService);
+        Order order = orderStatus.getOrder();
         orderStatusRepository.save(orderStatus);
-        return Optional.of(orderStatus.getOrder());
+
+        return order;
     }
 
-    public Optional<Order> payForOrder(Long id) {
-        OrderStatus orderStatus = orderStatusRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
+    public Order payForOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
+        OrderStatus orderStatus = orderStatusRepository.findByOrder(order).orElseThrow(() -> new OrderNotFoundEx("Order status was not found by this order: " + id));
         orderStatus.payForOrder();
         orderStatusRepository.save(orderStatus);
-        return Optional.empty();
+        return orderStatus.getOrder();
     }
 
-    public Optional<Order> finishOrder(Long id) {
-        OrderStatus orderStatus = orderStatusRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
+    public Order finishOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
+        OrderStatus orderStatus = orderStatusRepository.findByOrder(order).orElseThrow(() -> new OrderNotFoundEx("Order status was not found by this order: " + id));
         orderStatus.finishOrder();
         orderStatusRepository.save(orderStatus);
-        return Optional.empty();
+        return orderStatus.getOrder();
     }
 
 

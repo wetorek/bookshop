@@ -12,7 +12,10 @@ import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -24,6 +27,7 @@ public class CartService {
     private final BookService bookService;
     private final AdditionalServicesService additionalServicesService;
 
+    @Transactional
     public Cart getCart() {
         User user = authService.getCurrentUser();
         Optional<Cart> cartOptional = cartRepository.findCartByUsername(user.getUsername());
@@ -35,6 +39,7 @@ public class CartService {
         });
     }
 
+    @Transactional
     public Cart addItemToCart(CartItemRequest cartItemRequest) {
         if (bookService.getBookByID(cartItemRequest.getBooksId()).isEmpty()) {
             throw new BookNotFoundEx(cartItemRequest.toString());
@@ -47,6 +52,14 @@ public class CartService {
         addCartItemToCart(cart, cartItem);
         cartRepository.save(cart);
         return cart;
+    }
+
+    @Transactional
+    public void emptyCart() {
+        Cart cart = getCart();
+        cart.setTotal(BigDecimal.ZERO);
+        cart.setCartItems(new LinkedList<>());
+        cart.setAdditionalServices(new LinkedList<>());
     }
 
     private void addCartItemToCart(Cart cart, CartItem cartItem) { //strategy
@@ -66,6 +79,7 @@ public class CartService {
                 .findFirst();
     }
 
+    @Transactional
     public Cart removeItemFromCart(CartItemRequest cartItemRequest) {
         Cart cart = getCart();
         if (!doesCartContainProduct(cart, cartItemRequest)) {
@@ -81,7 +95,7 @@ public class CartService {
         return cart;
     }
 
-    private boolean doesCartContainProduct(Cart cart, CartItemRequest cartItemRequest) { //TODO design pattern
+    private boolean doesCartContainProduct(Cart cart, CartItemRequest cartItemRequest) {
         return cart.getCartItems().stream()
                 .map(CartItem::getBook)
                 .map(Book::getId)
@@ -96,6 +110,7 @@ public class CartService {
     }
 
 
+    @Transactional
     public Cart addAdditionalService(AdditionalServiceDto additionalServiceDto) {
         System.out.println(additionalServiceDto);
         AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
@@ -109,6 +124,7 @@ public class CartService {
         return cart;
     }
 
+    @Transactional
     public Cart removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
         AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
                 new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto));
