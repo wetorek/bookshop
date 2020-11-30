@@ -39,8 +39,8 @@
     - [ ] a possible feature to implement in the future: how many books are available in location
     
     
-    
-##Used design patterns:
+dać główny endpoint bookapi, ustandaryzować endpointy do resta. Refactor serwiców żeby zwracały encje. Dodanie wszędzie wyjątków
+#Used design patterns:
   - [X] Singleton\
   com.bookshop.security.JwtAuthenticationFilter.doFilterInternal and com.bookshop.service.AuthService.getCurrentUser\
   Used in logger in BookService\
