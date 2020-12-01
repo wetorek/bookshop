@@ -90,8 +90,7 @@ public class BookService {
                 .map(author -> authorService.getAuthorById(author.getId()))
                 .forEach(bookFromRepo::addAuthor);
         bookDto.getCategoryDtoList().stream()
-                .map(category -> categoryService.getCategoryEntity(category.getId()))
-                .filter(Optional::isPresent).map(Optional::get)
+                .map(category -> categoryService.getCategoryById(category.getId()))
                 .forEach(bookFromRepo::addCategory);
         bookDto.getPublisherDtoList().stream()
                 .map(PublisherDto::getId)
@@ -151,11 +150,11 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> addCategoryToBook(Long bookId, Long categoryId) {
-        if (!bookRepository.existsById(bookId) || categoryService.getCategoryEntity(categoryId).isEmpty()) {
+        if (!bookRepository.existsById(bookId) || categoryService.getCategoryById(categoryId) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        Category category = categoryService.getCategoryEntity(categoryId).orElseThrow(() -> new IllegalArgumentException("This category does not exist in repo"));
+        Category category = categoryService.getCategoryById(categoryId);
         bookFromRepo.addCategory(category);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -185,7 +184,7 @@ public class BookService {
         if (bookFromRepo.getCategories().stream().map(Category::getId).noneMatch(u -> u.equals(categoryId))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Category category = categoryService.getCategoryEntity(categoryId).orElseThrow();
+        Category category = categoryService.getCategoryById(categoryId);
         bookFromRepo.removeCategory(category);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -228,11 +227,8 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<List<BookDto>> getBooksByCategory(Long categoryId) {
-        Optional<Category> category = categoryService.getCategoryEntity(categoryId);
-        if (category.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Book> bookList = bookRepository.getBooksByCategoriesContains(category.get());
+        Category category = categoryService.getCategoryById(categoryId);
+        List<Book> bookList = bookRepository.getBooksByCategoriesContains(category);
         List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }

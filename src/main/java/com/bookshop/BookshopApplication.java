@@ -64,8 +64,8 @@ public class BookshopApplication {
         authorController.addAuthor(authorDto2);
         CategoryDto categoryDto1 = new CategoryDto(1L, "przygodowe");
         CategoryDto categoryDto2 = new CategoryDto(2L, "akcji");
-        System.out.println(categoryService.saveCategory(categoryDto1));
-        System.out.println(categoryService.saveCategory(categoryDto2));
+        categoryService.saveCategory(categoryDto1);
+        categoryService.saveCategory(categoryDto2);
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
         publisherService.savePublisher(publisherDto1);
@@ -102,10 +102,6 @@ public class BookshopApplication {
 
     private void deleteBooks() {
         System.out.println(bookService.delete(31L));
-    }
-
-    private void deleteCategory() {
-        System.out.println(categoryService.deleteById(2L));
     }
 
 

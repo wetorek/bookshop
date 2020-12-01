@@ -1,13 +1,12 @@
 package com.bookshop.mapper;
 
 import com.bookshop.controller.dto.CategoryDto;
-import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class CategoryMapper {
@@ -23,10 +22,13 @@ public class CategoryMapper {
 
     public Category mapCategoryDtoUsingEntity(CategoryDto categoryDto, Category category) {
         Category mappedCategory = mapCategoryDtoToEntity(categoryDto);
-        List<Book> books = category.getBooksCategory();
-        category.getBooksCategory().forEach(book -> book.getCategories().remove(category));
-        category.setBooksCategory(new LinkedList<>());
-        books.forEach(book -> book.addCategory(mappedCategory));
+        mappedCategory.setBooksCategory(category.getBooksCategory());
         return mappedCategory;
+    }
+
+    public List<CategoryDto> mapListToDto(List<Category> categories) {
+        return categories.stream()
+                .map(category -> modelMapper.map(category, CategoryDto.class))
+                .collect(Collectors.toList());
     }
 }
