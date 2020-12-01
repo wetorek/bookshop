@@ -1,13 +1,12 @@
 package com.bookshop.mapper;
 
 import com.bookshop.controller.dto.PublisherDto;
-import com.bookshop.entity.Book;
 import com.bookshop.entity.Publisher;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class PublisherMapper {
@@ -23,11 +22,14 @@ public class PublisherMapper {
 
     public Publisher mapPublisherDtoUsingEntity(PublisherDto publisherDto, Publisher publisher) {
         Publisher mappedPublisher = mapPublisherDtoToEntity(publisherDto);
-        List<Book> books = publisher.getBooksPublisher();
-        publisher.getBooksPublisher().forEach(book -> book.getPublishers().remove(publisher));
-        publisher.setBooksPublisher(new LinkedList<>());
-        books.forEach(book -> book.addPublisher(mappedPublisher));
+        mappedPublisher.setBooksPublisher(publisher.getBooksPublisher());
         return mappedPublisher;
+    }
+
+    public List<PublisherDto> mapListToDto(List<Publisher> publishers) {
+        return publishers.stream()
+                .map(publisher -> modelMapper.map(publisher, PublisherDto.class))
+                .collect(Collectors.toList());
     }
 
 }

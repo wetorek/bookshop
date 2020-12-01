@@ -20,7 +20,7 @@
     - [x] Book
     - [x] Author
     - [X] Cart
-    - [ ] Order
+    - [X] Order
     - [X] Additional Service ( services like book packaging )
     - [x] Publisher
     - [X] User

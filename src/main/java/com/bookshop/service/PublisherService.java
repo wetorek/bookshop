@@ -2,12 +2,12 @@ package com.bookshop.service;
 
 import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.entity.Publisher;
+import com.bookshop.exceptions.ApplicationConflictException;
+import com.bookshop.exceptions.ApplicationNotFoundException;
 import com.bookshop.mapper.PublisherMapper;
 import com.bookshop.repository.PublisherRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,60 +23,41 @@ public class PublisherService {
     private final PublisherMapper publisherMapper;
 
     @Transactional(readOnly = true)
-    public List<PublisherDto> getAllPublishers() {
-        return publisherRepository.findAll()
-                .stream()
-                .map(publisherMapper::mapPublisherEntityToDto)
-                .collect(Collectors.toList());
+    public List<Publisher> getAllPublishers() {
+        return publisherRepository.findAll();
     }
 
     @Transactional
-    public ResponseEntity<Void> savePublisher(PublisherDto publisherDto) {
+    public void savePublisher(PublisherDto publisherDto) {
         if (publisherRepository.existsById(publisherDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new ApplicationConflictException("Publisher already exists " + publisherDto);
         }
         publisherRepository.save(publisherMapper.mapPublisherDtoToEntity(publisherDto));
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Transactional
-    public ResponseEntity<Void> updatePublisher(PublisherDto publisherDto) {
+    public void updatePublisher(PublisherDto publisherDto) {
         if (!publisherRepository.existsById(publisherDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Publisher does not exist: " + publisherDto);
         }
-        Publisher publisherFromRepo = publisherRepository.findById(publisherDto.getId()).orElseThrow();
+        Publisher publisherFromRepo = getPublisherById(publisherDto.getId());
         Publisher newPublisher = publisherMapper.mapPublisherDtoUsingEntity(publisherDto, publisherFromRepo);
         publisherRepository.save(newPublisher);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<Void> deletePublisher(Long id) {
+    public void deletePublisher(Long id) {
         if (!publisherRepository.existsById(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Publisher does not exist: " + id);
         }
-        Publisher publisher = publisherRepository.findById(id).orElseThrow();
-        publisher.getBooksPublisher().forEach(book -> book.removePublisher(publisher));
-        publisherRepository.save(publisher);
         publisherRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<PublisherDto> getPublisherById(Long id) {
-        Optional<PublisherDto> publisherDto = publisherRepository.findById(id).map(publisherMapper::mapPublisherEntityToDto);
-        return publisherDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public Publisher getPublisherById(Long id) {
+        return publisherRepository.findById(id).orElseThrow(() -> new ApplicationNotFoundException("Publisher not found: " + id));
     }
 
-    public boolean allExist(List<PublisherDto> publisherDtoList) {
-        return publisherDtoList.stream()
-                .map(PublisherDto::getId)
-                .allMatch(publisherRepository::existsById);
-    }
-
-    public Optional<Publisher> getPublisherEntity(Long id) {
-        return publisherRepository.findById(id);
-    }
 
     public List<Publisher> getPublishersByList(List<PublisherDto> publisherDtoList) {
         return publisherDtoList.stream()

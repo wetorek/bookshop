@@ -95,8 +95,7 @@ public class BookService {
                 .forEach(bookFromRepo::addCategory);
         bookDto.getPublisherDtoList().stream()
                 .map(PublisherDto::getId)
-                .map(publisherService::getPublisherEntity)
-                .filter(Optional::isPresent).map(Optional::get)
+                .map(publisherService::getPublisherById)
                 .forEach(bookFromRepo::addPublisher);
     }
 
@@ -201,7 +200,7 @@ public class BookService {
         if (bookFromRepo.getPublishers().stream().map(Publisher::getId).noneMatch(u -> u.equals(publisherId))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Publisher publisher = publisherService.getPublisherEntity(publisherId).orElseThrow();
+        Publisher publisher = publisherService.getPublisherById(publisherId);
         bookFromRepo.removePublisher(publisher);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -209,11 +208,11 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> addPublisherToBook(Long bookId, Long publisherId) {
-        if (!bookRepository.existsById(bookId) || publisherService.getPublisherEntity(publisherId).isEmpty()) {
+        if (!bookRepository.existsById(bookId) || publisherService.getPublisherById(publisherId) != null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        Publisher publisher = publisherService.getPublisherEntity(publisherId).orElseThrow();
+        Publisher publisher = publisherService.getPublisherById(publisherId);
         bookFromRepo.addPublisher(publisher);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

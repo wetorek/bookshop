@@ -1,10 +1,11 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.PublisherDto;
+import com.bookshop.entity.Publisher;
+import com.bookshop.mapper.PublisherMapper;
 import com.bookshop.service.PublisherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,30 +16,38 @@ import java.util.List;
 public class PublisherController {
 
     PublisherService publisherService;
+    PublisherMapper publisherMapper;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<PublisherDto>> getAllPublishers() {
-        return new ResponseEntity<>(publisherService.getAllPublishers(), HttpStatus.OK);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<PublisherDto> getAllPublishers() {
+        List<Publisher> publishers = publisherService.getAllPublishers();
+        return publisherMapper.mapListToDto(publishers);
     }
 
-    @GetMapping("/publisher/{id}")
-    public ResponseEntity<PublisherDto> getPublisherById(@PathVariable Long id) {
-        return publisherService.getPublisherById(id);
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PublisherDto getPublisherById(@PathVariable Long id) {
+        Publisher publisher = publisherService.getPublisherById(id);
+        return publisherMapper.mapPublisherEntityToDto(publisher);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addPublisher(@RequestBody PublisherDto publisherDto) {
-        return publisherService.savePublisher(publisherDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addPublisher(@RequestBody PublisherDto publisherDto) {
+        publisherService.savePublisher(publisherDto);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> updatePublisher(@RequestBody PublisherDto publisherDto) {
-        return publisherService.updatePublisher(publisherDto);
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePublisher(@RequestBody PublisherDto publisherDto) {
+        publisherService.updatePublisher(publisherDto);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePublisher(@PathVariable Long id) {
-        return publisherService.deletePublisher(id);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePublisher(@PathVariable Long id) {
+        publisherService.deletePublisher(id);
     }
 
 }
