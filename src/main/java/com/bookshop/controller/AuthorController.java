@@ -1,10 +1,11 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.AuthorDto;
+import com.bookshop.entity.Author;
+import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.service.AuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,30 +16,38 @@ import java.util.List;
 public class AuthorController {
 
     AuthorService authorService;
+    AuthorMapper authorMapper;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<AuthorDto>> getAllAuthors() {
-        return new ResponseEntity<>(authorService.getAllAuthors(), HttpStatus.OK);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<AuthorDto> getAllAuthors() {
+        List<Author> authors = authorService.getAllAuthors();
+        return authorMapper.mapListOfAuthorsToDto(authors);
     }
 
-    @GetMapping("/author/{id}")
-    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
-        return authorService.getAuthorById(id);
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public AuthorDto getAuthorById(@PathVariable Long id) {
+        Author author = authorService.getAuthorById(id);
+        return authorMapper.mapAuthorEntityToDto(author);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addAuthor(@RequestBody AuthorDto authorDto) {
-        return authorService.saveAuthor(authorDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addAuthor(@RequestBody AuthorDto authorDto) {
+        authorService.saveAuthor(authorDto);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> updateAuthor(@RequestBody AuthorDto authorDto) {
-        return authorService.updateAuthor(authorDto);
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void updateAuthor(@RequestBody AuthorDto authorDto) {
+        authorService.updateAuthor(authorDto);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        return authorService.deleteAuthor(id);
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public void deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
     }
 
 }

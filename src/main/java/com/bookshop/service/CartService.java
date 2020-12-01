@@ -113,8 +113,7 @@ public class CartService {
     @Transactional
     public Cart addAdditionalService(AdditionalServiceDto additionalServiceDto) {
         System.out.println(additionalServiceDto);
-        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
-                new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto));
+        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId());
         Cart cart = getCart();
         if (cart.getAdditionalServices().contains(additionalService)) {
             throw new AdditionalServiceConflictEx("This additional service is already in cart! " + additionalServiceDto);
@@ -126,8 +125,7 @@ public class CartService {
 
     @Transactional
     public Cart removeAdditionalService(AdditionalServiceDto additionalServiceDto) {
-        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId()).orElseThrow(() ->
-                new AdditionalServiceNotFoundEx("Additional Service not found " + additionalServiceDto));
+        AdditionalService additionalService = additionalServicesService.getById(additionalServiceDto.getId());
         Cart cart = getCart();
         if (!cart.getAdditionalServices().contains(additionalService)) {
             throw new AdditionalServiceNotFoundEx("Additional service not found in cart! " + additionalServiceDto);

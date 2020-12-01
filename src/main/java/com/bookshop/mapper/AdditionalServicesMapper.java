@@ -22,4 +22,8 @@ public class AdditionalServicesMapper {
     public AdditionalService mapDtoToEntity(AdditionalServiceDto additionalServiceDto) {
         return modelMapper.map(additionalServiceDto, AdditionalService.class);
     }
+
+    public AdditionalServiceDto mapEntityToDto(AdditionalService additionalService) {
+        return modelMapper.map(additionalService, AdditionalServiceDto.class);
+    }
 }

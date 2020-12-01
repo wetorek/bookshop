@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class AuthorMapper {
@@ -28,5 +29,12 @@ public class AuthorMapper {
         author.setBooksAuthor(new LinkedList<>());
         books.forEach(book -> book.addAuthor(mappedAuthor));
         return mappedAuthor;
+    }
+
+    public List<AuthorDto> mapListOfAuthorsToDto(List<Author> authors) {
+        return authors
+                .stream()
+                .map(author -> modelMapper.map(author, AuthorDto.class))
+                .collect(Collectors.toList());
     }
 }

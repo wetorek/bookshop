@@ -1,7 +1,6 @@
 package com.bookshop;
 
 import com.bookshop.config.SwaggerConfiguration;
-import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
@@ -42,7 +41,7 @@ public class BookshopApplication {
     @EventListener
     public void appReady(ApplicationReadyEvent event) {
 //        publisherTest();
-        setUp();
+//        setUp();
 //        updateBooksPatch();
 //        updateBooksAddConnectedEntities();
 //        updateBooksRemoveAuthorCategory();
@@ -54,7 +53,7 @@ public class BookshopApplication {
 
     }
 
-    private void setUp() {
+   /* private void setUp() {
         AuthorDto authorDto1 = new AuthorDto(1L, "Puszek", "Wielki");
         AuthorDto authorDto2 = new AuthorDto(2L, "Jasiek", "Intellij");
         System.out.println(authorService.saveAuthor(authorDto1));
@@ -79,7 +78,7 @@ public class BookshopApplication {
         additionalServicesService.addService(additionalServiceDto2);
 //        System.out.println(bookService.getAllBooks());
 
-    }
+    }*/
 
 
     private void publisherTest() {

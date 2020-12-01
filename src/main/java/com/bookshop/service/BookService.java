@@ -87,8 +87,7 @@ public class BookService {
 
     private void attachEntitiesToBook(Book bookFromRepo, BookDto bookDto) {
         bookDto.getAuthorDtoList().stream()
-                .map(author -> authorService.getAuthorEntity(author.getId()))
-                .filter(Optional::isPresent).map(Optional::get)
+                .map(author -> authorService.getAuthorById(author.getId()))
                 .forEach(bookFromRepo::addAuthor);
         bookDto.getCategoryDtoList().stream()
                 .map(category -> categoryService.getCategoryEntity(category.getId()))
@@ -141,11 +140,11 @@ public class BookService {
 
     @Transactional
     public ResponseEntity<Void> addAuthorToBook(Long bookId, Long authorId) {
-        if (!bookRepository.existsById(bookId) || authorService.getAuthorEntity(authorId).isEmpty()) {
+        if (!bookRepository.existsById(bookId) || authorService.getAuthorById(authorId) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        Author author = authorService.getAuthorEntity(authorId).orElseThrow(() -> new IllegalArgumentException("This author does not exist in repo"));
+        Author author = authorService.getAuthorById(authorId);
         bookFromRepo.addAuthor(author);
         bookRepository.save(bookFromRepo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -222,11 +221,8 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<List<BookDto>> getBooksByAuthor(Long authorID) {
-        Optional<Author> author = authorService.getAuthorEntity(authorID);
-        if (author.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Book> bookList = bookRepository.getBooksByAuthorsContains(author.get());
+        Author author = authorService.getAuthorById(authorID);
+        List<Book> bookList = bookRepository.getBooksByAuthorsContains(author);
         List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }

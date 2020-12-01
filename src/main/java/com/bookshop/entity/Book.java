@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "books")
+@Entity(name = "BOOKS")
 public class Book {
     LocalDate dateOfRelease;
     @Id

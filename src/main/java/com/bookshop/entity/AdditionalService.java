@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "additional_services")
+@Entity(name = "ADDITIONAL_SERVICES")
 public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

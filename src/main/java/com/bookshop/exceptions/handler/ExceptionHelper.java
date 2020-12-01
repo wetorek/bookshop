@@ -52,4 +52,16 @@ public class ExceptionHelper {
         log.error("Order not found: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = ApplicationNotFoundException.class)
+    private ResponseEntity<Object> notFoundHandler(ApplicationNotFoundException ex) {
+        log.error("Not found: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ApplicationConflictException.class)
+    private ResponseEntity<Object> conflictExceptionHandler(ApplicationConflictException ex) {
+        log.error("Conflict in: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }

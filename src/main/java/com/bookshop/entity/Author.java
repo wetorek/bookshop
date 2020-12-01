@@ -13,13 +13,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "authors")
+@Entity(name = "AUTHORS")
 public class Author {
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "authors_books",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "AUTHORS_BOOKS",
+            joinColumns = @JoinColumn(name = "AUTHOR_ID"),
+            inverseJoinColumns = @JoinColumn(name = "BOOK_ID"))
     List<Book> booksAuthor = new LinkedList<>();
     @Id
     private Long id;

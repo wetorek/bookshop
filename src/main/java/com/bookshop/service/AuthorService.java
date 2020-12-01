@@ -2,6 +2,8 @@ package com.bookshop.service;
 
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.entity.Author;
+import com.bookshop.exceptions.ApplicationConflictException;
+import com.bookshop.exceptions.ApplicationNotFoundException;
 import com.bookshop.mapper.AuthorMapper;
 import com.bookshop.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -24,50 +26,43 @@ public class AuthorService {
     private final AuthorMapper authorMapper;
 
     @Transactional(readOnly = true)
-    public List<AuthorDto> getAllAuthors() {
-        return authorRepository.findAll()
-                .stream()
-                .map(authorMapper::mapAuthorEntityToDto)
-                .collect(Collectors.toList());
+    public List<Author> getAllAuthors() {
+        return authorRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<AuthorDto> getAuthorById(Long id) {
-        Optional<AuthorDto> authorDto = authorRepository.findById(id)
-                .map(authorMapper::mapAuthorEntityToDto);
-        return authorDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public Author getAuthorById(Long id) {
+        return authorRepository.findById(id).orElseThrow(() -> new ApplicationNotFoundException("Author not found " + id));
     }
 
     @Transactional
-    public ResponseEntity<Void> saveAuthor(AuthorDto authorDto) {
+    public void saveAuthor(AuthorDto authorDto) {
         if (authorRepository.existsById(authorDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new ApplicationConflictException("Author already exists: " + authorDto);
         }
         authorRepository.save(authorMapper.mapAuthorDtoToEntity(authorDto));
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Transactional
-    public ResponseEntity<Void> updateAuthor(AuthorDto authorDto) {
+    @Transactional     //TODO change it using cascade
+    public void updateAuthor(AuthorDto authorDto) {
         if (!authorRepository.existsById(authorDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Author not found: " + authorDto);
         }
-        Author authorFromRepo = authorRepository.findById(authorDto.getId()).orElseThrow();
+        Author authorFromRepo = getAuthorById(authorDto.getId());
         Author newAuthor = authorMapper.mapAuthorDtoUsingEntity(authorDto, authorFromRepo);
         authorRepository.save(newAuthor);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
-    public ResponseEntity<Void> deleteAuthor(Long id) {
+    @Transactional           //TODO change it using cascade
+    public void deleteAuthor(Long id) {
         if (!authorRepository.existsById(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return;
         }
-        Author author = authorRepository.findById(id).orElseThrow();
+        Author author = getAuthorById(id);
         author.getBooksAuthor().forEach(book -> book.removeAuthor(author));
         authorRepository.save(author);
         authorRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
@@ -83,10 +78,4 @@ public class AuthorService {
         return authorDtoList.stream()
                 .allMatch(u -> authorRepository.existsById(u.getId()));
     }
-
-    public Optional<Author> getAuthorEntity(Long id) {
-        return authorRepository.findById(id);
-    }
-
-
 }

@@ -8,7 +8,6 @@ import com.bookshop.service.AuthService;
 import com.bookshop.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,31 +20,36 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+    public String signup(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
-        return new ResponseEntity<>("Registered successfully, please check Your email", HttpStatus.OK);
+        return "Registered successfully, please check Your email";
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("accountVerification/{token}")
-    public ResponseEntity<String> verifyAccount(@PathVariable String token) {
+    public String verifyAccount(@PathVariable String token) {
         authService.verifyAccount(token);
-        return new ResponseEntity<>("Account created successfully", HttpStatus.OK);
+        return "Account created successfully";
     }
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("refresh/token")
     public AuthenticationResponse refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public String logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
-        return new ResponseEntity<>("Refresh token deleted!", HttpStatus.OK);
+        return "Refresh token deleted!";
     }
 }

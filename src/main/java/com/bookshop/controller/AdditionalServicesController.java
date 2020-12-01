@@ -29,4 +29,11 @@ public class AdditionalServicesController {
     public void addAdditionalService(@RequestBody AdditionalServiceDto additionalServiceDto) {
         additionalServicesService.addService(additionalServiceDto);
     }
+
+    @GetMapping("/{Id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AdditionalServiceDto get(@PathVariable Long Id) {
+        AdditionalService additionalService = additionalServicesService.getById(Id);
+        return additionalServicesMapper.mapEntityToDto(additionalService);
+    }
 }
