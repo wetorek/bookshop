@@ -48,12 +48,11 @@ public class BookshopApplication {
         setUp();
 //        updateBooksPatch();
 //        updateBooksAddConnectedEntities();
-//        updateBooksRemoveAuthorCategory();
+        updateBooksRemoveAuthorCategory();
 //        deleteBooks();
 //        detachAuthor();
 //        categories();
 //        deleteCategory();
-
 
     }
 
@@ -101,7 +100,7 @@ public class BookshopApplication {
 
 
     private void deleteBooks() {
-        System.out.println(bookService.delete(31L));
+        bookService.delete(21L);
     }
 
 
@@ -126,7 +125,7 @@ public class BookshopApplication {
         CategoryDto categoryDto2 = new CategoryDto(2L, "akcji");
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
-        BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u azjatów", 111L, LocalDate.of(2014, 1, 3), List.of(authorDto2), List.of(categoryDto2), List.of(publisherDto2));
+        BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u azjatów", 111L, LocalDate.of(2014, 1, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
         bookService.update(book3);
     }
 
@@ -137,7 +136,7 @@ public class BookshopApplication {
         CategoryDto categoryDto2 = new CategoryDto(2L, "akcji");
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
-        BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", 1111L, LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
+        BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", 1111L, LocalDate.of(2012, 2, 3), List.of(authorDto1), List.of(categoryDto1), List.of(publisherDto1));
         bookService.update(book2);
     }
     /*

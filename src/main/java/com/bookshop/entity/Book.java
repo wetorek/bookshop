@@ -39,22 +39,40 @@ public class Book {
     @ManyToMany(mappedBy = "booksPublisher", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Publisher> publishers = new LinkedList<>();
 
+
+    public void removeAuthors(List<Author> authors) {
+        authors.forEach(this::removeAuthor);
+    }
+
+    public void setAuthors(List<Author> authorList) {
+        authors = new LinkedList<>();
+        authorList.forEach(this::addAuthor);
+    }
+
+    public void setCategories(List<Category> categoryList) {
+        categories = new LinkedList<>();
+        categoryList.forEach(this::addCategory);
+    }
+
+    public void removeCategories(List<Category> categories) {
+        categories.forEach(this::removeCategory);
+    }
+
+    public void setPublishers(List<Publisher> publisherList) {
+        publishers = new LinkedList<>();
+        publisherList.forEach(this::addPublisher);
+    }
+
+    public void removePublishers(List<Publisher> publishers) {
+        publishers.forEach(this::removePublisher);
+    }
+
+
     public void addAuthor(Author author) {
         this.authors.add(author);
         author.getBooksAuthor().add(this);
     }
 
-    public void setAuthors(List<Author> authors) {
-        authors.forEach(this::addAuthor);
-    }
-
-    public void setCategories(List<Category> categories) {
-        categories.forEach(this::addCategory);
-    }
-
-    public void setPublishers(List<Publisher> publishers) {
-        publishers.forEach(this::addPublisher);
-    }
 
     public void removeAuthor(Author author) {
         this.authors.remove(author);

@@ -1,8 +1,5 @@
 package com.bookshop.service;
 
-import com.bookshop.controller.dto.AuthorDto;
-import com.bookshop.controller.dto.CategoryDto;
-import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
@@ -20,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.bookshop.util.BookServiceUtils.*;
 
 @Service
 //@Slf4j
@@ -70,62 +67,44 @@ public class BookService {
         if (!bookRepository.existsById(bookDto.getId())) {
             throw new ApplicationNotFoundException("Book not found: " + bookDto);
         }
-        Book bookFromRepo = getBookById(bookDto.getId()); //todo refactor this lad
+        Book bookFromRepo = getBookById(bookDto.getId());
+        List<Publisher> publisherList = bookFromRepo.getPublishers();
+        List<Category> categoryList = bookFromRepo.getCategories();
+        List<Author> authorList = bookFromRepo.getAuthors();
+        dispatchEntitiesFromBook(bookFromRepo);
+        Book newBook = bookMapper.mapBookDtoToEntity(bookDto);
         if (compareBooksIfHaveTheSameEntities(bookFromRepo, bookDto)) {
-            Book newBook = bookMapper.mapBookEntityToEntity(bookFromRepo, bookDto);
-            bookRepository.save(bookFromRepo);
-            bookRepository.save(newBook);
+            newBook.setAuthors(authorList);
+            newBook.setCategories(categoryList);
+            newBook.setPublishers(publisherList);
         } else {
-            bookFromRepo.getAuthors().forEach(author -> author.getBooksAuthor().remove(bookFromRepo));
-            bookFromRepo.getCategories().forEach(category -> category.getBooksCategory().remove(bookFromRepo));
-            bookFromRepo.getPublishers().forEach(publisher -> publisher.getBooksPublisher().remove(bookFromRepo));
-            attachEntitiesToBook(bookFromRepo, bookDto);
-            bookRepository.save(bookFromRepo);
+            newBook.setAuthors(authorService.getAuthorsByList(bookDto.getAuthorDtoList()));
+            newBook.setCategories(categoryService.getCategoriesByList(bookDto.getCategoryDtoList()));
+            newBook.setPublishers(publisherService.getPublishersByList(bookDto.getPublisherDtoList()));
         }
+        bookRepository.save(newBook);
     }
 
-    private void attachEntitiesToBook(Book bookFromRepo, BookDto bookDto) {
-        bookDto.getAuthorDtoList().stream()
-                .map(author -> authorService.getAuthorById(author.getId()))
-                .forEach(bookFromRepo::addAuthor);
-        bookDto.getCategoryDtoList().stream()
-                .map(category -> categoryService.getCategoryById(category.getId()))
-                .forEach(bookFromRepo::addCategory);
-        bookDto.getPublisherDtoList().stream()
-                .map(PublisherDto::getId)
-                .map(publisherService::getPublisherById)
-                .forEach(bookFromRepo::addPublisher);
+    private void dispatchEntitiesFromBook(Book bookFromRepo) {
+        bookFromRepo.getAuthors().forEach(author -> author.getBooksAuthor().remove(bookFromRepo));
+        bookFromRepo.getCategories().forEach(category -> category.getBooksCategory().remove(bookFromRepo));
+        bookFromRepo.getPublishers().forEach(publisher -> publisher.getBooksPublisher().remove(bookFromRepo));
     }
 
-    private boolean compareBooksIfHaveTheSameEntities(Book book, BookDto bookDto) { // if ids are the same returns true
-        List<Long> authors = book.getAuthors().stream().map(Author::getId).collect(Collectors.toList());
-        List<Long> authors2 = bookDto.getAuthorDtoList().stream().map(AuthorDto::getId).collect(Collectors.toList());
-        List<Long> categories = book.getCategories().stream().map(Category::getId).collect(Collectors.toList());
-        List<Long> categories2 = bookDto.getCategoryDtoList().stream().map(CategoryDto::getId).collect(Collectors.toList());
-        List<Long> publishers = bookDto.getPublisherDtoList().stream().map(PublisherDto::getId).collect(Collectors.toList());
-        List<Long> publishers2 = book.getPublishers().stream().map(Publisher::getId).collect(Collectors.toList());
-        return compareLists(authors, authors2) && compareLists(categories, categories2) && compareLists(publishers, publishers2);
+    private boolean compareBooksIfHaveTheSameEntities(Book book, BookDto bookDto) {
+        return compareAuthors(book, bookDto) && comparePublishers(book, bookDto) && compareCategories(book, bookDto);
     }
 
-    private boolean compareLists(List<Long> list1, List<Long> list2) {
-        return list1.containsAll(list2) && list2.containsAll(list1);
-    }
 
     @Transactional
-    public ResponseEntity<Void> delete(Long id) {
+    public void delete(Long id) {
         if (!bookRepository.existsById(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found: " + id);
         }
-        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
-        book.getAuthors().forEach(u -> u.getBooksAuthor().remove(book));
-        book.getCategories().forEach(u -> u.getBooksCategory().remove(book));
-        book.getPublishers().forEach(publisher -> publisher.getBooksPublisher().remove(book));
-        book.setAuthors(new LinkedList<>());
-        book.setCategories(new LinkedList<>());
-        book.setPublishers(new LinkedList<>());
+        Book book = getBookById(id);
+        dispatchEntitiesFromBook(book);
         bookRepository.save(book);
         bookRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
