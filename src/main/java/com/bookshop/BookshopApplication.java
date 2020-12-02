@@ -48,8 +48,8 @@ public class BookshopApplication {
         setUp();
 //        updateBooksPatch();
 //        updateBooksAddConnectedEntities();
-        updateBooksRemoveAuthorCategory();
-//        deleteBooks();
+//        updateBooksRemoveAuthorCategory();
+        deleteBooks();
 //        detachAuthor();
 //        categories();
 //        deleteCategory();
@@ -100,7 +100,7 @@ public class BookshopApplication {
 
 
     private void deleteBooks() {
-        bookService.delete(21L);
+        bookService.delete(31L);
     }
 
 

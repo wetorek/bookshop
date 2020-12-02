@@ -12,12 +12,12 @@ import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.bookshop.util.BookServiceUtils.*;
 
@@ -113,103 +113,121 @@ public class BookService {
     }
 
     @Transactional
-    public ResponseEntity<Void> addAuthorToBook(Long bookId, Long authorId) {
+    public void addAuthorToBook(Long bookId, Long authorId) {
         if (!bookRepository.existsById(bookId) || authorService.getAuthorById(authorId) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found " + bookId + " author " + authorId);
         }
-        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book bookFromRepo = getBookById(bookId);
         Author author = authorService.getAuthorById(authorId);
         bookFromRepo.addAuthor(author);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> addCategoryToBook(Long bookId, Long categoryId) {
+    public void addCategoryToBook(Long bookId, Long categoryId) {
         if (!bookRepository.existsById(bookId) || categoryService.getCategoryById(categoryId) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found " + bookId + " category " + categoryId);
         }
         Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
         Category category = categoryService.getCategoryById(categoryId);
         bookFromRepo.addCategory(category);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> removeAuthorFromBook(Long bookId, Long authorId) {
-        if (!bookRepository.existsById(bookId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+    public void removeAuthorFromBook(Long bookId, Long authorId) {
+        Book bookFromRepo = getBookById(bookId);
         if (bookFromRepo.getAuthors().stream().map(Author::getId).noneMatch(u -> u.equals(authorId))) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Author is not attached to this book " + bookId);
         }
-        Author author = bookFromRepo.getAuthors().stream().filter(u -> u.getId().equals(authorId)).findFirst().orElseThrow();
+        Author author = authorService.getAuthorById(authorId);
         bookFromRepo.removeAuthor(author);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> removeCategoryFromBook(Long bookId, Long categoryId) {
+    public void removeCategoryFromBook(Long bookId, Long categoryId) {
         if (!bookRepository.existsById(bookId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found " + bookId);
         }
-        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book bookFromRepo = getBookById(bookId);
         if (bookFromRepo.getCategories().stream().map(Category::getId).noneMatch(u -> u.equals(categoryId))) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Category is not attached to this book " + bookId);
         }
         Category category = categoryService.getCategoryById(categoryId);
         bookFromRepo.removeCategory(category);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> removePublisherFromBook(Long bookId, Long publisherId) {
+    public void removePublisherFromBook(Long bookId, Long publisherId) {
         if (!bookRepository.existsById(bookId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found " + bookId);
         }
-        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book bookFromRepo = getBookById(bookId);
         if (bookFromRepo.getPublishers().stream().map(Publisher::getId).noneMatch(u -> u.equals(publisherId))) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Publisher is not attached to this book " + bookId);
         }
         Publisher publisher = publisherService.getPublisherById(publisherId);
         bookFromRepo.removePublisher(publisher);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public ResponseEntity<Void> addPublisherToBook(Long bookId, Long publisherId) {
-        if (!bookRepository.existsById(bookId) || publisherService.getPublisherById(publisherId) != null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public void addPublisherToBook(Long bookId, Long publisherId) {
+        if (!bookRepository.existsById(bookId) || publisherService.getPublisherById(publisherId) == null) {
+            throw new ApplicationNotFoundException("Book not found " + bookId);
         }
-        Book bookFromRepo = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book bookFromRepo = getBookById(bookId);
         Publisher publisher = publisherService.getPublisherById(publisherId);
         bookFromRepo.addPublisher(publisher);
         bookRepository.save(bookFromRepo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<List<BookDto>> getBooksByAuthor(Long authorID) {
+    public List<Book> getBooksByAuthor(Long authorID) {
         Author author = authorService.getAuthorById(authorID);
-        List<Book> bookList = bookRepository.getBooksByAuthorsContains(author);
-        List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
-        return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
+        return bookRepository.getBooksByAuthorsContains(author);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<List<BookDto>> getBooksByCategory(Long categoryId) {
-        Category category = categoryService.getCategoryById(categoryId);
-        List<Book> bookList = bookRepository.getBooksByCategoriesContains(category);
-        List<BookDto> bookDtoList = bookMapper.mapListOfEntitiesToDto(bookList);
-        return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
+    public List<Book> getBooksByPublisher(Long publisherId) {
+        Publisher publisher = publisherService.getPublisherById(publisherId);
+        return bookRepository.getBooksByPublishersContains(publisher);
     }
 
+    @Transactional(readOnly = true)
+    public List<Book> getBooksByCategory(Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
+        return bookRepository.getBooksByCategoriesContains(category);
+    }
+
+    @Transactional(readOnly = true)
     public boolean doesBookExist(Long id) {
         return bookRepository.existsById(id);
+    }
+
+    public List<Book> getBooksByParams(Long authorId, Long categoryId, Long publisherId) {
+        if (isMoreThanOneParam(authorId, categoryId, publisherId)) {
+            throw new ApplicationConflictException("User entered to many params!");
+        }
+        if (authorId != null) {
+            return getBooksByAuthor(authorId);
+        }
+        if (categoryId != null) {
+            return getBooksByCategory(categoryId);
+        }
+        if (publisherId != null) {
+            return getBooksByPublisher(publisherId);
+        } else {
+            return getAllBooks();
+        }
+    }
+
+    private boolean isMoreThanOneParam(Long... ids) {
+        return Arrays.stream(ids)
+                .filter(Objects::nonNull)
+                .count() > 1;
+
     }
 }

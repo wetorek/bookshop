@@ -6,7 +6,6 @@ import com.bookshop.mapper.BookMapper;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,28 +18,12 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<BookDto> getAllBooks() {
-        List<Book> books = bookService.getAllBooks();
-        return bookMapper.mapListOfEntitiesToDto(books);
-    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookDto getBookById(@PathVariable Long id) {
         Book book = bookService.getBookById(id);
         return bookMapper.mapBookEntityToDto(book);
-    }
-
-    @GetMapping("/asdasdasd")   //todo solve this problem
-    public ResponseEntity<List<BookDto>> getBooksByAuthor(@RequestParam() Long authorId) {
-        return bookService.getBooksByAuthor(authorId);
-    }
-
-    @GetMapping("/book/author/{categoryId}")
-    public ResponseEntity<List<BookDto>> getBooksByCategory(@PathVariable Long categoryId) {
-        return bookService.getBooksByCategory(categoryId);
     }
 
     @PostMapping
@@ -56,37 +39,72 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteBook(@PathVariable Long id) {
         bookService.delete(id);
     }
 
-    @PatchMapping("/patch/addAuthor/{bookId}/{authorId}")
-    public ResponseEntity<Void> addAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
-        return bookService.addAuthorToBook(bookId, authorId);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getBooksBy(@RequestParam(required = false) Long authorId, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long publisherId) {
+        List<Book> books = bookService.getBooksByParams(authorId, categoryId, publisherId);
+        return bookMapper.mapListOfEntitiesToDto(books);
     }
 
-    @PatchMapping("/patch/addPublisher/{bookId}/{publisherId}")
-    public ResponseEntity<Void> addPublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
-        return bookService.addPublisherToBook(bookId, publisherId);
+    /*@GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getAllBooks() {
+        List<Book> books = bookService.getAllBooks();
+        return bookMapper.mapListOfEntitiesToDto(books);
+    }*/
+
+    /*@GetMapping("/asdasdasd")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getBooksByAuthor(@RequestParam() Long authorId) {
+        List<Book> books = bookService.getBooksByAuthor(authorId);
+        return bookMapper.mapListOfEntitiesToDto(books);
     }
 
-    @PatchMapping("/patch/addCategory/{bookId}/{categoryId}")
-    public ResponseEntity<Void> addCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
-        return bookService.addCategoryToBook(bookId, categoryId);
+    @GetMapping("/book/author/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getBooksByCategory(@PathVariable Long categoryId) {
+        List<Book> books = bookService.getBooksByCategory(categoryId);
+        return bookMapper.mapListOfEntitiesToDto(books);
+    }*/
+
+    @PatchMapping("addAuthor/{bookId}/{authorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
+        bookService.addAuthorToBook(bookId, authorId);
     }
 
-    @PatchMapping("/patch/detachAuthor/{bookId}/{authorId}")
-    public ResponseEntity<Void> removeAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
-        return bookService.removeAuthorFromBook(bookId, authorId);
+    @PatchMapping("addPublisher/{bookId}/{publisherId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addPublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
+        bookService.addPublisherToBook(bookId, publisherId);
     }
 
-    @PatchMapping("/patch/detachCategory/{bookId}/{categoryId}")
-    public ResponseEntity<Void> removeCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
-        return bookService.removeCategoryFromBook(bookId, categoryId);
+    @PatchMapping("addCategory/{bookId}/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
+        bookService.addCategoryToBook(bookId, categoryId);
     }
 
-    @PatchMapping("/patch/detachPublisher/{bookId}/{publisherId}")
-    public ResponseEntity<Void> removePublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
-        return bookService.removePublisherFromBook(bookId, publisherId);
+    @PatchMapping("detachAuthor/{bookId}/{authorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
+        bookService.removeAuthorFromBook(bookId, authorId);
+    }
+
+    @PatchMapping("detachCategory/{bookId}/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeCategory(@PathVariable Long bookId, @PathVariable Long categoryId) {
+        bookService.removeCategoryFromBook(bookId, categoryId);
+    }
+
+    @PatchMapping("detachPublisher/{bookId}/{publisherId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removePublisher(@PathVariable Long bookId, @PathVariable Long publisherId) {
+        bookService.removePublisherFromBook(bookId, publisherId);
     }
 }
