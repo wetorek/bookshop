@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PublisherController {
 
-    PublisherService publisherService;
-    PublisherMapper publisherMapper;
+    private final PublisherService publisherService;
+    private final PublisherMapper publisherMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.function.BiPredicate;
 
 @AllArgsConstructor
@@ -66,8 +65,8 @@ public class OrderService {
         BiPredicate<CartItem, BookService> checkNumberOfBooks = ((cartItem, bookService1) -> {
             Long numberInCart = cartItem.getAmountOfItems();
             Long bookId = cartItem.getBook().getId();
-            Optional<Book> book = bookService1.getBookByID(bookId);
-            return book.map(book1 -> book.get().getInSock()).map(inStock -> numberInCart <= inStock).orElse(false);
+            Book book = bookService1.getBookById(bookId);
+            return numberInCart <= book.getInSock();
         });
         return cart.getCartItems()
                 .stream()

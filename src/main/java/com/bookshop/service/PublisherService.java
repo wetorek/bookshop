@@ -68,4 +68,9 @@ public class PublisherService {
                 .collect(Collectors.toList());
     }
 
+    public boolean existAll(List<PublisherDto> list) {
+        return list.stream()
+                .allMatch(publisherDto -> publisherRepository.existsById(publisherDto.getId()));
+    }
+
 }

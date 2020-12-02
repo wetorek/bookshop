@@ -15,8 +15,8 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @AllArgsConstructor
 public class CategoryController {
-    CategoryService categoryService;
-    CategoryMapper categoryMapper;
+    private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

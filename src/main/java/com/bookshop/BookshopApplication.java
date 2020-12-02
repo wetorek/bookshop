@@ -73,9 +73,9 @@ public class BookshopApplication {
         BookDto book1 = new BookDto(11L, new BigDecimal("12.23"), "Tomek w krainie kangurów", 111L, LocalDate.of(1999, 12, 9), List.of(authorDto1), List.of(categoryDto1), List.of(publisherDto1));
         BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", 1111L, LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
         BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u azjatów", 111L, LocalDate.of(2014, 1, 3), List.of(authorDto2), List.of(categoryDto2), List.of(publisherDto2));
-        System.out.println(bookService.save(book1));
-        System.out.println(bookService.save(book2));
-        System.out.println(bookService.save(book3));
+        bookService.save(book1);
+        bookService.save(book2);
+        bookService.save(book3);
         /*AdditionalServiceDto additionalServiceDto1 = new AdditionalServiceDto(1L, BigDecimal.TEN, "service 1");
         AdditionalServiceDto additionalServiceDto2 = new AdditionalServiceDto(2L, BigDecimal.ONE, "service 2");
         additionalServicesService.addService(additionalServiceDto1);
@@ -114,7 +114,7 @@ public class BookshopApplication {
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
         BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", 1111L, LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
         book2.setName("Changed name");
-        System.out.println(bookService.update(book2));
+        bookService.update(book2);
     }
 
 
@@ -127,7 +127,7 @@ public class BookshopApplication {
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
         BookDto book3 = new BookDto(31L, new BigDecimal("23.22"), "Tomek u azjatów", 111L, LocalDate.of(2014, 1, 3), List.of(authorDto2), List.of(categoryDto2), List.of(publisherDto2));
-        System.out.println(bookService.update(book3));
+        bookService.update(book3);
     }
 
     private void updateBooksRemoveAuthorCategory() {
@@ -138,7 +138,7 @@ public class BookshopApplication {
         PublisherDto publisherDto1 = new PublisherDto(1L, "Gazeta wyborcza");
         PublisherDto publisherDto2 = new PublisherDto(2L, "Dziennik codzienny");
         BookDto book2 = new BookDto(21L, new BigDecimal("21.37"), "Tomek na czarnym ladzie", 1111L, LocalDate.of(2012, 2, 3), List.of(authorDto1, authorDto2), List.of(categoryDto1, categoryDto2), List.of(publisherDto1, publisherDto2));
-        System.out.println(bookService.update(book2));
+        bookService.update(book2);
     }
     /*
     private void attachAuthor() {

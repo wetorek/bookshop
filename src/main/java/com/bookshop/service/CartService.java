@@ -41,7 +41,7 @@ public class CartService {
 
     @Transactional
     public Cart addItemToCart(CartItemRequest cartItemRequest) {
-        if (bookService.getBookByID(cartItemRequest.getBooksId()).isEmpty()) {
+        if (!bookService.doesBookExist(cartItemRequest.getBooksId())) {
             throw new BookNotFoundEx(cartItemRequest.toString());
         }
         CartItem cartItem = CartUtils.buildCartItem(bookService, cartItemRequest);

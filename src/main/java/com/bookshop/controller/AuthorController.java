@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthorController {
 
-    AuthorService authorService;
-    AuthorMapper authorMapper;
+    private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

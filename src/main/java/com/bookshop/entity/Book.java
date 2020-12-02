@@ -1,8 +1,6 @@
 package com.bookshop.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,16 +29,31 @@ public class Book {
     @Min(0L)
     private Long inSock;
 
-    @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Setter(AccessLevel.NONE)
+    @ManyToMany(mappedBy = "booksAuthor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Author> authors = new LinkedList<>();
-    @ManyToMany(mappedBy = "booksCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Setter(AccessLevel.NONE)
+    @ManyToMany(mappedBy = "booksCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Category> categories = new LinkedList<>();
-    @ManyToMany(mappedBy = "booksPublisher", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Setter(AccessLevel.NONE)
+    @ManyToMany(mappedBy = "booksPublisher", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Publisher> publishers = new LinkedList<>();
 
     public void addAuthor(Author author) {
         this.authors.add(author);
         author.getBooksAuthor().add(this);
+    }
+
+    public void setAuthors(List<Author> authors) {
+        authors.forEach(this::addAuthor);
+    }
+
+    public void setCategories(List<Category> categories) {
+        categories.forEach(this::addCategory);
+    }
+
+    public void setPublishers(List<Publisher> publishers) {
+        publishers.forEach(this::addPublisher);
     }
 
     public void removeAuthor(Author author) {

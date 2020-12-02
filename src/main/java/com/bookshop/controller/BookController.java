@@ -1,6 +1,8 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.book.BookDto;
+import com.bookshop.entity.Book;
+import com.bookshop.mapper.BookMapper;
 import com.bookshop.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,20 +16,25 @@ import java.util.List;
 @AllArgsConstructor
 public class BookController {
 
-    BookService bookService;
+    private final BookService bookService;
+    private final BookMapper bookMapper;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<BookDto>> getAllBooks() {
-        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getAllBooks() {
+        List<Book> books = bookService.getAllBooks();
+        return bookMapper.mapListOfEntitiesToDto(books);
     }
 
-    @GetMapping("/book/{id}")
-    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto getBookById(@PathVariable Long id) {
+        Book book = bookService.getBookById(id);
+        return bookMapper.mapBookEntityToDto(book);
     }
 
-    @GetMapping("/book/author/{authorId}")
-    public ResponseEntity<List<BookDto>> getBooksByAuthor(@PathVariable Long authorId) {
+    @GetMapping("/asdasdasd")   //todo solve this problem
+    public ResponseEntity<List<BookDto>> getBooksByAuthor(@RequestParam() Long authorId) {
         return bookService.getBooksByAuthor(authorId);
     }
 
@@ -36,19 +43,21 @@ public class BookController {
         return bookService.getBooksByCategory(categoryId);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto) {
-        return bookService.save(bookDto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addBook(@RequestBody BookDto bookDto) {
+        bookService.save(bookDto);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> updateBook(@RequestBody BookDto bookDto) {
-        return bookService.update(bookDto);
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void updateBook(@RequestBody BookDto bookDto) {
+        bookService.update(bookDto);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        return bookService.delete(id);
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookService.delete(id);
     }
 
     @PatchMapping("/patch/addAuthor/{bookId}/{authorId}")

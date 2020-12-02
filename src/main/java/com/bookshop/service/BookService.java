@@ -8,6 +8,8 @@ import com.bookshop.entity.Author;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Category;
 import com.bookshop.entity.Publisher;
+import com.bookshop.exceptions.ApplicationConflictException;
+import com.bookshop.exceptions.ApplicationNotFoundException;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.BookRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,42 +36,41 @@ public class BookService {
     private final PublisherService publisherService;
 
     @Transactional(readOnly = true)
-    public List<BookDto> getAllBooks() {
-        return bookRepository.findAll()
-                .stream()
-                .map(bookMapper::mapBookEntityToDto)
-                .collect(Collectors.toList());
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     @Transactional
-    public ResponseEntity<Void> save(BookDto bookDto) {
+    public void save(BookDto bookDto) {
         if (bookRepository.existsById(bookDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new ApplicationConflictException("Book already exists: " + bookDto);
         }
-        if (!authorService.existAll(bookDto.getAuthorDtoList()) || !categoryService.existAll(bookDto.getCategoryDtoList())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!checkIfAllExist(bookDto)) {
+            throw new ApplicationNotFoundException("Some of the mapped entities does not exist: " + bookDto);
         }
-        bookRepository.save(matchBookWithEntities(bookDto));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Book book = createNewBok(bookDto);
+        bookRepository.save(book);
+        logger.info("Book created: " + bookDto.getId());
     }
 
-    private Book matchBookWithEntities(BookDto bookDto) {
-        List<Author> authors = authorService.getAuthorsByList(bookDto.getAuthorDtoList());
+    private boolean checkIfAllExist(BookDto bookDto) {
+        return authorService.existAll(bookDto.getAuthorDtoList()) && categoryService.existAll(bookDto.getCategoryDtoList()) && publisherService.existAll(bookDto.getPublisherDtoList());
+    }
+
+    private Book createNewBok(BookDto bookDto) {
         Book book = bookMapper.mapBookDtoToEntity(bookDto);
-        authors.forEach(author -> author.addBook(book));
-        List<Category> categories = categoryService.getCategoriesByList(bookDto.getCategoryDtoList());
-        categories.forEach(category -> category.addBook(book));
-        List<Publisher> publishers = publisherService.getPublishersByList(bookDto.getPublisherDtoList());
-        publishers.forEach(publisher -> publisher.addBook(book));
+        book.setAuthors(authorService.getAuthorsByList(bookDto.getAuthorDtoList()));
+        book.setCategories(categoryService.getCategoriesByList(bookDto.getCategoryDtoList()));
+        book.setPublishers(publisherService.getPublishersByList(bookDto.getPublisherDtoList()));
         return book;
     }
 
     @Transactional
-    public ResponseEntity<Void> update(BookDto bookDto) {
+    public void update(BookDto bookDto) {
         if (!bookRepository.existsById(bookDto.getId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApplicationNotFoundException("Book not found: " + bookDto);
         }
-        Book bookFromRepo = bookRepository.findById(bookDto.getId()).orElseThrow(() -> new IllegalArgumentException("This book does not exist in repo"));
+        Book bookFromRepo = getBookById(bookDto.getId()); //todo refactor this lad
         if (compareBooksIfHaveTheSameEntities(bookFromRepo, bookDto)) {
             Book newBook = bookMapper.mapBookEntityToEntity(bookFromRepo, bookDto);
             bookRepository.save(bookFromRepo);
@@ -82,7 +82,6 @@ public class BookService {
             attachEntitiesToBook(bookFromRepo, bookDto);
             bookRepository.save(bookFromRepo);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private void attachEntitiesToBook(Book bookFromRepo, BookDto bookDto) {
@@ -130,10 +129,8 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<BookDto> getBookById(Long id) {
-        return bookRepository.findById(id)
-                .map(bookMapper::mapBookEntityToDto)
-                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new ApplicationNotFoundException("Book not found " + id));
     }
 
     @Transactional
@@ -233,7 +230,7 @@ public class BookService {
         return new ResponseEntity<>(bookDtoList, HttpStatus.OK);
     }
 
-    public Optional<Book> getBookByID(Long id) {
-        return bookRepository.findById(id);
+    public boolean doesBookExist(Long id) {
+        return bookRepository.existsById(id);
     }
 }

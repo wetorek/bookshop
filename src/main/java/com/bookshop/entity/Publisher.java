@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name = "publishers")
 public class Publisher {
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "publishers_books",
             joinColumns = @JoinColumn(name = "publisher_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
