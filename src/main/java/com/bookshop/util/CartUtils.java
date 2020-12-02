@@ -4,7 +4,7 @@ import com.bookshop.controller.dto.CartItemRequest;
 import com.bookshop.entity.Book;
 import com.bookshop.entity.Cart;
 import com.bookshop.entity.CartItem;
-import com.bookshop.service.BookService;
+import com.bookshop.service.book.BookService;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;

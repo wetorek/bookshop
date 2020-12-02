@@ -3,7 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Book;
 import com.bookshop.mapper.BookMapper;
-import com.bookshop.service.BookService;
+import com.bookshop.service.book.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

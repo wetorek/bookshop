@@ -9,6 +9,7 @@ import com.bookshop.exceptions.InvalidCartEx;
 import com.bookshop.exceptions.OrderNotFoundEx;
 import com.bookshop.repository.OrderRepository;
 import com.bookshop.repository.OrderStatusRepository;
+import com.bookshop.service.book.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

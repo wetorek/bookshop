@@ -1,4 +1,4 @@
-package com.bookshop.service;
+package com.bookshop.service.book;
 
 import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Author;
@@ -9,6 +9,10 @@ import com.bookshop.exceptions.ApplicationConflictException;
 import com.bookshop.exceptions.ApplicationNotFoundException;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.repository.BookRepository;
+import com.bookshop.service.AuthorService;
+import com.bookshop.service.CategoryService;
+import com.bookshop.service.PublisherService;
+import com.bookshop.service.book.strategy.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,27 +211,30 @@ public class BookService {
         return bookRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByParams(Long authorId, Long categoryId, Long publisherId) {
+        GetStrategy getStrategy;
+        Long param = 0L;
         if (isMoreThanOneParam(authorId, categoryId, publisherId)) {
             throw new ApplicationConflictException("User entered to many params!");
-        }
-        if (authorId != null) {
-            return getBooksByAuthor(authorId);
-        }
-        if (categoryId != null) {
-            return getBooksByCategory(categoryId);
-        }
-        if (publisherId != null) {
-            return getBooksByPublisher(publisherId);
+        } else if (authorId != null) {
+            getStrategy = new GetBooksByAuthorStrategy(authorService, bookRepository);
+            param = authorId;
+        } else if (categoryId != null) {
+            getStrategy = new GetBooksByCategoryStrategy(categoryService, bookRepository);
+            param = categoryId;
+        } else if (publisherId != null) {
+            getStrategy = new GetBooksByPublisherStrategy(publisherService, bookRepository);
+            param = publisherId;
         } else {
-            return getAllBooks();
+            getStrategy = new GetAllBooksStrategy(bookRepository);
         }
+        return getStrategy.getBooks(param);
     }
 
     private boolean isMoreThanOneParam(Long... ids) {
         return Arrays.stream(ids)
                 .filter(Objects::nonNull)
                 .count() > 1;
-
     }
 }

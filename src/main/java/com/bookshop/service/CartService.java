@@ -8,6 +8,7 @@ import com.bookshop.exceptions.AdditionalServiceNotFoundEx;
 import com.bookshop.exceptions.BookConflictEx;
 import com.bookshop.exceptions.BookNotFoundEx;
 import com.bookshop.repository.CartRepository;
+import com.bookshop.service.book.BookService;
 import com.bookshop.util.CartUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

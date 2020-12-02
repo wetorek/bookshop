@@ -66,7 +66,7 @@ dać główny endpoint bookapi, ustandaryzować endpointy do resta. Refactor ser
   - [ ] Adapter\
   find a place to implement
   - [X] Factory\
-  Creating a logger in com.bookshop.service.BookService
+  Creating a logger in com.bookshop.service.book.strategy.BookService
   - [ ] State\
   Of an order\
   User and admin filter?
