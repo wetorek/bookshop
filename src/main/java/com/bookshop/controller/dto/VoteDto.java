@@ -15,4 +15,5 @@ public class VoteDto {
     @Min(value = 1L)
     @Max(value = 10L)
     private Long rating;
+    private String description;
 }

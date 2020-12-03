@@ -22,4 +22,5 @@ public class Vote {
     private Long bookId;
     private Long userId;
     private Long rating;
+    private String description;
 }

@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.controller.dto.book.BookDto;
 import com.bookshop.entity.Book;
 import com.bookshop.mapper.BookMapper;
+import com.bookshop.service.VoteService;
 import com.bookshop.service.book.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class BookController {
 
     private final BookService bookService;
     private final BookMapper bookMapper;
-
+    private final VoteService voteService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -48,6 +49,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookDto> getBooksBy(@RequestParam(required = false) Long authorId, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long publisherId) {
         List<Book> books = bookService.getBooksByParams(authorId, categoryId, publisherId);
+
         return bookMapper.mapListOfEntitiesToDto(books);
     }
 

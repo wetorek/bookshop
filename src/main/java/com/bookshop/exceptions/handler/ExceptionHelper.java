@@ -64,4 +64,10 @@ public class ExceptionHelper {
         log.error("Conflict in: " + ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value = ApplicationBadRequestException.class)
+    private ResponseEntity<Object> badRequestExceptionHandler(ApplicationBadRequestException ex) {
+        log.error("Bad request: " + ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,16 +1,20 @@
 package com.bookshop.service;
 
 import com.bookshop.controller.dto.VoteDto;
+import com.bookshop.entity.Book;
 import com.bookshop.entity.User;
 import com.bookshop.entity.Vote;
-import com.bookshop.repository.BookRepository;
+import com.bookshop.exceptions.ApplicationBadRequestException;
+import com.bookshop.exceptions.ApplicationConflictException;
+import com.bookshop.exceptions.BookNotFoundEx;
 import com.bookshop.repository.VoteRepository;
+import com.bookshop.service.book.BookService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -18,23 +22,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class VoteService {
 
     private final VoteRepository voteRepository;
-    private final BookRepository bookRepository;
+    private final BookService bookService;
     private final AuthService authService;
 
     @Transactional
-    public ResponseEntity<Void> vote(VoteDto voteDto) {                         //todo combine votes with book, create bookrequest and response- rate field in book
+    public void vote(VoteDto voteDto) {
         if (voteDto.getRating() < 1L || voteDto.getRating() > 10L) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApplicationBadRequestException("Bad request, the vote is out of scale: " + voteDto);
         }
-        if (!bookRepository.existsById(voteDto.getBookId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!bookService.doesBookExist(voteDto.getBookId())) {
+            throw new BookNotFoundEx("Book not found: " + voteDto.getBookId());
         }
         User user = authService.getCurrentUser();
         if (voteRepository.existsByBookIdAndUserId(voteDto.getBookId(), user.getUserId())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new ApplicationConflictException("This user already voted for this book: " + user.getUsername() + "user id: " + user.getUserId() + " " + voteDto);
         }
         voteRepository.save(mapToVote(voteDto, user));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Vote> getVotesByBook(Book book) {
+        return voteRepository.findAllByBookId(book.getId());
     }
 
     private Vote mapToVote(VoteDto voteDto, User user) {
@@ -42,6 +50,7 @@ public class VoteService {
                 .bookId(voteDto.getBookId())
                 .rating(voteDto.getRating())
                 .userId(user.getUserId())
+                .description(voteDto.getDescription())
                 .build();
     }
 }
