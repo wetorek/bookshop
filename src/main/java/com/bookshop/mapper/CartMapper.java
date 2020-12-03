@@ -7,8 +7,10 @@ import com.bookshop.entity.Cart;
 import com.bookshop.entity.CartItem;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
+@Component
 public class CartMapper {
     private final ModelMapper modelMapper;
     private final AdditionalServicesMapper additionalServicesMapper;

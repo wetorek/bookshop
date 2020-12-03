@@ -3,6 +3,7 @@ package com.bookshop.controller.dto.book;
 import com.bookshop.controller.dto.AuthorDto;
 import com.bookshop.controller.dto.CategoryDto;
 import com.bookshop.controller.dto.PublisherDto;
+import com.bookshop.controller.dto.VoteDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class BookResponse {
     private BigDecimal price;
     private String name;
     private LocalDate dateOfRelease;
-    private Long rate;
+    private List<VoteDto> voteDtoList;
     private List<AuthorDto> authorDtoList;
     private List<CategoryDto> categoryDtoList;
     private List<PublisherDto> publisherDtoList;

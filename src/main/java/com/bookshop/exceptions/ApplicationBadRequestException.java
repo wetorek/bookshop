@@ -1,6 +1,6 @@
 package com.bookshop.exceptions;
 
-public class ApplicationBadRequestException extends RuntimeException{
+public class ApplicationBadRequestException extends RuntimeException {
     public ApplicationBadRequestException(String message) {
         super(message);
     }

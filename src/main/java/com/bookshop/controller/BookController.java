@@ -1,6 +1,7 @@
 package com.bookshop.controller;
 
 import com.bookshop.controller.dto.book.BookDto;
+import com.bookshop.controller.dto.book.BookResponse;
 import com.bookshop.entity.Book;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.service.VoteService;
@@ -47,10 +48,9 @@ public class BookController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookDto> getBooksBy(@RequestParam(required = false) Long authorId, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long publisherId) {
+    public List<BookResponse> getBooksBy(@RequestParam(required = false) Long authorId, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long publisherId) {
         List<Book> books = bookService.getBooksByParams(authorId, categoryId, publisherId);
-
-        return bookMapper.mapListOfEntitiesToDto(books);
+        return bookMapper.mapListOfEntitiesToResponse(books, voteService);
     }
 
     /*@GetMapping

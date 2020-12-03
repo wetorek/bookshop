@@ -4,11 +4,13 @@ import com.bookshop.controller.dto.AdditionalServiceDto;
 import com.bookshop.entity.AdditionalService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Component
 public class AdditionalServicesMapper {
     private final ModelMapper modelMapper;
 

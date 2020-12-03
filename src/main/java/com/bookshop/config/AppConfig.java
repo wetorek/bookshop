@@ -1,6 +1,7 @@
 package com.bookshop.config;
 
-import com.bookshop.mapper.*;
+import com.bookshop.mapper.OrderMapper;
+import com.bookshop.mapper.UserMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,35 +13,6 @@ public class AppConfig {
         return new ModelMapper();
     }
 
-    @Bean
-    public AuthorMapper authorMapper() {
-        return new AuthorMapper(modelMapper());
-    }
-
-    @Bean
-    public BookMapper bookMapper() {
-        return new BookMapper(modelMapper());
-    }
-
-    @Bean
-    public CategoryMapper categoryMapper() {
-        return new CategoryMapper(modelMapper());
-    }
-
-    @Bean
-    public PublisherMapper publisherMapper() {
-        return new PublisherMapper(modelMapper());
-    }
-
-    @Bean
-    public AdditionalServicesMapper additionalServicesMapper() {
-        return new AdditionalServicesMapper(modelMapper());
-    }
-
-    @Bean
-    public CartMapper cartMapper() {
-        return new CartMapper(modelMapper(), additionalServicesMapper(), bookMapper());
-    }
 
     @Bean
     public UserMapper userMapper() {

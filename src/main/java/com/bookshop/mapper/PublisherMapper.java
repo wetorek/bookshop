@@ -4,11 +4,13 @@ import com.bookshop.controller.dto.PublisherDto;
 import com.bookshop.entity.Publisher;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Component
 public class PublisherMapper {
     private final ModelMapper modelMapper;
 
