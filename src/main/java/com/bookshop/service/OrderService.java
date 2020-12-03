@@ -45,6 +45,7 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
     public Order payForOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
         OrderStatus orderStatus = orderStatusRepository.findByOrder(order).orElseThrow(() -> new OrderNotFoundEx("Order status was not found by this order: " + id));
@@ -53,6 +54,7 @@ public class OrderService {
         return orderStatus.getOrder();
     }
 
+    @Transactional
     public Order finishOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundEx("Order was not found: " + id));
         OrderStatus orderStatus = orderStatusRepository.findByOrder(order).orElseThrow(() -> new OrderNotFoundEx("Order status was not found by this order: " + id));

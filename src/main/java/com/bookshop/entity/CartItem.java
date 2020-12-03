@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "cart_items")
+@Entity(name = "CART_ITEMS")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

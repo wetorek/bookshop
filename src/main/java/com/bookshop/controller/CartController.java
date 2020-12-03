@@ -17,35 +17,35 @@ public class CartController {
     private final CartService cartService;
     private final CartMapper cartMapper;
 
-    @GetMapping("/get")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CartDto getCartResponse() {
         Cart cart = cartService.getCart();
         return cartMapper.mapCartToDto(cart);
     }
 
-    @PatchMapping("/cart-item/add")
+    @PostMapping("/cart-item")
     @ResponseStatus(HttpStatus.OK)
     public CartDto addItemToCart(@RequestBody CartItemRequest cartItemRequest) {
         Cart cart = cartService.addItemToCart(cartItemRequest);
         return cartMapper.mapCartToDto(cart);
     }
 
-    @PatchMapping("/cart-item/remove")
+    @DeleteMapping("/cart-item")
     @ResponseStatus(HttpStatus.OK)
     public CartDto removeItemFromCart(@RequestBody CartItemRequest cartItemRequest) {
         Cart cart = cartService.removeItemFromCart(cartItemRequest);
         return cartMapper.mapCartToDto(cart);
     }
 
-    @PatchMapping("additional-service/add")
+    @PostMapping("additional-service")
     @ResponseStatus(HttpStatus.OK)
     public CartDto addAdditionalServ(@RequestBody AdditionalServiceDto additionalServiceDto) {
         Cart cart = cartService.addAdditionalService(additionalServiceDto);
         return cartMapper.mapCartToDto(cart);
     }
 
-    @PatchMapping("additional-service/remove")
+    @DeleteMapping("additional-service")
     @ResponseStatus(HttpStatus.OK)
     public CartDto removeAdditionalServ(@RequestBody AdditionalServiceDto additionalServiceDto) {
         Cart cart = cartService.removeAdditionalService(additionalServiceDto);

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "votes")
+@Entity(name = "VOTES")
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

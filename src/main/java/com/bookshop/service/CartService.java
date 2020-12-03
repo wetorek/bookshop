@@ -63,7 +63,7 @@ public class CartService {
         cart.setAdditionalServices(new LinkedList<>());
     }
 
-    private void addCartItemToCart(Cart cart, CartItem cartItem) { //strategy
+    private void addCartItemToCart(Cart cart, CartItem cartItem) {
         if (!doesCartContainProduct(cart, cartItem)) {
             cart.getCartItems().add(cartItem);
         } else {

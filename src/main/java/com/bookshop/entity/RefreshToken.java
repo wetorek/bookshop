@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import java.time.Instant;
 
 @Data
-@Entity
+@Entity(name = "REFRESH_TOKENS")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

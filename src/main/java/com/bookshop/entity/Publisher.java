@@ -12,26 +12,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "publishers")
+@Entity(name = "PUBLISHERS")
 public class Publisher {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(name = "publishers_books",
-            joinColumns = @JoinColumn(name = "publisher_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @JoinTable(name = "PUBLISHERS_BOOKS",
+            joinColumns = @JoinColumn(name = "PUBLISHER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "BOOK_ID"))
     List<Book> booksPublisher = new LinkedList<>();
     @Id
     private Long id;
     @NotBlank(message = "Name is required")
     private String name;
 
-    public void addBook(Book book) {
-        this.booksPublisher.add(book);
-        book.getPublishers().add(this);
-    }
-
-    public void removeBook(Book book) {
-        this.booksPublisher.remove(book);
-        book.getPublishers().remove(this);
-    }
 
 }

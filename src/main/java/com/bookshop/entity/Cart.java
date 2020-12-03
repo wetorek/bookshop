@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "cart")
+@Entity(name = "CARTS")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,5 +24,4 @@ public class Cart {
     private List<CartItem> cartItems;
     @OneToMany(cascade = {CascadeType.ALL})
     private List<AdditionalService> additionalServices;
-    //discount code?
 }

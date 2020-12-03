@@ -13,7 +13,6 @@ public class AppConfig {
         return new ModelMapper();
     }
 
-
     @Bean
     public UserMapper userMapper() {
         return new UserMapper(modelMapper());
