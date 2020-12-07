@@ -231,7 +231,7 @@ class AuthorServiceTest {
     @Test
     void getAuthorExistsTest(){
         //given
-        Author author = Mockito.mock(Author.class);
+        Author author = new Author(new LinkedList<>(), 1L, "name", "surname");
         Mockito.when(authorRepository.findById(author.getId())).thenReturn(Optional.of(author));
 
         //when
@@ -245,7 +245,7 @@ class AuthorServiceTest {
     @Test
     void getAuthorDoesNotExist(){
         //given
-        Author author = Mockito.mock(Author.class);
+        Author author = new Author(new LinkedList<>(), 1L, "name", "surname");
         Mockito.when(authorRepository.findById(author.getId())).thenReturn(Optional.empty());
 
         //when
