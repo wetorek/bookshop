@@ -24,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthorServiceTest {
 
     @Mock
-    AuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
     @Mock
-    AuthorMapper authorMapper;
+    private AuthorMapper authorMapper;
 
     @InjectMocks
-    AuthorService authorService;
+    private AuthorService authorService;
 
     @Test
     void shouldReturnAllAuthors() {
